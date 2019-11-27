@@ -21,6 +21,7 @@ namespace ZFavoredClass
         static Dictionary<string, BlueprintProgression> class_guid_progression_map = new Dictionary<string, BlueprintProgression>();
         static Dictionary<string, BlueprintFeatureSelection> class_guid_bonus_selection_map = new Dictionary<string, BlueprintFeatureSelection>();
 
+        static BlueprintArchetype eldritch_scion = library.Get<BlueprintArchetype>("d078b2ef073f2814c9e338a789d97b73");
         static internal BlueprintFeatureSelection favored_class_selection;
 
 
@@ -139,7 +140,8 @@ namespace ZFavoredClass
                                                                               feature.Description,
                                                                               CallOfTheWild.Helpers.MergeIds(feature.AssetGuid, "2a34dc814a504699914e2020d3252bc8"),
                                                                               feature.Icon,
-                                                                              FeatureGroup.None
+                                                                              FeatureGroup.None,
+                                                                              feature.GetComponents<Prerequisite>().ToArray()
                                                                               );
                 }
                 partial_feature.AddComponent(CallOfTheWild.Helpers.Create<NewMechanics.PrerequisiteFeatureFullRank>(p =>
@@ -202,19 +204,29 @@ namespace ZFavoredClass
             //gnome shaman hex 1/6
             //gnome/human slayer talent 1/6
             //human wild talent 1/6
+            //magus arcana 1/6
 
-            addFavoredClassBonus(createFeatureCopy(Warpriest.fighter_feat, 3), null, Warpriest.warpriest_class, 6, human);
-            addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("c074a5d615200494b8f2a9c845799d93"), 3), null, rogue, 6, human);
-            addFavoredClassBonus(createFeatureCopy(Witch.hex_selection, 3), null, Witch.witch_class, 6, gnome);
-            addFavoredClassBonus(createFeatureCopy(Shaman.hex_selection, 3), null, Shaman.shaman_class, 6, gnome);
-            addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("43d1b15873e926848be2abf0ea3ad9a8"), 3), null, slayer, 6, human, gnome);
-            addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("5c883ae0cd6d7d5448b7a420f51f8459"), 3), null, kineticist, 6, human);
+            addFavoredClassBonus(createFeatureCopy(Warpriest.fighter_feat, "Gain 1/6 of a new bonus combat feat.", 3), null, Warpriest.warpriest_class, 6, human);
+            addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("c074a5d615200494b8f2a9c845799d93"), "Gain 1/6 of a new rogue talent.", 3), null, rogue, 6, human);
+            addFavoredClassBonus(createFeatureCopy(Witch.hex_selection, "Gain 1/6 of a new witch hex.", 3), null, Witch.witch_class, 6, gnome);
+            addFavoredClassBonus(createFeatureCopy(Shaman.hex_selection, "Gain 1/6 of a new shaman hex.", 3), null, Shaman.shaman_class, 6, gnome);
+            addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("43d1b15873e926848be2abf0ea3ad9a8"), "Gain 1/6 of a new slayer talent.", 3), null, slayer, 6, human, gnome);
+            addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("5c883ae0cd6d7d5448b7a420f51f8459"), "Gain 1/6 of a new wild talent.", 3), null, kineticist, 6, human);
+
+            var magus_arcana = createFeatureCopy(library.Get<BlueprintFeatureSelection>("e9dc4dfc73eaaf94aae27e0ed6cc9ada"), "Gain 1/6 of a new magus arcana.", 3);
+            magus_arcana.AddComponent(Common.prerequisiteNoArchetype(magus, eldritch_scion));
+
+            var eldritch_arcana = createFeatureCopy(library.Get<BlueprintFeatureSelection>("d4b54d9db4932454ab2899f931c2042c"), "Gain 1/6 of a new magus arcana.", 3);
+            eldritch_arcana.AddComponent(Common.createPrerequisiteArchetypeLevel(magus, eldritch_scion, 1));
+            addFavoredClassBonus(magus_arcana, null, magus, 6, elf, halfling);
+            addFavoredClassBonus(eldritch_arcana, null, magus, 6, elf, halfling);
         }
 
 
-        static BlueprintFeature createFeatureCopy(BlueprintFeature original, int rank = 0)
+        static BlueprintFeature createFeatureCopy(BlueprintFeature original, string description,int rank = 0)
         {
             var feat =  library.CopyAndAdd<BlueprintFeature>(original, "FavoredClass" + original.name, "");
+            feat.SetDescription(description);
             if (rank != 0)
             {
                 feat.Ranks = rank;
@@ -236,6 +248,11 @@ namespace ZFavoredClass
 
             var ki_resource = library.Get<BlueprintAbilityResource>("9d9c90a9a1f52d04799294bf91c80a82");
             var ki_icon = library.Get<BlueprintFeature>("e9590244effb4be4f830b1e3fffced13").Icon;
+
+
+            var arcane_pool_resource = library.Get<BlueprintAbilityResource>("effc3e386331f864e9e06d19dc218b37");
+            var eldritch_pool_resource = library.Get<BlueprintAbilityResource>("17b6158d363e4844fa073483eb2655f8");
+            var pool_icon = library.Get<BlueprintFeature>("42f96fc8d6c80784194262e51b0a1d25").Icon; //extra arcane pool
 
             var extra_rage = createResourceBonusFeature("FavoredClassExtraRageFeature",
                                                         "Bonus Rage Rounds",
@@ -273,6 +290,21 @@ namespace ZFavoredClass
                                             ki_icon,
                                             ki_resource);
 
+            var extra_arcane_pool = createResourceBonusFeature("FavoredClassExtraArcanePoolFeature",
+                                                                "Bonus Arcane Pool",
+                                                                "Add +1/4 point to the magus’ arcane pool.",
+                                                                pool_icon,
+                                                                arcane_pool_resource);
+            extra_arcane_pool.AddComponent(Common.prerequisiteNoArchetype(magus, eldritch_scion));
+
+
+            var extra_eldritch_pool = createResourceBonusFeature("FavoredClassExtraArcaneEldritchpoolFeature",
+                                                                "Bonus Eldritch Pool",
+                                                                "Add +1/4 point to the magus’ eldritch pool.",
+                                                                pool_icon,
+                                                                eldritch_pool_resource);
+            extra_eldritch_pool.AddComponent(Common.createPrerequisiteArchetypeLevel(magus, eldritch_scion, 1));
+
 
 
             addFavoredClassBonus(extra_bloodrage, null, Bloodrager.bloodrager_class, 1, dwarf, half_orc, human);
@@ -281,6 +313,8 @@ namespace ZFavoredClass
             addFavoredClassBonus(extra_skald_performance, null, Skald.skald_class, 1, half_elf, half_orc);
             addFavoredClassBonus(extra_bombs, null, alchemist, 2, gnome);
             addFavoredClassBonus(extra_ki, null, monk, 4, human);
+            addFavoredClassBonus(extra_arcane_pool, null, magus, 4, human, half_elf);
+            addFavoredClassBonus(extra_eldritch_pool, null, magus, 4, human, half_elf);
         }
 
 
