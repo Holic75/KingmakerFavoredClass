@@ -13,6 +13,10 @@ It adds the following options for favored class bonuses:
  - +1 monk ki pool/magus arcane pool/4 levels for certain races
  - +1 known spell of highest level-1/2 levels for alchemist/bard/inquisitor/sorceror/wizard/witch/skald for certain races
  - +1 known cleric spell of highes level-1/2 levels for half-elf, human or half-orc shaman
+ - +1 luck bonus on saving throws/4 levels for animal companion of halfling druid or hunter
+ - +1 DR/magic /2 levels for animal companion of gnome ranger or hunter
+ - +1 to natural AC in wildshape/3 levels for elf or half-orc druid
+ 
  
 It requires at least Call of the Wild 1.46.
 

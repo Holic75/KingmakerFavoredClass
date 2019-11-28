@@ -6,9 +6,14 @@ using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.Blueprints.Classes.Spells;
 using Kingmaker.Blueprints.Facts;
 using Kingmaker.Designers.Mechanics.Facts;
+using Kingmaker.EntitySystem.Stats;
+using Kingmaker.Enums;
 using Kingmaker.UnitLogic.Mechanics.Components;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,6 +64,7 @@ namespace ZFavoredClass
         static internal BlueprintCharacterClass rogue = library.Get<BlueprintCharacterClass>("299aa766dee3cbf4790da4efb8c72484");
         static internal BlueprintCharacterClass sorceror = library.Get<BlueprintCharacterClass>("b3a505fb61437dc4097f43c3f8f9a4cf");
         static internal BlueprintCharacterClass wizard = library.Get<BlueprintCharacterClass>("ba34257984f4c41408ce1dc2004e342e");
+        static internal BlueprintCharacterClass ranger = library.Get<BlueprintCharacterClass>("cda0615668a6df14eb36ba19ee881af6");
         static internal BlueprintCharacterClass slayer = library.Get<BlueprintCharacterClass>("c75e0971973957d4dbad24bc7957e4fb");
         static internal BlueprintCharacterClass monk = library.Get<BlueprintCharacterClass>("e8f21e5b58e0569468e420ebea456124");
 
@@ -142,8 +148,64 @@ namespace ZFavoredClass
             addExtraKnownSpellsFavoredClassBonus();
             addExtraSelectionFavoredClassBonus();
             addExtraResourceFavoredClassBonus();
+            addAnimalCompanionFavoredClassBonuses();
 
-             fixCompanions();
+            fixCompanions();
+
+            loadCustomFavoredClassBonuses();
+        }
+
+
+        static void addAnimalCompanionFavoredClassBonuses()
+        {
+            var icon = library.Get<BlueprintFeature>("571f8434d98560c43935e132df65fe76").Icon;
+            var animal_companion_saves_feature = Helpers.CreateFeature("AnimalCompanionSavesFavoredClassFeature",
+                                                                       "Animal Companion Saving Throws Bonus",
+                                                                       "Add a +1/4 luck bonus on the saving throws of your animal companion.",
+                                                                       "",
+                                                                       icon,
+                                                                       FeatureGroup.None,
+                                                                       Helpers.CreateAddContextStatBonus(StatType.SaveFortitude, ModifierDescriptor.Luck),
+                                                                       Helpers.CreateAddContextStatBonus(StatType.SaveReflex, ModifierDescriptor.Luck),
+                                                                       Helpers.CreateAddContextStatBonus(StatType.SaveWill, ModifierDescriptor.Luck)
+                                                                       );
+
+            
+            animal_companion_saves_feature.Ranks = 5;
+            animal_companion_saves_feature.ReapplyOnLevelUp = true;
+
+            var master_saves_feature = Common.createAddFeatToAnimalCompanion(animal_companion_saves_feature, "");
+            animal_companion_saves_feature.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueTypeExtender.MasterFeatureRank.ToContextRankBaseValueType(),
+                                                                                        feature: master_saves_feature));
+
+            var animal_companion_dr_feature = Helpers.CreateFeature("AnimalCompanionDRFavoredClassFeature",
+                                                           "Animal Companion DR/magic Bonus",
+                                                           "Add DR 1/magic to your animal companion. Each time you gain another level, the DR increases by 1/2 (maximum DR 10/magic).",
+                                                           "",
+                                                           icon,
+                                                           FeatureGroup.None,
+                                                           Common.createMagicDR(Helpers.CreateContextValue(AbilityRankType.Default))
+                                                           );
+            
+            animal_companion_dr_feature.Ranks = 19;
+            animal_companion_dr_feature.ReapplyOnLevelUp = true;
+
+            var master_dr_feature = Common.createAddFeatToAnimalCompanion(animal_companion_dr_feature, "");
+            animal_companion_dr_feature.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueTypeExtender.MasterFeatureRank.ToContextRankBaseValueType(),
+                                                                                     feature: master_dr_feature, progression: ContextRankProgression.OnePlusDiv2));
+
+            addFavoredClassBonus(master_dr_feature, null, new BlueprintCharacterClass[]{ Hunter.hunter_class, ranger }, 1, gnome);
+            addFavoredClassBonus(master_saves_feature, null, new BlueprintCharacterClass[] { Hunter.hunter_class, druid }, 4, halfling);
+        }
+
+
+        static void loadCustomFavoredClassBonuses()
+        {
+            string[] filePaths = Directory.GetFiles(@"./Mods/ZFavoredClass/Custom/", "*.json", SearchOption.TopDirectoryOnly);
+            foreach (var fp in filePaths)
+            {
+                loadCustomFeature(fp);
+            }
         }
 
 
@@ -481,6 +543,54 @@ namespace ZFavoredClass
 
             learn_selection.Ranks = 10;
             return learn_selection;
+        }
+
+
+        static void loadCustomFeature(string filename)
+        {
+            Main.logger.Log("Loading favored class bonus from: " + filename);
+
+            string feature_guid;
+            string partial_guid;
+            int divisor;
+            string class_guid;
+            string[] races_guids;
+            using (StreamReader bonus_file = File.OpenText(filename))
+            using (JsonTextReader reader = new JsonTextReader(bonus_file))
+            {
+                JObject jo = (JObject)JToken.ReadFrom(reader);
+
+                feature_guid = (string)jo["feature"];
+                partial_guid = (string)jo["partial"];
+                class_guid = (string)jo["class"];
+                divisor = (int)jo["divisor"];
+                races_guids = jo["races"].Select(x => (string)x).ToArray();
+            }
+            try
+            {
+                BlueprintFeature feature = library.Get<BlueprintFeature>(feature_guid);
+                BlueprintFeature partial_feature = null;
+                if (partial_guid != "")
+                {
+                    partial_feature = library.Get<BlueprintFeature>(partial_guid);
+                }
+                var @class = library.Get<BlueprintCharacterClass>(class_guid);
+
+                List<BlueprintRace> races = new List<BlueprintRace>();
+
+                foreach (var race_guid in races_guids)
+                {
+                    races.Add(library.Get<BlueprintRace>(race_guid));
+                }
+                addFavoredClassBonus(feature, partial_feature, @class, divisor, races.ToArray());
+                Main.logger.Log("Success");
+            }
+            catch (Exception ex)
+            {
+                Main.logger.Log("Failure");
+                Main.logger.Log(ex.ToString());
+            }
+
         }
 
     }
