@@ -157,6 +157,7 @@ namespace ZFavoredClass.NewMechanics
     {
         [NotNull]
         public BlueprintFeature Feature;
+        public BlueprintFeature checked_feature;
         public int divisor;
         public bool not;
 
@@ -166,7 +167,9 @@ namespace ZFavoredClass.NewMechanics
           UnitDescriptor unit,
           LevelUpState state)
         {
-            if (selectionState != (FeatureSelectionState)null && selectionState.IsSelectedInChildren((IFeatureSelectionItem)this.Feature))
+            if (selectionState != null && selectionState.IsSelectedInChildren(this.Feature))
+                return false;
+            if (selectionState != null && checked_feature != null && selectionState.IsSelectedInChildren(this.checked_feature))
                 return false;
             var feat = unit.Progression.Features.GetFact(this.Feature);
 

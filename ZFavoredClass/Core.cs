@@ -4,6 +4,7 @@ using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Classes.Prerequisites;
 using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.Blueprints.Classes.Spells;
+using Kingmaker.Blueprints.Facts;
 using Kingmaker.Designers.Mechanics.Facts;
 using Kingmaker.UnitLogic.Mechanics.Components;
 using System;
@@ -16,6 +17,17 @@ namespace ZFavoredClass
 {
     class Core
     {
+        public class FavoredClassFeature
+        {
+            public BlueprintFeature partial;
+            public BlueprintFeature full;
+
+            public FavoredClassFeature(BlueprintFeature partial_feature, BlueprintFeature full_feature)  
+            {
+                partial = partial_feature;
+                full = full_feature;
+            }
+        }
         const String eldritchScionClassId = "f5b8c63b141b2f44cbb8c2d7579c34f5";
         static LibraryScriptableObject library => Main.library;
         static Dictionary<string, BlueprintProgression> class_guid_progression_map = new Dictionary<string, BlueprintProgression>();
@@ -32,6 +44,7 @@ namespace ZFavoredClass
         static internal BlueprintRace dwarf = library.Get<BlueprintRace>("c4faf439f0e70bd40b5e36ee80d06be7");
         static internal BlueprintRace half_orc = library.Get<BlueprintRace>("1dc20e195581a804890ddc74218bfd8e");
         static internal BlueprintRace halfling = library.Get<BlueprintRace>("b0c3ef2729c498f47970bb50fa1acd30");
+        static internal BlueprintRace tiefling = library.Get<BlueprintRace>("5c4e42124dc2b4647af6e36cf2590500");
 
 
         static internal BlueprintCharacterClass alchemist = library.Get<BlueprintCharacterClass>("0937bec61c0dabc468428f496580c721");
@@ -50,11 +63,16 @@ namespace ZFavoredClass
         static internal BlueprintCharacterClass monk = library.Get<BlueprintCharacterClass>("e8f21e5b58e0569468e420ebea456124");
 
 
+        static public FavoredClassFeature favored_skill;
+        static public FavoredClassFeature favored_hp;
+        static public FavoredClassFeature favored_bombs;
+
+
         static internal void load()
         {
             favored_class_selection = CallOfTheWild.Helpers.CreateFeatureSelection("FavoredClassSelection",
                                                                                    "Favored Class",
-                                                                                   "Each character begins play with a single favored class of his choosing—typically, this is the same class as the one he chooses at 1st level.Whenever a character gains a level in his favored class, he receives either + 1 hit point per level or + 1 skill rank per 2 levels.The choice of favored class cannot be changed once the character is created, and the choice of gaining a hit point or a skill rank each time a character gains a level(including his first level) cannot be changed once made for a particular level.Prestige classes(see Prestige Classes) can never be a favored class.",
+                                                                                   "Each character begins play with a single favored class of his choosing—typically, this is the same class as the one he chooses at 1st level.Whenever a character gains a level in his favored class, he receives either + 1 hit point per level or + 1 skill rank per 2 levels. The choice of favored class cannot be changed once the character is created, and the choice of gaining a hit point or a skill rank each time a character gains a level(including his first level) cannot be changed once made for a particular level.Prestige classes(see Prestige Classes) can never be a favored class.",
                                                                                    "",
                                                                                    null,
                                                                                    FeatureGroup.AasimarHeritage);
@@ -118,16 +136,83 @@ namespace ZFavoredClass
             bonus_skill.Ranks = 10;
 
 
-             addFavoredClassBonus(bonus_hp, null, classes.ToArray(), 1);
-             addFavoredClassBonus(bonus_skill, null, classes.ToArray(), 2);
+            favored_hp = addFavoredClassBonus(bonus_hp, null, classes.ToArray(), 1);
+            favored_skill = addFavoredClassBonus(bonus_skill, null, classes.ToArray(), 2);
 
-             addExtraKnownSpellsFavoredClassBonus();
-             addExtraSelectionFavoredClassBonus();
-             addExtraResourceFavoredClassBonus();
+            addExtraKnownSpellsFavoredClassBonus();
+            addExtraSelectionFavoredClassBonus();
+            addExtraResourceFavoredClassBonus();
+
+             fixCompanions();
         }
 
 
-        static public void addFavoredClassBonus(BlueprintFeature feature, BlueprintFeature partial_feature, BlueprintCharacterClass[] classes, int divisor, params BlueprintRace[] races)
+        static void fixCompanions()
+        {
+            var valerie_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("912444657701e2d4ab2634c3d1e130ad");
+            var amiri1_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("df943986ee329e84a94360f2398ae6e6");
+            var tristian_companion = ResourcesLibrary.TryGetBlueprint<BlueprintUnit>("f6c23e93512e1b54dba11560446a9e02");
+            var harrim_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("8910febae2a7b9f4ba5eca4dde1e9649");
+            var linzi_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("c13cba80a1d22a94788b735a3e847242");
+            var ekun_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("0bc6dc9b6648a744899752508addae8c");
+            var jaethal_feature = library.Get<BlueprintFeature>("34280596dd550074ca55bd15285451b3");
+            var jubilost_feature = library.Get<BlueprintFeature>("c9618e3c61e65114b994f3fabcae1d97");
+            var nok_nok_companion = library.Get<BlueprintUnit>("f9417988783876044b76f918f8636455");
+            var kanerah_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("ccb52e235941e0442be0cb0ee5570f07");
+            var kalikke_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("385e8d69b89992844b0992caf666a5fd");
+            var octavia_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("200151a5a5c78a4439d0f6e9fb26620a");
+            var regongar_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("12ee53c9e546719408db257f489ec366");
+            var varn_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("2babd2d4687b5ee428966322eccfe4b6");
+            var cephal_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("d152b07305353474ba15d750015d99ee");
+
+            addFavoredClassToCompanion(favored_hp, valerie_feature.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_skill, amiri1_feature.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_skill, tristian_companion.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_hp, harrim_feature.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_hp, linzi_feature.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_skill, ekun_feature.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_hp, jaethal_feature.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_bombs, jubilost_feature.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_skill, nok_nok_companion.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_skill, kanerah_feature.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_hp, kalikke_feature.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_hp, octavia_feature.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_skill, regongar_feature.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_skill, varn_feature.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_hp, cephal_feature.GetComponent<AddClassLevels>());
+        }
+
+
+        static void addFavoredClassToCompanion(FavoredClassFeature favored_feature, AddClassLevels add_classLevels)
+        {
+            var @class = add_classLevels.CharacterClass;
+            var level = add_classLevels.Levels;
+            var fc_selection = new SelectionEntry();
+            fc_selection.Selection = favored_class_selection;
+            fc_selection.Features = new BlueprintFeature[] { class_guid_progression_map[@class.AssetGuid] };
+       
+            var fc_bonus_selection = new SelectionEntry();
+            fc_bonus_selection.Selection = class_guid_bonus_selection_map[@class.AssetGuid];
+
+            fc_bonus_selection.Features = new BlueprintFeature[0];
+            for (int i = 0; i < level;)
+            {
+                if (favored_feature.partial != null)
+                {
+                    i += 2;
+                    fc_bonus_selection.Features = fc_bonus_selection.Features.AddToArray(new BlueprintFeature[] { favored_feature.partial, favored_feature.full });
+                }
+                else
+                {
+                    i += 1;
+                    fc_bonus_selection.Features = fc_bonus_selection.Features.AddToArray(new BlueprintFeature[] { favored_feature.full });
+                }
+            }
+
+            add_classLevels.Selections = add_classLevels.Selections.AddToArray(fc_selection, fc_bonus_selection);
+        }
+
+        static public FavoredClassFeature addFavoredClassBonus(BlueprintFeature feature, BlueprintFeature partial_feature, BlueprintCharacterClass[] classes, int divisor, params BlueprintRace[] races)
         {
            
             int max_rank = feature.Ranks > 0 ? feature.Ranks : 1;
@@ -148,6 +233,7 @@ namespace ZFavoredClass
                                                                                                                     {
                                                                                                                         p.divisor = divisor;
                                                                                                                         p.Feature = partial_feature;
+                                                                                                                        p.checked_feature = feature;
                                                                                                                         p.not = true;
                                                                                                                     }
                                                                                                                     )
@@ -187,11 +273,13 @@ namespace ZFavoredClass
                 var selection = class_guid_bonus_selection_map[c.AssetGuid];
                 selection.AllFeatures = selection.AllFeatures.AddToArray(feature);
             }
+
+            return new FavoredClassFeature(partial_feature, feature);
         }
 
-        static public void addFavoredClassBonus(BlueprintFeature feature, BlueprintFeature partial_feature, BlueprintCharacterClass @class, int divisor, params BlueprintRace[] races)
+        static public FavoredClassFeature addFavoredClassBonus(BlueprintFeature feature, BlueprintFeature partial_feature, BlueprintCharacterClass @class, int divisor, params BlueprintRace[] races)
         {
-            addFavoredClassBonus(feature, partial_feature, new BlueprintCharacterClass[] { @class }, divisor, races);
+            return addFavoredClassBonus(feature, partial_feature, new BlueprintCharacterClass[] { @class }, divisor, races);
         }
 
 
@@ -283,6 +371,7 @@ namespace ZFavoredClass
                                                         "Add +1/2 to the number of bombs per day the alchemist can create.",
                                                         bomb_icon,
                                                         bomb_resource);
+            extra_bombs.AddComponent(Common.prerequisiteNoArchetype(alchemist, library.Get<BlueprintArchetype>("68cbcd9fbf1fb1d489562f829bb97e38"))); //no bombs on vivisectionist
 
             var extra_ki = createResourceBonusFeature("FavoredClassExtraKiFeature",
                                             "Bonus Ki",
@@ -311,10 +400,10 @@ namespace ZFavoredClass
             addFavoredClassBonus(extra_rage, null, barbarian, 1, dwarf, half_orc);
             addFavoredClassBonus(extra_performance, null, bard, 1, half_elf, half_orc, gnome);
             addFavoredClassBonus(extra_skald_performance, null, Skald.skald_class, 1, half_elf, half_orc);
-            addFavoredClassBonus(extra_bombs, null, alchemist, 2, gnome);
+            favored_bombs = addFavoredClassBonus(extra_bombs, null, alchemist, 2, gnome);
             addFavoredClassBonus(extra_ki, null, monk, 4, human);
-            addFavoredClassBonus(extra_arcane_pool, null, magus, 4, human, half_elf);
-            addFavoredClassBonus(extra_eldritch_pool, null, magus, 4, human, half_elf);
+            addFavoredClassBonus(extra_arcane_pool, null, magus, 4, human, half_elf, tiefling);
+            addFavoredClassBonus(extra_eldritch_pool, null, magus, 4, human, half_elf,tiefling);
         }
 
 
@@ -329,8 +418,9 @@ namespace ZFavoredClass
                                              CallOfTheWild.Helpers.Create<CallOfTheWild.NewMechanics.ContextIncreaseResourceAmount>(c => { c.Resource = resource; c.Value = Helpers.CreateContextValue(Kingmaker.Enums.AbilityRankType.Default); })
                                             );
             feat.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: feat));
+            feat.AddComponent(Helpers.Create<RecalculateOnFactsChange>(r => r.CheckedFacts = new BlueprintUnitFact[] { feat }));
             feat.Ranks = 20;
-            feat.ReapplyOnLevelUp = true;
+            
             return feat;
         }
 
