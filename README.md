@@ -2,7 +2,7 @@
 
 This is a mod for Pathfinder:Kingmaker that adds favored class mechanics.
 
-It is not compatible with favored class from Eldritch Arcana mod
+It is not compatible with favored class from Eldritch Arcana mod (you will normally get two favored classes - one from this mod and one from EA, so you probably might just pick some dummy class from one mod and use bonus from the other).
 
 It adds the following options for favored class bonuses:
  - +1 HP/level
@@ -20,7 +20,15 @@ It adds the following options for favored class bonuses:
  
 It requires at least Call of the Wild 1.46.
 
+This mod supposed to work with all classes that were introduced by other mods as long as it is loaded the last (should be by default).
 
+For other modders: you can easily add favored class bonuses for your races/classes by providing a simple description file and placing it in /ZFavoredClass/Custom/,
+ (there is already an example), you will need to specify:
+- guid of the feature corresponding to the favored class bonus (ensure that it has enough ranks, do not use existing features, but rather create a copy of them, since blueprint will be altered)
+- how many levels are needed to acquire the feature
+- guid of the feature giving partial bonus (if there is any, otherwise leave it empty)
+- guid of the class (due to guid generation process, if you want to use same bonus for different classes, you will need to supply full and partial features with different guids for each class)
+- guid of races providing this favored class bonus
 
 
 Install
