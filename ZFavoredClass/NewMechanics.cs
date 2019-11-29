@@ -125,7 +125,7 @@ namespace ZFavoredClass.NewMechanics
             var spellSelection = state.DemandSpellSelection(spellbook, spellbook.SpellList);
             int existingNewSpells = spellSelection.LevelCount[SpellLevel]?.SpellSelections.Length ?? 0;
 
-            Main.logger.Log($"Adding spell selection to level {SpellLevel}");
+           // Main.logger.Log($"Adding spell selection to level {SpellLevel}");
             spellSelection.SetLevelSpells(SpellLevel, 1 + existingNewSpells);
         }
     }
@@ -146,7 +146,7 @@ namespace ZFavoredClass.NewMechanics
     {
         protected override void Apply(LevelUpState state)
         {
-            Main.logger.Log(GetType().Name + $" {state.SelectedClass}");
+            //Main.logger.Log(GetType().Name + $" {state.SelectedClass}");
             state.ExtraSkillPoints++;
         }
     }
@@ -200,11 +200,11 @@ namespace ZFavoredClass.NewMechanics
 
             if (not)
             {
-                return $"Less than {divisor} rank(s) of {stringBuilder.ToString()}";
+                return $"Less than {divisor - 1} rank(s) of {stringBuilder.ToString()}";
             }
             else
             {
-                return $"{divisor} rank(s) of {stringBuilder.ToString()}";
+                return $"{divisor - 1} rank(s) of {stringBuilder.ToString()}";
             }
         }
     }
