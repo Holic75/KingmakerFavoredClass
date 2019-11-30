@@ -6,6 +6,6 @@
   "ManagerVersion": "0.13.0",
   "Requirements": [ "CallOfTheWild" ],
   "AssemblyName": "ZFavoredClass.dll",
-  "HomePage": "",
+  "HomePage": "https://www.nexusmods.com/pathfinderkingmaker/mods/151",
   "EntryMethod": "ZFavoredClass.Main.Load"
 }

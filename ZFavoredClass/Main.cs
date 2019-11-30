@@ -26,7 +26,7 @@ namespace ZFavoredClass
             internal Settings()
             {
 
-                using (StreamReader settings_file = File.OpenText("Mods/ProperFlanking2/settings.json"))
+                using (StreamReader settings_file = File.OpenText("Mods/ZFavoredClass/settings.json"))
                 using (JsonTextReader reader = new JsonTextReader(settings_file))
                 {
                     JObject jo = (JObject)JToken.ReadFrom(reader);
