@@ -16,6 +16,8 @@ It adds the following options for favored class bonuses:
  - +1 luck bonus on saving throws/4 levels for animal companion of halfling druid or hunter
  - +1 DR/magic /2 levels for animal companion of gnome ranger or hunter
  - +1 to natural AC in wildshape/3 levels for elf or half-orc druid
+ - +1 bonus to lay on hands healing/damage/2 levels for elf, halfling and gnome paladins
+ - +1 bonus to lay on hands self healing/level for tiefling paladins
  
  
 It requires at least Call of the Wild 1.46.

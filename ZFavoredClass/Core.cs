@@ -8,6 +8,9 @@ using Kingmaker.Blueprints.Facts;
 using Kingmaker.Designers.Mechanics.Facts;
 using Kingmaker.EntitySystem.Stats;
 using Kingmaker.Enums;
+using Kingmaker.UnitLogic.Abilities.Blueprints;
+using Kingmaker.UnitLogic.Abilities.Components;
+using Kingmaker.UnitLogic.Mechanics.Actions;
 using Kingmaker.UnitLogic.Mechanics.Components;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -55,6 +58,7 @@ namespace ZFavoredClass
         static internal BlueprintCharacterClass alchemist = library.Get<BlueprintCharacterClass>("0937bec61c0dabc468428f496580c721");
         static internal BlueprintCharacterClass barbarian = library.Get<BlueprintCharacterClass>("f7d7eb166b3dd594fb330d085df41853");
         static internal BlueprintCharacterClass bard = library.Get<BlueprintCharacterClass>("772c83a25e2268e448e841dcd548235f");
+        static internal BlueprintCharacterClass paladin = library.Get<BlueprintCharacterClass>("bfa11238e7ae3544bbeb4d0b92e897ec");
         static internal BlueprintCharacterClass cleric = library.Get<BlueprintCharacterClass>("67819271767a9dd4fbfd4ae700befea0");
         static internal BlueprintCharacterClass druid = library.Get<BlueprintCharacterClass>("610d836f3a3a9ed42a4349b62f002e96");
         static internal BlueprintCharacterClass fighter = library.Get<BlueprintCharacterClass>("48ac8db94d5de7645906c7d0ad3bcfbd");
@@ -149,10 +153,79 @@ namespace ZFavoredClass
             addExtraSelectionFavoredClassBonus();
             addExtraResourceFavoredClassBonus();
             addAnimalCompanionFavoredClassBonuses();
+            addPaladinFavoredClassBonuses();
 
             fixCompanions();
 
+           
             loadCustomFavoredClassBonuses();
+        }
+
+
+        static void addPaladinFavoredClassBonuses()
+        {
+
+            var lay_on_hands = library.Get<BlueprintAbility>("caae1dc6fcf7b37408686971ee27db13");
+            var lay_on_hands_self = library.Get<BlueprintAbility>("8d6073201e5395d458b8251386d72df1");
+            var lay_on_hands_troth = library.Get<BlueprintAbility>("8337cea04c8afd1428aad69defbfc365");
+
+            var lay_on_hands_all = new BlueprintAbility[] { lay_on_hands, lay_on_hands_self, lay_on_hands_troth };
+
+
+            var lay_on_hands_bonus_feature = Helpers.CreateFeature("LayOnHandsFavoredClassBonusFeature",
+                                                                   "Lay On Hands Bonus",
+                                                                   "Add +1/2 hp to the paladin’s lay on hands ability (whether using it to heal or harm).",
+                                                                   "",
+                                                                   lay_on_hands.Icon,
+                                                                   FeatureGroup.None);
+            var lay_on_hands_self_bonus_feature = Helpers.CreateFeature("LayOnHandsSelfFavoredClassBonusFeature",
+                                                                           "Lay On Hands Healing Bonus",
+                                                                           "Add +1 to the amount of damage the paladin heals with lay on hands, but only when the paladin uses that ability on herself.",
+                                                                           "",
+                                                                           lay_on_hands.Icon,
+                                                                           FeatureGroup.None);
+
+            lay_on_hands_bonus_feature.Ranks = 10;
+            lay_on_hands_self_bonus_feature.Ranks = 20;
+
+            foreach (var loh in lay_on_hands_all)
+            {
+                var loh_actions = loh.GetComponent<AbilityEffectRunAction>().Actions.Actions;
+                loh_actions = CallOfTheWild.Common.changeAction<ContextActionHealTarget>(loh_actions, c => c.Value.BonusValue = Helpers.CreateContextValue(AbilityRankType.SpeedBonus));
+                loh_actions = CallOfTheWild.Common.changeAction<ContextActionDealDamage>(loh_actions, c => c.Value.BonusValue = Helpers.CreateContextValue(AbilityRankType.DamageDiceAlternative));
+                //damage bonus
+                loh.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: lay_on_hands_bonus_feature, type: AbilityRankType.DamageDiceAlternative));
+                if (loh != lay_on_hands)
+                {
+                    loh.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureListRanks, 
+                                                                     featureList: new BlueprintFeature[] { lay_on_hands_bonus_feature, lay_on_hands_self_bonus_feature },
+                                                                     type: AbilityRankType.SpeedBonus));
+                }
+                else
+                {
+                    loh.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, 
+                                                                     feature: lay_on_hands_bonus_feature, 
+                                                                     type: AbilityRankType.DamageDiceAlternative));
+                }
+
+                loh.ReplaceComponent<AbilityEffectRunAction>(CallOfTheWild.Helpers.CreateRunActions(loh_actions));
+            }
+
+            addFavoredClassBonus(lay_on_hands_bonus_feature, null, paladin, 2, elf, gnome, halfling);
+            addFavoredClassBonus(lay_on_hands_self_bonus_feature, null, paladin, 1, tiefling);
+
+            var concentration_bonus = Helpers.CreateFeature("ConcentrationFavoredClassBonus",
+                                                            "Concentration Bonus",
+                                                            "Add a +1 bonus on concentration checks when casting spells.",
+                                                            "",
+                                                            library.Get<BlueprintFeature>("06964d468fde1dc4aa71a92ea04d930d").Icon, //combat casting
+                                                            FeatureGroup.None,
+                                                            CallOfTheWild.Helpers.Create<ConcentrationBonus>(c => c.Value = CallOfTheWild.Helpers.CreateContextValue(AbilityRankType.Default))
+                                                            );
+            concentration_bonus.Ranks = 20;
+            concentration_bonus.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: concentration_bonus));
+
+            addFavoredClassBonus(concentration_bonus, null, new BlueprintCharacterClass[] {paladin, VindicativeBastard.vindicative_bastard_class }, 1, dwarf);
         }
 
 
