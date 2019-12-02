@@ -477,7 +477,7 @@ namespace ZFavoredClass
                                              "",
                                              icon,
                                              FeatureGroup.None,
-                                             CallOfTheWild.Helpers.Create<CallOfTheWild.NewMechanics.ContextIncreaseResourceAmount>(c => { c.Resource = resource; c.Value = Helpers.CreateContextValue(Kingmaker.Enums.AbilityRankType.Default); })
+                                             CallOfTheWild.Helpers.Create<CallOfTheWild.ResourceMechanics.ContextIncreaseResourceAmount>(c => { c.Resource = resource; c.Value = Helpers.CreateContextValue(Kingmaker.Enums.AbilityRankType.Default); })
                                             );
             feat.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: feat));
             feat.AddComponent(Helpers.Create<RecalculateOnFactsChange>(r => r.CheckedFacts = new BlueprintUnitFact[] { feat }));
