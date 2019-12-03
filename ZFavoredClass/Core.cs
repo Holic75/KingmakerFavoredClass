@@ -53,7 +53,7 @@ namespace ZFavoredClass
         static internal BlueprintRace half_orc = library.Get<BlueprintRace>("1dc20e195581a804890ddc74218bfd8e");
         static internal BlueprintRace halfling = library.Get<BlueprintRace>("b0c3ef2729c498f47970bb50fa1acd30");
         static internal BlueprintRace tiefling = library.Get<BlueprintRace>("5c4e42124dc2b4647af6e36cf2590500");
-
+        static internal BlueprintRace aasimar = library.Get<BlueprintRace>("b7f02ba92b363064fb873963bec275ee");
 
         static internal BlueprintCharacterClass alchemist = library.Get<BlueprintCharacterClass>("0937bec61c0dabc468428f496580c721");
         static internal BlueprintCharacterClass barbarian = library.Get<BlueprintCharacterClass>("f7d7eb166b3dd594fb330d085df41853");
@@ -154,6 +154,7 @@ namespace ZFavoredClass
             addExtraResourceFavoredClassBonus();
             addAnimalCompanionFavoredClassBonuses();
             addPaladinFavoredClassBonuses();
+            addAbilityDamageBonus();
 
             fixCompanions();
 
@@ -161,6 +162,92 @@ namespace ZFavoredClass
             loadCustomFavoredClassBonuses();
         }
 
+
+        static void addAbilityDamageBonus()
+        {
+            var earth_icon = library.Get<BlueprintAbility>("97d0a51ca60053047afb9aca900fb71b").Icon;
+            var fire_icon = library.Get<BlueprintAbility>("4783c3709a74a794dbe7c8e7e0b1b038").Icon;
+            var kinetic_balst_damage = library.Get<BlueprintAbility>("0a2f7c6aa81bc6548ac7780d8b70bcbc").Icon; //battering blast
+            //kineticist dwarf - earth 1/3, elf/half elf - everything
+            BlueprintAbility[] kinetic_blasts = new BlueprintAbility[] {library.Get<BlueprintAbility>("83d5873f306ac954cad95b6aeeeb2d8c"), //fire
+                                                                        library.Get<BlueprintAbility>("d663a8d40be1e57478f34d6477a67270"), //water
+                                                                        library.Get<BlueprintAbility>("b813ceb82d97eed4486ddd86d3f7771b"), //thunderstorm
+                                                                        library.Get<BlueprintAbility>("3baf01649a92ae640927b0f633db7c11"), //steam
+                                                                        library.Get<BlueprintAbility>("b93e1f0540a4fa3478a6b47ae3816f32"), //sandstorm
+                                                                        library.Get<BlueprintAbility>("9afdc3eeca49c594aa7bf00e8e9803ac"), //plasma
+                                                                        library.Get<BlueprintAbility>("e2610c88664e07343b4f3fb6336f210c"), //mud
+                                                                        library.Get<BlueprintAbility>("6276881783962284ea93298c1fe54c48"), //metal
+                                                                        library.Get<BlueprintAbility>("8c25f52fce5113a4491229fd1265fc3c"), //magma
+                                                                        library.Get<BlueprintAbility>("403bcf42f08ca70498432cf62abee434"), //ice
+                                                                        library.Get<BlueprintAbility>("45eb571be891c4c4581b6fcddda72bcd"), //electric
+
+                                                                        library.Get<BlueprintAbility>("e53f34fb268a7964caf1566afb82dadd"), //earth
+                                                                        library.Get<BlueprintAbility>("7980e876b0749fc47ac49b9552e259c1"), //cold
+                                                                        library.Get<BlueprintAbility>("4e2e066dd4dc8de4d8281ed5b3f4acb6"), //charged water
+                                                                        library.Get<BlueprintAbility>("d29186edb20be6449b23660b39435398"), //blue flame
+                                                                        library.Get<BlueprintAbility>("16617b8c20688e4438a803effeeee8a6"), //blizzard
+                                                                        library.Get<BlueprintAbility>("0ab1552e2ebdacf44bb7b20f5393366d") //air
+                                                                       };
+
+            BlueprintAbility[] earth_blasts = new BlueprintAbility[] {  library.Get<BlueprintAbility>("b93e1f0540a4fa3478a6b47ae3816f32"), //sandstorm
+                                                                        library.Get<BlueprintAbility>("e2610c88664e07343b4f3fb6336f210c"), //mud
+                                                                        library.Get<BlueprintAbility>("6276881783962284ea93298c1fe54c48"), //metal
+                                                                        library.Get<BlueprintAbility>("8c25f52fce5113a4491229fd1265fc3c"), //magma
+                                                                        library.Get<BlueprintAbility>("e53f34fb268a7964caf1566afb82dadd") //earth
+                                                                       };
+
+            var kinet_earth_dmg_bonus = Helpers.CreateFeature("EarthBlastKineticistDamageFavoredClassBonusFeature",
+                                                              "Earth Element Blast Damage Bonus",
+                                                              "Add 1/3 point of damage to earth element blasts that deal damage that apply the kineticist’s elemental overflow bonus.",
+                                                              "",
+                                                              kinetic_balst_damage,
+                                                              FeatureGroup.None,
+                                                              Helpers.Create<CallOfTheWild.NewMechanics.DamageAbilityBonus>(e => { e.abilities = earth_blasts; e.value = Helpers.CreateContextValue(AbilityRankType.Default); })
+                                                              );
+            kinet_earth_dmg_bonus.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: kinet_earth_dmg_bonus));
+            kinet_earth_dmg_bonus.Ranks = 6;
+            addFavoredClassBonus(kinet_earth_dmg_bonus, null, kineticist, 3, dwarf);
+
+            var kinet_dmg_bonus = Helpers.CreateFeature("KineticistDamageFavoredClassBonusFeature",
+                                                          "Element Blast Damage Bonus",
+                                                          "Gain a +1/4 bonus on damage rolls that apply the kineticist’s elemental overflow bonus.",
+                                                          "",
+                                                          kinetic_balst_damage,
+                                                          FeatureGroup.None,
+                                                          Helpers.Create<CallOfTheWild.NewMechanics.DamageAbilityBonus>(e => { e.abilities = kinetic_blasts; e.value = Helpers.CreateContextValue(AbilityRankType.Default); })
+                                                          );
+            kinet_dmg_bonus.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: kinet_dmg_bonus));
+            kinet_dmg_bonus.Ranks = 5;
+            addFavoredClassBonus(kinet_dmg_bonus, null, kineticist, 4, elf, half_elf);
+
+            //sorceror dwarf - acid, ground,  half-orc - fire + magus
+
+            var sorc_earth_dmg_bonus = Helpers.CreateFeature("AcidEarthSpellDamageFavoredClassBonusFeature",
+                                                              "Acid and Earth Spells Damage Bonus",
+                                                              "Add +1/2 to acid and earth spell or spell-like ability damage.",
+                                                              "",
+                                                              earth_icon,
+                                                              FeatureGroup.None,
+                                                              Helpers.Create<CallOfTheWild.NewMechanics.SpellDescriptorDamageSpellBonus>(e => { e.SpellDescriptor = SpellDescriptor.Acid | SpellDescriptor.Ground; e.value = Helpers.CreateContextValue(AbilityRankType.Default); })
+                                                              );
+            sorc_earth_dmg_bonus.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: sorc_earth_dmg_bonus));
+            sorc_earth_dmg_bonus.Ranks = 10;
+            addFavoredClassBonus(sorc_earth_dmg_bonus, null, sorceror, 2, dwarf);
+
+
+            var sorc_fire_dmg_bonus = Helpers.CreateFeature("FireSpellDamageFavoredClassBonusFeature",
+                                                  "Fire Spells Damage Bonus",
+                                                  "Add +1/2 point of damage to spells with fire descriptor.",
+                                                  "",
+                                                  fire_icon,
+                                                  FeatureGroup.None,
+                                                  Helpers.Create<CallOfTheWild.NewMechanics.SpellDescriptorDamageSpellBonus>(e => { e.SpellDescriptor = SpellDescriptor.Fire; e.value = Helpers.CreateContextValue(AbilityRankType.Default); })
+                                                  );
+            sorc_fire_dmg_bonus.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: sorc_fire_dmg_bonus));
+            sorc_fire_dmg_bonus.Ranks = 10;
+            addFavoredClassBonus(sorc_fire_dmg_bonus, null, new BlueprintCharacterClass[] { sorceror, magus },  2, half_orc);
+        }
+        
 
         static void addPaladinFavoredClassBonuses()
         {
@@ -626,7 +713,7 @@ namespace ZFavoredClass
             string feature_guid;
             string partial_guid;
             int divisor;
-            string class_guid;
+            string[] class_guids;
             string[] races_guids;
             using (StreamReader bonus_file = File.OpenText(filename))
             using (JsonTextReader reader = new JsonTextReader(bonus_file))
@@ -635,7 +722,7 @@ namespace ZFavoredClass
 
                 feature_guid = (string)jo["feature"];
                 partial_guid = (string)jo["partial"];
-                class_guid = (string)jo["class"];
+                class_guids = jo["classes"].Select(x => (string)x).ToArray();
                 divisor = (int)jo["divisor"];
                 races_guids = jo["races"].Select(x => (string)x).ToArray();
             }
@@ -647,7 +734,11 @@ namespace ZFavoredClass
                 {
                     partial_feature = library.Get<BlueprintFeature>(partial_guid);
                 }
-                var @class = library.Get<BlueprintCharacterClass>(class_guid);
+                List<BlueprintCharacterClass> classes = new List<BlueprintCharacterClass>();
+                foreach (var class_guid in class_guids)
+                {
+                    classes.Add(library.Get<BlueprintCharacterClass>(class_guid));
+                }
 
                 List<BlueprintRace> races = new List<BlueprintRace>();
 
@@ -655,7 +746,7 @@ namespace ZFavoredClass
                 {
                     races.Add(library.Get<BlueprintRace>(race_guid));
                 }
-                addFavoredClassBonus(feature, partial_feature, @class, divisor, races.ToArray());
+                addFavoredClassBonus(feature, partial_feature, classes.ToArray(), divisor, races.ToArray());
                 Main.logger.Log("Success");
             }
             catch (Exception ex)

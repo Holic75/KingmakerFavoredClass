@@ -2,6 +2,6 @@
     feature: "38ac98295f614fc394e74a444d03c67d",
     partial: "",
     divisor: 3,
-    class: "610d836f3a3a9ed42a4349b62f002e96",
+    classes: ["610d836f3a3a9ed42a4349b62f002e96"],
     races: ["25a5878d125338244896ebd3238226c8", "1dc20e195581a804890ddc74218bfd8e"]
 }

@@ -18,7 +18,12 @@ It adds the following options for favored class bonuses:
  - +1 to natural AC in wildshape/3 levels for elf or half-orc druid
  - +1 bonus to lay on hands healing/damage/2 levels for elf, halfling and gnome paladins
  - +1 bonus to lay on hands self healing/level for tiefling paladins
- 
+ - +1 bonus to channel energy healing or damage/3 levels for half-elf clerics and warpriests
+ - +1 bonus to channel energy damage for purpose of harming undead/2 levels for aasimar clerics
+ - +1 to damage of fire spells/2 levels for half orcs sorcerors or magi
+ - +1 to damage of earth and acid spells/2 levels for dwarf sorcerors
+ - +1 to earth elemental blasts damage/3 levels for dwarf kineticists
+ - +1 to elemental blasts damage/4 levels for half-elf and elf kineticists
  
 It requires at least Call of the Wild 1.46.
 
