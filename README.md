@@ -24,8 +24,10 @@ It adds the following options for favored class bonuses:
  - +1 to damage of earth and acid spells/2 levels for dwarf sorcerors
  - +1 to earth elemental blasts damage/3 levels for dwarf kineticists
  - +1 to elemental blasts damage/4 levels for half-elf and elf kineticists
+ - +1 to base speed/level for elf barbarians, bloodragers and monks
+ - +1 to natural AC when using mutagen/4 levels for dwarf alchemists
  
-It requires at least Call of the Wild 1.46.
+It requires at least Call of the Wild 1.47.
 
 This mod supposed to work with all classes that were introduced by other mods as long as it is loaded the last (should be by default).
 

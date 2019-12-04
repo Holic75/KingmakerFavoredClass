@@ -5,11 +5,15 @@ using Kingmaker.Blueprints.Classes.Prerequisites;
 using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.Blueprints.Classes.Spells;
 using Kingmaker.Blueprints.Facts;
+using Kingmaker.Blueprints.Items.Armors;
 using Kingmaker.Designers.Mechanics.Facts;
 using Kingmaker.EntitySystem.Stats;
 using Kingmaker.Enums;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.Abilities.Components;
+using Kingmaker.UnitLogic.ActivatableAbilities;
+using Kingmaker.UnitLogic.Buffs.Blueprints;
+using Kingmaker.UnitLogic.FactLogic;
 using Kingmaker.UnitLogic.Mechanics.Actions;
 using Kingmaker.UnitLogic.Mechanics.Components;
 using Newtonsoft.Json;
@@ -145,9 +149,21 @@ namespace ZFavoredClass
                                                         CallOfTheWild.Helpers.Create<NewMechanics.AddSkillRankOnce>());
             bonus_skill.Ranks = 10;
 
+            var bonus_speed = CallOfTheWild.Helpers.CreateFeature("FavoredClassBonusSpeedFeature",
+                                                                  "Bonus Speed",
+                                                                  "Gain +1 ft bonus to base speed.",
+                                                                  "",
+                                                                  CallOfTheWild.Helpers.GetIcon("14c90900b690cac429b229efdf416127"), // longstrider
+                                                                  FeatureGroup.None,
+                                                                  Helpers.CreateAddContextStatBonus(StatType.Speed, ModifierDescriptor.UntypedStackable)
+                                                                  );
+            bonus_speed.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: bonus_speed));
+            bonus_speed.Ranks = 20;
+
 
             favored_hp = addFavoredClassBonus(bonus_hp, null, classes.ToArray(), 1);
             favored_skill = addFavoredClassBonus(bonus_skill, null, classes.ToArray(), 2);
+            addFavoredClassBonus(bonus_speed, null, new BlueprintCharacterClass[] { barbarian, Bloodrager.bloodrager_class, monk }, 1, elf);
 
             addExtraKnownSpellsFavoredClassBonus();
             addExtraSelectionFavoredClassBonus();
@@ -155,6 +171,7 @@ namespace ZFavoredClass
             addAnimalCompanionFavoredClassBonuses();
             addPaladinFavoredClassBonuses();
             addAbilityDamageBonus();
+            addDwarfAlchemistMutagenBonus();
 
             fixCompanions();
 
@@ -162,6 +179,49 @@ namespace ZFavoredClass
             loadCustomFavoredClassBonuses();
         }
 
+
+        static void addDwarfAlchemistMutagenBonus()
+        {
+            var mutagens = new BlueprintFeature[]
+            {
+                library.Get<BlueprintFeature>("cee8f65448ce71c4b8b8ca13751dd8ea"), //mutagen
+                library.Get<BlueprintFeature>("76c61966afdd82048911f3d63c6fe0bc"), //greater mutagen
+                library.Get<BlueprintFeature>("6f5cb651e26bd97428523061b07ffc85"), //grand mutagen
+
+                library.Get<BlueprintFeature>("e3f460ea61fcc504183c7d6818bbbf7a"), //cognatogen
+                library.Get<BlueprintFeature>("18eb29676492e844eb5a55d1c855ce69"), //greater cognatogen
+                library.Get<BlueprintFeature>("af4a320648eb5724889d6ff6255090b2"), //grand cognatogen
+            };
+
+
+            var natural_ac = Helpers.CreateFeature("NaturalACButagenFavoredClassBonus",
+                                                   "Mutagen Natural Armor Bonus",
+                                                   "Add +1/4 to the alchemist’s natural armor bonus when using the character’s mutagen.",
+                                                   "",
+                                                   library.Get<BlueprintAbility>("c66e86905f7606c4eaa5c774f0357b2b").Icon,
+                                                   FeatureGroup.None
+                                                   );
+            natural_ac.Ranks = 5;
+
+            foreach (var m in mutagens)
+            {
+                var comp = m.GetComponent<AddFacts>();
+
+                foreach (var f in comp.Facts)
+                {
+
+                    var buff = Common.extractActions<ContextActionApplyBuff>((f as BlueprintAbility).GetComponent<AbilityEffectRunAction>().Actions.Actions)[0].Buff;
+
+                    buff.AddComponents(Helpers.CreateAddContextStatBonus(StatType.AC, ModifierDescriptor.NaturalArmor, rankType: AbilityRankType.ProjectilesCount),
+                                                                         Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank,
+                                                                                                         feature: natural_ac,
+                                                                                                         type: AbilityRankType.ProjectilesCount)
+                                                                        );
+                }
+            }
+
+            addFavoredClassBonus(natural_ac, null, alchemist, 4, dwarf);
+        }
 
         static void addAbilityDamageBonus()
         {
