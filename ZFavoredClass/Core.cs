@@ -163,7 +163,7 @@ namespace ZFavoredClass
 
             favored_hp = addFavoredClassBonus(bonus_hp, null, classes.ToArray(), 1);
             favored_skill = addFavoredClassBonus(bonus_skill, null, classes.ToArray(), 2);
-            addFavoredClassBonus(bonus_speed, null, new BlueprintCharacterClass[] { barbarian, Bloodrager.bloodrager_class, monk }, 1, elf);
+            addFavoredClassBonus(bonus_speed, null, new BlueprintCharacterClass[] { barbarian, Bloodrager.bloodrager_class, monk }, 1, elf, half_elf);
 
             addExtraKnownSpellsFavoredClassBonus();
             addExtraSelectionFavoredClassBonus();
@@ -358,7 +358,7 @@ namespace ZFavoredClass
                 loh.ReplaceComponent<AbilityEffectRunAction>(CallOfTheWild.Helpers.CreateRunActions(loh_actions));
             }
 
-            addFavoredClassBonus(lay_on_hands_bonus_feature, null, paladin, 2, elf, gnome, halfling);
+            addFavoredClassBonus(lay_on_hands_bonus_feature, null, paladin, 2, elf, gnome, halfling, half_elf);
             addFavoredClassBonus(lay_on_hands_self_bonus_feature, null, paladin, 1, tiefling);
 
             var concentration_bonus = Helpers.CreateFeature("ConcentrationFavoredClassBonus",
@@ -576,20 +576,20 @@ namespace ZFavoredClass
             //human wild talent 1/6
             //magus arcana 1/6
 
-            addFavoredClassBonus(createFeatureCopy(Warpriest.fighter_feat, "Gain 1/6 of a new bonus combat feat.", 3), null, Warpriest.warpriest_class, 6, human);
-            addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("c074a5d615200494b8f2a9c845799d93"), "Gain 1/6 of a new rogue talent.", 3), null, rogue, 6, human);
+            addFavoredClassBonus(createFeatureCopy(Warpriest.fighter_feat, "Gain 1/6 of a new bonus combat feat.", 3), null, Warpriest.warpriest_class, 6, human, half_elf, half_orc, aasimar, tiefling);
+            addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("c074a5d615200494b8f2a9c845799d93"), "Gain 1/6 of a new rogue talent.", 3), null, rogue, 6, human, half_elf, half_orc, aasimar, tiefling);
             addFavoredClassBonus(createFeatureCopy(Witch.hex_selection, "Gain 1/6 of a new witch hex.", 3), null, Witch.witch_class, 6, gnome);
             addFavoredClassBonus(createFeatureCopy(Shaman.hex_selection, "Gain 1/6 of a new shaman hex.", 3), null, Shaman.shaman_class, 6, gnome);
-            addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("43d1b15873e926848be2abf0ea3ad9a8"), "Gain 1/6 of a new slayer talent.", 3), null, slayer, 6, human, gnome);
-            addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("5c883ae0cd6d7d5448b7a420f51f8459"), "Gain 1/6 of a new wild talent.", 3), null, kineticist, 6, human);
+            addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("43d1b15873e926848be2abf0ea3ad9a8"), "Gain 1/6 of a new slayer talent.", 3), null, slayer, 6, human, gnome, half_elf, half_orc, aasimar, tiefling);
+            addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("5c883ae0cd6d7d5448b7a420f51f8459"), "Gain 1/6 of a new wild talent.", 3), null, kineticist, 6, human, half_elf, half_orc, aasimar, tiefling);
 
             var magus_arcana = createFeatureCopy(library.Get<BlueprintFeatureSelection>("e9dc4dfc73eaaf94aae27e0ed6cc9ada"), "Gain 1/6 of a new magus arcana.", 3);
             magus_arcana.AddComponent(Common.prerequisiteNoArchetype(magus, eldritch_scion));
 
             var eldritch_arcana = createFeatureCopy(library.Get<BlueprintFeatureSelection>("d4b54d9db4932454ab2899f931c2042c"), "Gain 1/6 of a new magus arcana.", 3);
             eldritch_arcana.AddComponent(Common.createPrerequisiteArchetypeLevel(magus, eldritch_scion, 1));
-            addFavoredClassBonus(magus_arcana, null, magus, 6, elf, halfling);
-            addFavoredClassBonus(eldritch_arcana, null, magus, 6, elf, halfling);
+            addFavoredClassBonus(magus_arcana, null, magus, 6, elf, halfling, half_elf);
+            addFavoredClassBonus(eldritch_arcana, null, magus, 6, elf, halfling, half_elf);
         }
 
 
@@ -678,14 +678,14 @@ namespace ZFavoredClass
 
 
 
-            addFavoredClassBonus(extra_bloodrage, null, Bloodrager.bloodrager_class, 1, dwarf, half_orc, human);
+            addFavoredClassBonus(extra_bloodrage, null, Bloodrager.bloodrager_class, 1, dwarf, half_orc, human, half_elf, aasimar, tiefling);
             addFavoredClassBonus(extra_rage, null, barbarian, 1, dwarf, half_orc);
             addFavoredClassBonus(extra_performance, null, bard, 1, half_elf, half_orc, gnome);
             addFavoredClassBonus(extra_skald_performance, null, Skald.skald_class, 1, half_elf, half_orc);
             favored_bombs = addFavoredClassBonus(extra_bombs, null, alchemist, 2, gnome);
-            addFavoredClassBonus(extra_ki, null, monk, 4, human);
-            addFavoredClassBonus(extra_arcane_pool, null, magus, 4, human, half_elf, tiefling);
-            addFavoredClassBonus(extra_eldritch_pool, null, magus, 4, human, half_elf,tiefling);
+            addFavoredClassBonus(extra_ki, null, monk, 4, human, half_elf, half_orc, aasimar, tiefling);
+            addFavoredClassBonus(extra_arcane_pool, null, magus, 4, human, half_elf, tiefling, aasimar, half_orc);
+            addFavoredClassBonus(extra_eldritch_pool, null, magus, 4, human, half_elf,tiefling, aasimar, half_orc);
         }
 
 
@@ -711,14 +711,14 @@ namespace ZFavoredClass
 
         static void addExtraKnownSpellsFavoredClassBonus()
         {
-            addFavoredClassBonus(CreateExtraSpellSelection(alchemist.Spellbook, alchemist, 5), null, alchemist, 2, elf, human, halfling);
-            addFavoredClassBonus(CreateExtraSpellSelection(bard.Spellbook, bard, 5), null, bard, 2,human);
-            addFavoredClassBonus(CreateExtraSpellSelection(inquistor.Spellbook, inquistor, 5), null, inquistor, 2, elf, human);
-            addFavoredClassBonus(CreateExtraSpellSelection(cleric.Spellbook, CallOfTheWild.Shaman.shaman_class, 8), null, CallOfTheWild.Shaman.shaman_class, 2, half_elf, human, half_orc);
-            addFavoredClassBonus(CreateExtraSpellSelection(sorceror.Spellbook, sorceror, 8), null, sorceror, 2, human);
-            addFavoredClassBonus(CreateExtraSpellSelection(wizard.Spellbook, wizard, 8), null, wizard, 2, human);
-            addFavoredClassBonus(CreateExtraSpellSelection(CallOfTheWild.Witch.witch_class.Spellbook, CallOfTheWild.Witch.witch_class, 8), null, CallOfTheWild.Witch.witch_class, 2, human, half_orc, half_elf, elf);
-            addFavoredClassBonus(CreateExtraSpellSelection(CallOfTheWild.Skald.skald_class.Spellbook, CallOfTheWild.Skald.skald_class, 5), null, CallOfTheWild.Skald.skald_class, 2, human);
+            addFavoredClassBonus(CreateExtraSpellSelection(alchemist.Spellbook, alchemist, 5), null, alchemist, 2, elf, human, halfling, half_elf, half_orc, aasimar, tiefling);
+            addFavoredClassBonus(CreateExtraSpellSelection(bard.Spellbook, bard, 5), null, bard, 2,human, half_elf, half_orc, aasimar, tiefling, half_elf);
+            addFavoredClassBonus(CreateExtraSpellSelection(inquistor.Spellbook, inquistor, 5), null, inquistor, 2, elf, human, half_elf, half_orc, aasimar, tiefling);
+            addFavoredClassBonus(CreateExtraSpellSelection(cleric.Spellbook, CallOfTheWild.Shaman.shaman_class, 8), null, CallOfTheWild.Shaman.shaman_class, 2, half_elf, human, half_orc, aasimar, tiefling);
+            addFavoredClassBonus(CreateExtraSpellSelection(sorceror.Spellbook, sorceror, 8), null, sorceror, 2, human, half_elf, half_orc, aasimar, tiefling);
+            addFavoredClassBonus(CreateExtraSpellSelection(wizard.Spellbook, wizard, 8), null, wizard, 2, human, half_elf, half_orc, aasimar, tiefling);
+            addFavoredClassBonus(CreateExtraSpellSelection(CallOfTheWild.Witch.witch_class.Spellbook, CallOfTheWild.Witch.witch_class, 8), null, CallOfTheWild.Witch.witch_class, 2, human, half_orc, half_elf, elf, aasimar, tiefling);
+            addFavoredClassBonus(CreateExtraSpellSelection(CallOfTheWild.Skald.skald_class.Spellbook, CallOfTheWild.Skald.skald_class, 5), null, CallOfTheWild.Skald.skald_class, 2, human, half_elf, half_orc, aasimar, tiefling);
         }
 
 
