@@ -136,7 +136,7 @@ namespace ZFavoredClass.NewMechanics
     {
         protected override void Apply(LevelUpState state)
         {
-            Main.logger.Log(GetType().Name + $" {state.SelectedClass}");
+           // Main.logger.Log(GetType().Name + $" {state.SelectedClass}");
             Owner.Stats.HitPoints.BaseValue++;
         }
     }
