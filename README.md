@@ -26,6 +26,7 @@ It adds the following options for favored class bonuses:
  - +1 to elemental blasts damage/4 levels for half-elf and elf kineticists
  - +1 to base speed/level for elf barbarians, bloodragers and monks
  - +1 to natural AC when using mutagen/4 levels for dwarf alchemists
+ - +1 to number of internal buffer uses/6 levels for halfling kineticists
  
 It requires at least Call of the Wild 1.47.
 

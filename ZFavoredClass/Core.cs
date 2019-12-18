@@ -677,6 +677,13 @@ namespace ZFavoredClass
             extra_eldritch_pool.AddComponent(Common.createPrerequisiteArchetypeLevel(magus, eldritch_scion, 1));
 
 
+            var extra_internal_buffer = createResourceBonusFeature("FavoredClassExtraInternalBufferFeature",
+                                                    "Bonus Internal Buffer",
+                                                    "Add +1/6 point to the kineticist’s internal buffer.",
+                                                    CallOfTheWild.KineticistFix.internal_buffer.Icon,
+                                                    CallOfTheWild.KineticistFix.internal_buffer_resource);
+
+
 
             addFavoredClassBonus(extra_bloodrage, null, Bloodrager.bloodrager_class, 1, dwarf, half_orc, human, half_elf, aasimar, tiefling);
             addFavoredClassBonus(extra_rage, null, barbarian, 1, dwarf, half_orc);
@@ -686,6 +693,7 @@ namespace ZFavoredClass
             addFavoredClassBonus(extra_ki, null, monk, 4, human, half_elf, half_orc, aasimar, tiefling);
             addFavoredClassBonus(extra_arcane_pool, null, magus, 4, human, half_elf, tiefling, aasimar, half_orc);
             addFavoredClassBonus(extra_eldritch_pool, null, magus, 4, human, half_elf,tiefling, aasimar, half_orc);
+            addFavoredClassBonus(extra_internal_buffer, null, kineticist, 6, halfling);
         }
 
 
