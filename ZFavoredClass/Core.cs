@@ -435,7 +435,7 @@ namespace ZFavoredClass
             var amiri1_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("df943986ee329e84a94360f2398ae6e6");
             var tristian_companion = ResourcesLibrary.TryGetBlueprint<BlueprintUnit>("f6c23e93512e1b54dba11560446a9e02");
             var harrim_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("8910febae2a7b9f4ba5eca4dde1e9649");
-            var linzi_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("c13cba80a1d22a94788b735a3e847242");
+            var linzi_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("920cb420385dbb34681b620b6c1b59e9");
             var ekun_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("0bc6dc9b6648a744899752508addae8c");
             var jaethal_feature = library.Get<BlueprintFeature>("34280596dd550074ca55bd15285451b3");
             var jubilost_feature = library.Get<BlueprintFeature>("c9618e3c61e65114b994f3fabcae1d97");
