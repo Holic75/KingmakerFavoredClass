@@ -227,4 +227,62 @@ namespace ZFavoredClass.NewMechanics
             return race.Name;
         }
     }
+
+
+
+    public class addSpellBookLevel : OwnedGameLogicComponent<UnitDescriptor>, ILevelUpCompleteUIHandler
+    {
+        [JsonProperty]
+        bool applied;
+        public BlueprintCharacterClass character_class;
+
+        public void HandleLevelUpComplete(UnitEntityData unit, bool isChargen)
+        {
+        }
+
+        public override void OnFactActivate()
+        {
+            try
+            {                
+                var levelUp = Game.Instance.UI.CharacterBuildController.LevelUpController;
+                if (Owner == levelUp.Preview || Owner == levelUp.Unit)
+                {
+                    applied = true;
+                    var spellbook = this.Owner.GetSpellbook(character_class);
+                    if (spellbook == null)
+                    {
+                        return;
+                    }
+                    int caster_level1 = spellbook.CasterLevel;
+                    spellbook.AddCasterLevel();
+                    int caster_level2 = spellbook.CasterLevel;
+                    if (!spellbook.Blueprint.Spontaneous)
+                    {
+                        return;
+                    }
+                    //now let us try to add more spells if spellbook is spontaneous
+
+                    var spell_selection = levelUp.State.DemandSpellSelection(spellbook.Blueprint, spellbook.Blueprint.SpellList);
+
+                    if (spellbook.Blueprint.SpellsKnown != null)
+                    {
+                        for (int index = 0; index <= 9; ++index)
+                        {
+                            int? count1 = spellbook.Blueprint.SpellsKnown.GetCount(caster_level1, index);
+                            int num1 = !count1.HasValue ? 0 : count1.Value;
+                            int? count2 = spellbook.Blueprint.SpellsKnown.GetCount(caster_level2, index);
+                            int num2 = !count2.HasValue ? 0 : count2.Value;
+                            int existing_new_spells = spell_selection.LevelCount[index]?.SpellSelections.Length ?? 0;
+                            spell_selection.SetLevelSpells(index, existing_new_spells + num2 - num1);
+                        }
+                    }                  
+                }
+
+            }
+            catch (Exception e)
+            {
+                Main.logger.Error(e.ToString());
+            }
+        }
+    }
 }

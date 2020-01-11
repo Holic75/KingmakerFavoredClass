@@ -28,6 +28,13 @@ It adds the following options for favored class bonuses:
  - +1 to natural AC when using mutagen/4 levels for dwarf alchemists
  - +1 to number of internal buffer uses/6 levels for halfling kineticists
  
+ 
+It also add following feats:
+- Favored Prestige Class (due to technical reasons should always be taken before taking first level in corresponding prestige class)
+- Prestigious Spellcaster (again due to technical reasons can be taken only after you select a spellbook to advance with corresponding prestige class,
+also it will not work if it is taken for spontaneous caster advancing prestige class and you get to select new spells known from some other spontaneous casting class,
+i.e. if you have eldritch knight advancing sorceror spellcasting, you can not take the feat during a level up for let's say inquisitor class)
+
 It requires at least Call of the Wild 1.47.
 
 This mod supposed to work with all classes that were introduced by other mods as long as it is loaded the last (should be by default).

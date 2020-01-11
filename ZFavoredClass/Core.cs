@@ -47,6 +47,9 @@ namespace ZFavoredClass
 
         static BlueprintArchetype eldritch_scion = library.Get<BlueprintArchetype>("d078b2ef073f2814c9e338a789d97b73");
         static internal BlueprintFeatureSelection favored_class_selection;
+        static public BlueprintFeatureSelection favored_prestige_class_selection;
+        static internal Dictionary<StatType, BlueprintFeature> favored_prestige_class_skill_bonus_map = new Dictionary<StatType, BlueprintFeature>();
+        static public BlueprintFeatureSelection prestigious_spellcaster;
 
 
         static internal BlueprintRace elf = library.Get<BlueprintRace>("25a5878d125338244896ebd3238226c8");
@@ -82,6 +85,8 @@ namespace ZFavoredClass
         static public FavoredClassFeature favored_bombs;
 
 
+
+
         static internal void load()
         {
             favored_class_selection = CallOfTheWild.Helpers.CreateFeatureSelection("FavoredClassSelection",
@@ -91,11 +96,23 @@ namespace ZFavoredClass
                                                                                    null,
                                                                                    FeatureGroup.AasimarHeritage);
 
-            var classes = library.Root.Progression.CharacterClasses.Where(c => c.AssetGuid != eldritchScionClassId && !c.PrestigeClass).ToList();
+            favored_prestige_class_selection = CallOfTheWild.Helpers.CreateFeatureSelection("FavoredPrestigeClassSelection",
+                                                                                           "Favored Prestige Class",
+                                                                                           "Choose one prestige class and one skill that is a class skill for that prestige class. Whenever you gain a level in that prestige class, you receive +1 hit point or +1 skill rank. You gain a +2 bonus on checks using the skill you chose from that prestige class’s class skills. If you have 10 or more ranks in one of these skills, the bonus increases to +4 for that skill. This bonus stacks with the bonus granted by Skill Focus.\n"
+                                                                                           + "The choice of favored prestige class cannot be changed once you make it. Levels in a favored prestige class are not the same as levels in a regular favored class, and as such levels in a favored prestige class can never be used to qualify or gain favored class options. You can have only one favored prestige class, but can still have a favored base class as well.\n"
+                                                                                           + "Note: You should select this feat before you gain levels in your chosen favored prestige class, but the benefits of the feat do not apply until you actually gain at least 1 level in that prestige class.",
+                                                                                           "",
+                                                                                           null,
+                                                                                           FeatureGroup.Feat);
+            favored_prestige_class_selection.AddComponent(Helpers.PrerequisiteNoFeature(favored_prestige_class_selection));
+            library.AddFeats(favored_prestige_class_selection);
+            createFavoredPrestigeClassSkillFocusSelection();
+
+            var classes = library.Root.Progression.CharacterClasses.Where(c => c.AssetGuid != eldritchScionClassId).ToList();
             foreach (var c in classes)
             {
                 var progression = CallOfTheWild.Helpers.CreateProgression("FavoredClass" + c.name + "Progression",
-                                                                          "Favored Class - " + c.Name,
+                                                                          $"Favored {(c.PrestigeClass ? "Prestige " : "")}Class - " + c.Name,
                                                                           favored_class_selection.Description,
                                                                           CallOfTheWild.Helpers.MergeIds("602ea6032c324258a183588f84522ea1", c.AssetGuid),
                                                                           null,
@@ -104,9 +121,16 @@ namespace ZFavoredClass
                                                                           );
                 progression.Classes = new BlueprintCharacterClass[] { c };
 
-                favored_class_selection.AllFeatures = favored_class_selection.AllFeatures.AddToArray(progression);
+                if (c.PrestigeClass)
+                {
+                    favored_prestige_class_selection.AllFeatures = favored_prestige_class_selection.AllFeatures.AddToArray(progression);
+                    progression.AddComponent(Helpers.Create<PrerequisiteNoClassLevel>(p => p.CharacterClass = c));
+                }
+                else
+                {
+                    favored_class_selection.AllFeatures = favored_class_selection.AllFeatures.AddToArray(progression);
+                }
                 class_guid_progression_map.Add(c.AssetGuid, progression);
-
                 var bonus_selection = CallOfTheWild.Helpers.CreateFeatureSelection("FavoredClass" + c.name + "FeatureSelecion",
                                                                                    progression.Name,
                                                                                    progression.Description,
@@ -117,9 +141,24 @@ namespace ZFavoredClass
                 bonus_selection.Mode = SelectionMode.Default;
 
                 var entries = new List<LevelEntry>();
-                for (int i = 1; i <= 20; i++)
+                int max_lvl = c.PrestigeClass ? 10 : 20;
+                for (int i = 1; i <= max_lvl; i++)
                 {
-                    entries.Add(CallOfTheWild.Helpers.LevelEntry(i, bonus_selection));
+                    if (c.PrestigeClass && i == 1)
+                    {
+                        var skill_focus_selection = Helpers.CreateFeatureSelection("FavoredPrestigeClass" + c.name + "SkillFocusSelection",
+                                                           "Favored Prestige Class Skill Focus",
+                                                           favored_prestige_class_selection.Description,
+                                                           Helpers.MergeIds(c.AssetGuid, "7b57b4a2378644f299590cfdf559b1c9"),
+                                                           null,
+                                                           FeatureGroup.None);
+                        skill_focus_selection.AllFeatures = c.ClassSkills.Select(s => favored_prestige_class_skill_bonus_map[s]).ToArray();
+                        entries.Add(CallOfTheWild.Helpers.LevelEntry(i, bonus_selection, skill_focus_selection));
+                    }
+                    else
+                    {
+                        entries.Add(CallOfTheWild.Helpers.LevelEntry(i, bonus_selection));
+                    }
                 }
 
                 progression.LevelEntries = entries.ToArray();
@@ -172,11 +211,30 @@ namespace ZFavoredClass
             addPaladinFavoredClassBonuses();
             addAbilityDamageBonus();
             addDwarfAlchemistMutagenBonus();
-
             fixCompanions();
-
-           
+          
             loadCustomFavoredClassBonuses();
+            createPrestigiousSpellcaster();
+        }
+
+
+        static void createFavoredPrestigeClassSkillFocusSelection()
+        {
+            var skill_foci = library.Get<BlueprintFeatureSelection>("c9629ef9eebb88b479b2fbc5e836656a").AllFeatures;
+
+            foreach (var skill_focus in skill_foci)
+            {
+                var favored_skill_focus = library.CopyAndAdd<BlueprintFeature>(skill_focus.AssetGuid, "FavoredPrestigeClass" + skill_focus.name, "");
+                var skill = favored_skill_focus.GetComponent<AddContextStatBonus>().Stat;
+
+                var config = Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.BaseStat, stat: skill, progression: ContextRankProgression.Custom,
+                                                             customProgression: new (int, int)[] { (9, 2), (20, 4) });
+                favored_skill_focus.ReplaceComponent<ContextRankConfig>(config);
+                favored_skill_focus.SetName("Favored Prestige Class " + favored_skill_focus.Name);
+                favored_skill_focus.SetDescription(favored_skill_focus.Description.Replace("+3", "+2").Replace("+6", "+4"));
+
+                favored_prestige_class_skill_bonus_map.Add(skill, favored_skill_focus);
+            }            
         }
 
 
@@ -425,6 +483,26 @@ namespace ZFavoredClass
             foreach (var fp in filePaths)
             {
                 loadCustomFeature(fp);
+            }
+        }
+
+
+        static void createPrestigiousSpellcaster()
+        {
+
+            prestigious_spellcaster = Helpers.CreateFeatureSelection("PrestigiousSpellcasterFeature",
+                                                                     "Prestigious Spellcaster",
+                                                                     "You gain new spells per day and spells known and +1 spellcasting level in caster class that is advanced by your prestige class.\n"
+                                                                     + "Special: You can select the Prestigious Spellcaster feat multiple times. Each time you select the Prestigious Spellcaster feat, your effective caster level increases by 1.\n"
+                                                                     + "However, regardless of the number of times you choose this feat, the total increase to your effective caster level cannot exceed your actual prestige class level.",
+                                                                     "",
+                                                                     library.Get<BlueprintFeature>("06964d468fde1dc4aa71a92ea04d930d").Icon,
+                                                                     FeatureGroup.Feat);
+            library.AddFeats(prestigious_spellcaster);
+            string[] filePaths = Directory.GetFiles(@"./Mods/ZFavoredClass/PrestigiousSpellcaster/", "*.json", SearchOption.TopDirectoryOnly);
+            foreach (var fp in filePaths)
+            {
+                loadPrestigiousSpellCaster(fp);
             }
         }
 
@@ -815,6 +893,67 @@ namespace ZFavoredClass
                     races.Add(library.Get<BlueprintRace>(race_guid));
                 }
                 addFavoredClassBonus(feature, partial_feature, classes.ToArray(), divisor, races.ToArray());
+                Main.logger.Log("Success");
+            }
+            catch (Exception ex)
+            {
+                Main.logger.Log("Failure");
+                Main.logger.Log(ex.ToString());
+            }
+
+        }
+
+
+        static void loadPrestigiousSpellCaster(string filename)
+        {
+            string[] merge_guids = new string[]
+                                            {
+                                                "5de35dca32484ccdbce307504b9fe554",
+                                                "5c47d51fcb80411c864e6791fa3c4886",
+                                                "e895af43dd4e40acbff1e6d8798b3b55",
+                                                "9b229bde63cb429b8539821f8e4f00d2",
+                                                "b0f8d2960a0a4ff7b5815397423321e6",
+                                                "53e61ed513024eccb854ae4b0d7684b9",
+                                                "435bc51b95dd4f9f91d9f19345d3714d",
+                                                "43d076225ec74d8daa23df1265b1e45f",
+                                                "a673258000804214be8da878270599fe",
+                                                "d1506b1eef8b4a2fb5730e4c42f8302e"
+                                            };
+            Main.logger.Log("Loading prestigious spllcaster data from: " + filename);
+
+            string class_guid;
+            int[] levels;
+            using (StreamReader caster_file = File.OpenText(filename))
+            using (JsonTextReader reader = new JsonTextReader(caster_file))
+            {
+                JObject jo = (JObject)JToken.ReadFrom(reader);
+
+                class_guid = (string)jo["class"];
+                levels = jo["spell_levels"].Select(x => (int)x).ToArray();
+            }
+            try
+            {
+                var caster_class = library.Get<BlueprintCharacterClass>(class_guid);
+                BlueprintFeature[] features = new BlueprintFeature[levels.Length];
+
+                for (int i = 0; i < levels.Length; i++)
+                {
+                    features[i] = Helpers.CreateFeature("PrestigiousSpellcaster" + caster_class.name + levels[i].ToString() +"Feature",
+                                                        $"Prestigious Spellcaster: {caster_class.Name} ({levels[i]})",
+                                                        prestigious_spellcaster.Description,
+                                                        Helpers.MergeIds(caster_class.AssetGuid, merge_guids[levels[i] - 1]),
+                                                        null,
+                                                        FeatureGroup.Feat,
+                                                        Helpers.Create<NewMechanics.addSpellBookLevel>(a => a.character_class = caster_class),
+                                                        Helpers.PrerequisiteClassLevel(caster_class, levels[i]),
+                                                        Helpers.PrerequisiteFeature(class_guid_progression_map[caster_class.AssetGuid])
+                                                        );
+                    if (i > 0)
+                    {
+                        features[i].AddComponent(Helpers.PrerequisiteFeature(features[i - 1]));
+                    }
+                }
+                prestigious_spellcaster.AllFeatures = prestigious_spellcaster.AllFeatures.AddToArray(features);
                 Main.logger.Log("Success");
             }
             catch (Exception ex)
