@@ -91,7 +91,7 @@ namespace ZFavoredClass
         {
             favored_class_selection = CallOfTheWild.Helpers.CreateFeatureSelection("FavoredClassSelection",
                                                                                    "Favored Class",
-                                                                                   "Each character begins play with a single favored class of his choosing—typically, this is the same class as the one he chooses at 1st level.Whenever a character gains a level in his favored class, he receives either + 1 hit point per level or + 1 skill rank per 2 levels. The choice of favored class cannot be changed once the character is created, and the choice of gaining a hit point or a skill rank each time a character gains a level (including his first level) cannot be changed once made for a particular level. Prestige classes can never be a favored class.",
+                                                                                   "Each character begins play with a single favored class of his choosing—typically, this is the same class as the one he chooses at 1st level. Whenever a character gains a level in his favored class, he receives either + 1 hit point per level or + 1 skill rank per 2 levels. The choice of favored class cannot be changed once the character is created, and the choice of gaining a hit point or a skill rank each time a character gains a level (including his first level) cannot be changed once made for a particular level. Prestige classes can never be a favored class.",
                                                                                    "",
                                                                                    null,
                                                                                    FeatureGroup.AasimarHeritage);
@@ -113,7 +113,7 @@ namespace ZFavoredClass
             {
                 var progression = CallOfTheWild.Helpers.CreateProgression("FavoredClass" + c.name + "Progression",
                                                                           $"Favored {(c.PrestigeClass ? "Prestige " : "")}Class - " + c.Name,
-                                                                          favored_class_selection.Description,
+                                                                          c.PrestigeClass ? favored_prestige_class_selection.Description : favored_class_selection.Description,
                                                                           CallOfTheWild.Helpers.MergeIds("602ea6032c324258a183588f84522ea1", c.AssetGuid),
                                                                           null,
                                                                           FeatureGroup.None,
