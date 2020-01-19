@@ -800,7 +800,10 @@ namespace ZFavoredClass
             addFavoredClassBonus(CreateExtraSpellSelection(alchemist.Spellbook, alchemist, 5), null, alchemist, 2, elf, human, halfling, half_elf, half_orc, aasimar, tiefling);
             addFavoredClassBonus(CreateExtraSpellSelection(bard.Spellbook, bard, 5), null, bard, 2,human, half_elf, half_orc, aasimar, tiefling, half_elf);
             addFavoredClassBonus(CreateExtraSpellSelection(inquistor.Spellbook, inquistor, 5), null, inquistor, 2, elf, human, half_elf, half_orc, aasimar, tiefling);
-            addFavoredClassBonus(CreateExtraSpellSelection(cleric.Spellbook, CallOfTheWild.Shaman.shaman_class, 8), null, CallOfTheWild.Shaman.shaman_class, 2, half_elf, human, half_orc, aasimar, tiefling);
+
+            var cleric_spells_for_shaman = Common.combineSpellLists("ShamanFavoredClassClericSpellList", cleric.Spellbook.SpellList);
+            Common.excludeSpellsFromList(cleric_spells_for_shaman, Shaman.shaman_class.Spellbook.SpellList);
+            addFavoredClassBonus(CreateExtraSpellSelection(cleric.Spellbook, CallOfTheWild.Shaman.shaman_class, 8, cleric_spells_for_shaman), null, CallOfTheWild.Shaman.shaman_class, 2, half_elf, human, half_orc, aasimar, tiefling);
             addFavoredClassBonus(CreateExtraSpellSelection(sorceror.Spellbook, sorceror, 8), null, sorceror, 2, human, half_elf, half_orc, aasimar, tiefling);
             addFavoredClassBonus(CreateExtraSpellSelection(wizard.Spellbook, wizard, 8), null, wizard, 2, human, half_elf, half_orc, aasimar, tiefling);
             addFavoredClassBonus(CreateExtraSpellSelection(CallOfTheWild.Witch.witch_class.Spellbook, CallOfTheWild.Witch.witch_class, 8), null, CallOfTheWild.Witch.witch_class, 2, human, half_orc, half_elf, elf, aasimar, tiefling);
@@ -808,7 +811,7 @@ namespace ZFavoredClass
         }
 
 
-        static BlueprintFeatureSelection CreateExtraSpellSelection(BlueprintSpellbook spellbook, BlueprintCharacterClass @class, int max_spellLevel)
+        static BlueprintFeatureSelection CreateExtraSpellSelection(BlueprintSpellbook spellbook, BlueprintCharacterClass @class, int max_spellLevel, BlueprintSpellList custom_spell_list = null)
         {
             String[] spellLevelGuids = new String[] {"1541c1ef94e24659b1120cf18792094a",
                                                      "5c570cda113846ea86b800d64a90c2d5",
@@ -835,8 +838,8 @@ namespace ZFavoredClass
                 learn_spell.SpecificSpellLevel = true;
                 learn_spell.SpellLevelPenalty = 0;
                 learn_spell.SpellcasterClass = @class;
-                learn_spell.SpellList = spellbook.SpellList;
-                learn_spell.ReplaceComponent<LearnSpellParametrized>(l => { l.SpellList = spellbook.SpellList; l.SpecificSpellLevel = true; l.SpellLevel = i; l.SpellcasterClass = @class; });
+                learn_spell.SpellList = custom_spell_list ?? spellbook.SpellList;
+                learn_spell.ReplaceComponent<LearnSpellParametrized>(l => { l.SpellList = custom_spell_list ?? spellbook.SpellList; l.SpecificSpellLevel = true; l.SpellLevel = i; l.SpellcasterClass = @class; });
                 learn_spell.AddComponents(Common.createPrerequisiteClassSpellLevel(@class, i + 1)
                     );
                 learn_spell.SetName(Helpers.CreateString($"Favored{@class.Name}{spellbook.SpellList.name}BonusSpellParametrizedFeature{i}.Name", $"Bonus {spellbook.Name} Spell" + $" (level {i})"));
