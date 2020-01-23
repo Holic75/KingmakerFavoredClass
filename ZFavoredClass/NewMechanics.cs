@@ -229,6 +229,25 @@ namespace ZFavoredClass.NewMechanics
     }
 
 
+    public class PrerequisiteClassSpellbook : Prerequisite
+    {
+        public BlueprintCharacterClass character_class;
+
+        public override bool Check(
+          FeatureSelectionState selectionState,
+          UnitDescriptor unit,
+          LevelUpState state)
+        {
+            return unit.GetSpellbook(character_class) != null;
+        }
+
+        public override string GetUIText()
+        {
+            return character_class.Name + " Spellbook";
+        }
+    }
+
+
 
     public class addSpellBookLevel : OwnedGameLogicComponent<UnitDescriptor>, ILevelUpCompleteUIHandler
     {

@@ -949,6 +949,7 @@ namespace ZFavoredClass
                                                         FeatureGroup.Feat,
                                                         Helpers.Create<NewMechanics.addSpellBookLevel>(a => a.character_class = caster_class),
                                                         Helpers.PrerequisiteClassLevel(caster_class, levels[i]),
+                                                        Helpers.Create<NewMechanics.PrerequisiteClassSpellbook>(p => p.character_class = caster_class),
                                                         Helpers.PrerequisiteFeature(class_guid_progression_map[caster_class.AssetGuid])
                                                         );
                     if (i > 0)
