@@ -825,7 +825,7 @@ namespace ZFavoredClass
 
 
             var icon = Helpers.GetIcon("55edf82380a1c8540af6c6037d34f322"); // elven magic
-            BlueprintFeatureSelection learn_selection = CallOfTheWild.Helpers.CreateFeatureSelection($"Favored{@class.Name}{spellbook.SpellList.name}BonusSpellFeatureSelection",
+            BlueprintFeatureSelection learn_selection = CallOfTheWild.Helpers.CreateFeatureSelection($"Favored{@class.name.Replace("Class", "").Replace("Witcher", "Witch")}{spellbook.SpellList.name}BonusSpellFeatureSelection",
                                                                           $"Bonus {spellbook.Name} Spell",
                                                                            $"Add 1/2 spell to your spellbook from the {spellbook.Name} spell list. This spell must be at least one level below the highest {@class.Name} spell you can cast.",
                                                                           "",
@@ -833,7 +833,7 @@ namespace ZFavoredClass
                                                                           FeatureGroup.None);
             for (int i = 1; i <= max_spellLevel; i++)
             {
-                var learn_spell = library.CopyAndAdd<BlueprintParametrizedFeature>("bcd757ac2aeef3c49b77e5af4e510956", $"Favored{@class.Name}{spellbook.SpellList.name}{i}ParametrizedFeature", "");
+                var learn_spell = library.CopyAndAdd<BlueprintParametrizedFeature>("bcd757ac2aeef3c49b77e5af4e510956", $"Favored{@class.name.Replace("Class", "").Replace("Witcher", "Witch")}{spellbook.SpellList.name}{i}ParametrizedFeature", "");
                 learn_spell.SpellLevel = i;
                 learn_spell.SpecificSpellLevel = true;
                 learn_spell.SpellLevelPenalty = 0;
@@ -922,7 +922,7 @@ namespace ZFavoredClass
                                                 "a673258000804214be8da878270599fe",
                                                 "d1506b1eef8b4a2fb5730e4c42f8302e"
                                             };
-            Main.logger.Log("Loading prestigious spllcaster data from: " + filename);
+            Main.logger.Log("Loading prestigious spellcaster data from: " + filename);
 
             string class_guid;
             int[] levels;
