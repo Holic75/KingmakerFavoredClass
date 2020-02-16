@@ -207,6 +207,7 @@ namespace ZFavoredClass
             addExtraKnownSpellsFavoredClassBonus();
             addExtraSelectionFavoredClassBonus();
             addExtraResourceFavoredClassBonus();
+            addConcentrationFavoredClassBonus();
             addAnimalCompanionFavoredClassBonuses();
             addPaladinFavoredClassBonuses();
             addAbilityDamageBonus();
@@ -419,20 +420,29 @@ namespace ZFavoredClass
             addFavoredClassBonus(lay_on_hands_bonus_feature, null, paladin, 2, elf, gnome, halfling, half_elf);
             addFavoredClassBonus(lay_on_hands_self_bonus_feature, null, paladin, 1, tiefling);
 
+
+        }
+
+
+        static void addConcentrationFavoredClassBonus()
+        {
             var concentration_bonus = Helpers.CreateFeature("ConcentrationFavoredClassBonus",
-                                                            "Concentration Bonus",
-                                                            "Add a +1 bonus on concentration checks when casting spells.",
-                                                            "",
-                                                            library.Get<BlueprintFeature>("06964d468fde1dc4aa71a92ea04d930d").Icon, //combat casting
-                                                            FeatureGroup.None,
-                                                            CallOfTheWild.Helpers.Create<ConcentrationBonus>(c => c.Value = CallOfTheWild.Helpers.CreateContextValue(AbilityRankType.Default))
-                                                            );
+                                                "Concentration Bonus",
+                                                "Add a +1 bonus on concentration checks when casting spells.",
+                                                "",
+                                                library.Get<BlueprintFeature>("06964d468fde1dc4aa71a92ea04d930d").Icon, //combat casting
+                                                FeatureGroup.None,
+                                                CallOfTheWild.Helpers.Create<ConcentrationBonus>(c => c.Value = CallOfTheWild.Helpers.CreateContextValue(AbilityRankType.Default))
+                                                );
             concentration_bonus.Ranks = 20;
             concentration_bonus.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: concentration_bonus));
 
-            addFavoredClassBonus(concentration_bonus, null, new BlueprintCharacterClass[] {paladin, VindicativeBastard.vindicative_bastard_class }, 1, dwarf);
-        }
+            var concentration_arcanist = createFeatureCopy(concentration_bonus, concentration_bonus.Description);
+            concentration_arcanist.ReplaceComponent<ContextRankConfig>(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: concentration_arcanist));
 
+            addFavoredClassBonus(concentration_bonus, null, new BlueprintCharacterClass[] { paladin, VindicativeBastard.vindicative_bastard_class }, 1, dwarf);
+            addFavoredClassBonus(concentration_arcanist, null, new BlueprintCharacterClass[] { Arcanist.arcanist_class }, 1, half_orc);
+        }
 
         static void addAnimalCompanionFavoredClassBonuses()
         {
@@ -653,10 +663,12 @@ namespace ZFavoredClass
             //gnome/human slayer talent 1/6
             //human wild talent 1/6
             //magus arcana 1/6
+            //arcane exploit 1/6
 
             addFavoredClassBonus(createFeatureCopy(Warpriest.fighter_feat, "Gain 1/6 of a new bonus combat feat.", 3), null, Warpriest.warpriest_class, 6, human, half_elf, half_orc, aasimar, tiefling);
             addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("c074a5d615200494b8f2a9c845799d93"), "Gain 1/6 of a new rogue talent.", 3), null, rogue, 6, human, half_elf, half_orc, aasimar, tiefling);
             addFavoredClassBonus(createFeatureCopy(Witch.hex_selection, "Gain 1/6 of a new witch hex.", 3), null, Witch.witch_class, 6, gnome);
+            addFavoredClassBonus(createFeatureCopy(Arcanist.arcane_exploits, "Gain 1/6 of a new arcanist exploit.", 3), null, Arcanist.arcanist_class, 6, halfling);
             addFavoredClassBonus(createFeatureCopy(Shaman.hex_selection, "Gain 1/6 of a new shaman hex.", 3), null, Shaman.shaman_class, 6, gnome);
             addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("43d1b15873e926848be2abf0ea3ad9a8"), "Gain 1/6 of a new slayer talent.", 3), null, slayer, 6, human, gnome, half_elf, half_orc, aasimar, tiefling);
             addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("5c883ae0cd6d7d5448b7a420f51f8459"), "Gain 1/6 of a new wild talent.", 3), null, kineticist, 6, human, half_elf, half_orc, aasimar, tiefling);
@@ -761,6 +773,18 @@ namespace ZFavoredClass
                                                     CallOfTheWild.KineticistFix.internal_buffer.Icon,
                                                     CallOfTheWild.KineticistFix.internal_buffer_resource);
 
+            var extra_max_arcane_reservoir = createResourceBonusFeature("FavoredClassExtraMaxArcaneReservoirFeature",
+                                                                        "Bonus Maximum Arcane Reservoir",
+                                                                        "Increase total number of points in the arcanist’s arcane reservoir by 1.",
+                                                                        Arcanist.arcane_reservoir.Icon,
+                                                                        Arcanist.arcane_reservoir_resource);
+
+            var extra_arcane_reservoir = createResourceBonusFeature("FavoredClassExtraArcaneReservoirFeature",
+                                                                        "Bonus Arcane Reservoir",
+                                                                        "Add 1/6 to the number of points the arcanist gains in her arcane reservoir each day.",
+                                                                        Arcanist.arcane_reservoir.Icon,
+                                                                        Arcanist.arcane_reservoir_partial_resource);
+
 
 
             addFavoredClassBonus(extra_bloodrage, null, Bloodrager.bloodrager_class, 1, dwarf, half_orc, human, half_elf, aasimar, tiefling);
@@ -772,6 +796,8 @@ namespace ZFavoredClass
             addFavoredClassBonus(extra_arcane_pool, null, magus, 4, human, half_elf, tiefling, aasimar, half_orc);
             addFavoredClassBonus(extra_eldritch_pool, null, magus, 4, human, half_elf,tiefling, aasimar, half_orc);
             addFavoredClassBonus(extra_internal_buffer, null, kineticist, 6, halfling);
+            addFavoredClassBonus(extra_max_arcane_reservoir, null, Arcanist.arcanist_class, 1, elf);
+            addFavoredClassBonus(extra_arcane_reservoir, null, Arcanist.arcanist_class, 6, gnome);
         }
 
 
@@ -808,6 +834,14 @@ namespace ZFavoredClass
             addFavoredClassBonus(CreateExtraSpellSelection(wizard.Spellbook, wizard, 8), null, wizard, 2, human, half_elf, half_orc, aasimar, tiefling);
             addFavoredClassBonus(CreateExtraSpellSelection(CallOfTheWild.Witch.witch_class.Spellbook, CallOfTheWild.Witch.witch_class, 8), null, CallOfTheWild.Witch.witch_class, 2, human, half_orc, half_elf, elf, aasimar, tiefling);
             addFavoredClassBonus(CreateExtraSpellSelection(CallOfTheWild.Skald.skald_class.Spellbook, CallOfTheWild.Skald.skald_class, 5), null, CallOfTheWild.Skald.skald_class, 2, human, half_elf, half_orc, aasimar, tiefling);
+
+            var arcanist_spells = CreateExtraSpellSelection(CallOfTheWild.Arcanist.arcanist_class.Spellbook, CallOfTheWild.Arcanist.arcanist_class, 8);
+            arcanist_spells.AddComponent(Common.prerequisiteNoArchetype(Arcanist.arcanist_class, Arcanist.unlettered_arcanist_archetype));
+            addFavoredClassBonus(arcanist_spells, null, CallOfTheWild.Arcanist.arcanist_class, 2, human, half_elf, half_orc, aasimar, tiefling);
+
+            var unlettered_arcanist_spells = CreateExtraSpellSelection(CallOfTheWild.Arcanist.unlettered_arcanist_archetype.ReplaceSpellbook, CallOfTheWild.Arcanist.arcanist_class, 8);
+            unlettered_arcanist_spells.AddComponent(Common.createPrerequisiteArchetypeLevel(Arcanist.arcanist_class, Arcanist.unlettered_arcanist_archetype, 1));
+            addFavoredClassBonus(unlettered_arcanist_spells, null, CallOfTheWild.Arcanist.arcanist_class, 2, human, half_elf, half_orc, aasimar, tiefling);
         }
 
 

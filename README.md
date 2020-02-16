@@ -9,9 +9,9 @@ It adds the following options for favored class bonuses:
  - +1 skill point/2 levels
  - +1 round of rage/bloodrage/bard or skald performance/level for certain races
  - +1 bomb use per day/2 levels for gnome alchemist
- - +1 combat feat/rogue, slayer or wild talent/witch or shaman hex/magus arcana/6 levels for certain races
+ - +1 combat feat/rogue, slayer or wild talent/witch or shaman hex/magus arcana/arcane exploit/6 levels for certain races
  - +1 monk ki pool/magus arcane pool/4 levels for certain races
- - +1 known spell of highest level-1/2 levels for alchemist/bard/inquisitor/sorceror/wizard/witch/skald for certain races
+ - +1 known spell of highest level-1/2 levels for alchemist/bard/inquisitor/sorceror/wizard/witch/skald/arcanist for certain races
  - +1 known cleric spell of highes level-1/2 levels for half-elf, human or half-orc shaman
  - +1 luck bonus on saving throws/4 levels for animal companion of halfling druid or hunter
  - +1 DR/magic /2 levels for animal companion of gnome ranger or hunter
@@ -27,6 +27,8 @@ It adds the following options for favored class bonuses:
  - +1 to base speed/level for elf barbarians, bloodragers and monks
  - +1 to natural AC when using mutagen/4 levels for dwarf alchemists
  - +1 to number of internal buffer uses/6 levels for halfling kineticists
+ - +1 to maximum number of arcane reservoir points/level for elf arcanists,
+ - +1 to to aracane reservoir point restored after rest/6 levels for gnome arcanists.
  
  
 It also add following feats:
@@ -35,7 +37,7 @@ It also add following feats:
 also it will not work if it is taken for spontaneous caster advancing prestige class and you get to select new spells known from some other spontaneous casting class,
 i.e. if you have eldritch knight advancing sorceror spellcasting, you can not take the feat during a level up for let's say inquisitor class)
 
-It requires at least Call of the Wild 1.47.
+It requires at least Call of the Wild 1.59.
 
 This mod supposed to work with all classes that were introduced by other mods as long as it is loaded the last (should be by default).
 
