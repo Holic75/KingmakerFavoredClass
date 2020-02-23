@@ -599,7 +599,7 @@ namespace ZFavoredClass
                                                                               feature.GetComponents<Prerequisite>().ToArray()
                                                                               );
                 }
-                partial_feature.AddComponent(CallOfTheWild.Helpers.Create<NewMechanics.PrerequisiteFeatureFullRank>(p =>
+                partial_feature.AddComponent(CallOfTheWild.Helpers.Create<CallOfTheWild.NewMechanics.PrerequisiteFeatureFullRank>(p =>
                                                                                                                     {
                                                                                                                         p.divisor = divisor;
                                                                                                                         p.Feature = partial_feature;
@@ -615,7 +615,7 @@ namespace ZFavoredClass
                     partial_feature.AddComponent(CallOfTheWild.Helpers.Create<NewMechanics.PrerequisiteRace>(p => { p.race = race; p.Group = Prerequisite.GroupType.Any; }));
                 }
 
-                feature.AddComponents(CallOfTheWild.Helpers.Create<NewMechanics.PrerequisiteFeatureFullRank>(p =>
+                feature.AddComponents(CallOfTheWild.Helpers.Create<CallOfTheWild.NewMechanics.PrerequisiteFeatureFullRank>(p =>
                                                                                                             {
                                                                                                                 p.divisor = divisor;
                                                                                                                 p.Feature = partial_feature;
@@ -826,6 +826,7 @@ namespace ZFavoredClass
             addFavoredClassBonus(CreateExtraSpellSelection(alchemist.Spellbook, alchemist, 5), null, alchemist, 2, elf, human, halfling, half_elf, half_orc, aasimar, tiefling);
             addFavoredClassBonus(CreateExtraSpellSelection(bard.Spellbook, bard, 5), null, bard, 2,human, half_elf, half_orc, aasimar, tiefling, half_elf);
             addFavoredClassBonus(CreateExtraSpellSelection(inquistor.Spellbook, inquistor, 5), null, inquistor, 2, elf, human, half_elf, half_orc, aasimar, tiefling);
+            addFavoredClassBonus(CreateExtraSpellSelection(Oracle.oracle_class.Spellbook, Oracle.oracle_class, 8), null, Oracle.oracle_class, 2, elf, human, half_elf, half_orc, aasimar, tiefling);
 
             var cleric_spells_for_shaman = Common.combineSpellLists("ShamanFavoredClassClericSpellList", cleric.Spellbook.SpellList);
             Common.excludeSpellsFromList(cleric_spells_for_shaman, Shaman.shaman_class.Spellbook.SpellList);

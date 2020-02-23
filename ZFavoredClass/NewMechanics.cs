@@ -152,63 +152,6 @@ namespace ZFavoredClass.NewMechanics
     }
 
 
-    [AllowMultipleComponents]
-    public class PrerequisiteFeatureFullRank : Prerequisite
-    {
-        [NotNull]
-        public BlueprintFeature Feature;
-        public BlueprintFeature checked_feature;
-        public int divisor;
-        public bool not;
-
-
-        public override bool Check(
-          FeatureSelectionState selectionState,
-          UnitDescriptor unit,
-          LevelUpState state)
-        {
-            if (selectionState != null && selectionState.IsSelectedInChildren(this.Feature))
-                return false;
-            if (selectionState != null && checked_feature != null && selectionState.IsSelectedInChildren(this.checked_feature))
-                return false;
-            var feat = unit.Progression.Features.GetFact(this.Feature);
-
-            if (feat == null)
-            {
-                return not;
-            }
-            else
-            {
-                return (((feat.GetRank() + 1) % divisor) == 0) != not;
-            }
-
-        }
-
-        public override string GetUIText()
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-            if ((UnityEngine.Object)this.Feature == (UnityEngine.Object)null)
-            {
-                UberDebug.LogError((object)("Empty Feature fild in prerequisite component: " + this.name), (object[])Array.Empty<object>());
-            }
-            else
-            {
-                if (string.IsNullOrEmpty(this.Feature.Name))
-                    UberDebug.LogError((object)string.Format("{0} has no Display Name", (object)this.Feature.name), (object[])Array.Empty<object>());
-                stringBuilder.Append(this.Feature.Name);
-            }
-
-            if (not)
-            {
-                return $"Less than {divisor - 1} rank(s) of {stringBuilder.ToString()}";
-            }
-            else
-            {
-                return $"{divisor - 1} rank(s) of {stringBuilder.ToString()}";
-            }
-        }
-    }
-
 
     public class PrerequisiteRace : Prerequisite
     {
