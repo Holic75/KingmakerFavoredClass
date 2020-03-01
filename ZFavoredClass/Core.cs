@@ -79,7 +79,8 @@ namespace ZFavoredClass
         static internal BlueprintCharacterClass slayer = library.Get<BlueprintCharacterClass>("c75e0971973957d4dbad24bc7957e4fb");
         static internal BlueprintCharacterClass monk = library.Get<BlueprintCharacterClass>("e8f21e5b58e0569468e420ebea456124");
 
-
+        static internal FavoredClassFeature rogue_talent;
+        static internal FavoredClassFeature wild_talent;
         static public FavoredClassFeature favored_skill;
         static public FavoredClassFeature favored_hp;
         static public FavoredClassFeature favored_bombs;
@@ -537,18 +538,18 @@ namespace ZFavoredClass
 
             addFavoredClassToCompanion(favored_hp, valerie_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_skill, amiri1_feature.GetComponent<AddClassLevels>());
-            addFavoredClassToCompanion(favored_skill, tristian_companion.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_hp, tristian_companion.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, harrim_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, linzi_feature.GetComponent<AddClassLevels>());
-            addFavoredClassToCompanion(favored_skill, ekun_feature.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_hp, ekun_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, jaethal_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_bombs, jubilost_feature.GetComponent<AddClassLevels>());
-            addFavoredClassToCompanion(favored_skill, nok_nok_companion.GetComponent<AddClassLevels>());
-            addFavoredClassToCompanion(favored_skill, kanerah_feature.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_hp, nok_nok_companion.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(wild_talent, kanerah_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, kalikke_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, octavia_feature.GetComponent<AddClassLevels>());
-            addFavoredClassToCompanion(favored_skill, regongar_feature.GetComponent<AddClassLevels>());
-            addFavoredClassToCompanion(favored_skill, varn_feature.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_hp, regongar_feature.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(rogue_talent, varn_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, cephal_feature.GetComponent<AddClassLevels>());
         }
 
@@ -666,12 +667,12 @@ namespace ZFavoredClass
             //arcane exploit 1/6
 
             addFavoredClassBonus(createFeatureCopy(Warpriest.fighter_feat, "Gain 1/6 of a new bonus combat feat.", 3), null, Warpriest.warpriest_class, 6, human, half_elf, half_orc, aasimar, tiefling);
-            addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("c074a5d615200494b8f2a9c845799d93"), "Gain 1/6 of a new rogue talent.", 3), null, rogue, 6, human, half_elf, half_orc, aasimar, tiefling);
+            rogue_talent = addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("c074a5d615200494b8f2a9c845799d93"), "Gain 1/6 of a new rogue talent.", 3), null, rogue, 6, human, half_elf, half_orc, aasimar, tiefling);
             addFavoredClassBonus(createFeatureCopy(Witch.hex_selection, "Gain 1/6 of a new witch hex.", 3), null, Witch.witch_class, 6, gnome);
             addFavoredClassBonus(createFeatureCopy(Arcanist.arcane_exploits, "Gain 1/6 of a new arcanist exploit.", 3), null, Arcanist.arcanist_class, 6, halfling);
             addFavoredClassBonus(createFeatureCopy(Shaman.hex_selection, "Gain 1/6 of a new shaman hex.", 3), null, Shaman.shaman_class, 6, gnome);
             addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("43d1b15873e926848be2abf0ea3ad9a8"), "Gain 1/6 of a new slayer talent.", 3), null, slayer, 6, human, gnome, half_elf, half_orc, aasimar, tiefling);
-            addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("5c883ae0cd6d7d5448b7a420f51f8459"), "Gain 1/6 of a new wild talent.", 3), null, kineticist, 6, human, half_elf, half_orc, aasimar, tiefling);
+            wild_talent = addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("5c883ae0cd6d7d5448b7a420f51f8459"), "Gain 1/6 of a new wild talent.", 3), null, kineticist, 6, human, half_elf, half_orc, aasimar, tiefling);
 
             var magus_arcana = createFeatureCopy(library.Get<BlueprintFeatureSelection>("e9dc4dfc73eaaf94aae27e0ed6cc9ada"), "Gain 1/6 of a new magus arcana.", 3);
             magus_arcana.AddComponent(Common.prerequisiteNoArchetype(magus, eldritch_scion));
@@ -785,6 +786,12 @@ namespace ZFavoredClass
                                                                         Arcanist.arcane_reservoir.Icon,
                                                                         Arcanist.arcane_reservoir_partial_resource);
 
+            var extra_inspiration = createResourceBonusFeature("FavoredClassExtraInspirationFeature",
+                                                            "Bonus Inspiration",
+                                                            "Increase the total number of points in the investigator’s inspiration pool by  1/3.",
+                                                            Investigator.inspiration.Icon,
+                                                            Investigator.inspiration_resource);
+
 
 
             addFavoredClassBonus(extra_bloodrage, null, Bloodrager.bloodrager_class, 1, dwarf, half_orc, human, half_elf, aasimar, tiefling);
@@ -796,8 +803,9 @@ namespace ZFavoredClass
             addFavoredClassBonus(extra_arcane_pool, null, magus, 4, human, half_elf, tiefling, aasimar, half_orc);
             addFavoredClassBonus(extra_eldritch_pool, null, magus, 4, human, half_elf,tiefling, aasimar, half_orc);
             addFavoredClassBonus(extra_internal_buffer, null, kineticist, 6, halfling);
-            addFavoredClassBonus(extra_max_arcane_reservoir, null, Arcanist.arcanist_class, 1, elf);
+            addFavoredClassBonus(extra_max_arcane_reservoir, null, Arcanist.arcanist_class, 1, elf, half_elf);
             addFavoredClassBonus(extra_arcane_reservoir, null, Arcanist.arcanist_class, 6, gnome);
+            addFavoredClassBonus(extra_inspiration, null, Investigator.investigator_class, 3, elf, half_elf);
         }
 
 
@@ -843,6 +851,14 @@ namespace ZFavoredClass
             var unlettered_arcanist_spells = CreateExtraSpellSelection(CallOfTheWild.Arcanist.unlettered_arcanist_archetype.ReplaceSpellbook, CallOfTheWild.Arcanist.arcanist_class, 8);
             unlettered_arcanist_spells.AddComponent(Common.createPrerequisiteArchetypeLevel(Arcanist.arcanist_class, Arcanist.unlettered_arcanist_archetype, 1));
             addFavoredClassBonus(unlettered_arcanist_spells, null, CallOfTheWild.Arcanist.arcanist_class, 2, human, half_elf, half_orc, aasimar, tiefling);
+
+            var investigator_formulae = CreateExtraSpellSelection(CallOfTheWild.Investigator.investigator_class.Spellbook, CallOfTheWild.Investigator.investigator_class, 5);
+            investigator_formulae.AddComponent(Common.prerequisiteNoArchetype(Investigator.investigator_class, CallOfTheWild.Investigator.questioner_archetype));
+            addFavoredClassBonus(investigator_formulae, null, Investigator.investigator_class, 2, human, halfling, gnome, half_elf, half_orc, aasimar, tiefling);
+
+            var questioner_spells = CreateExtraSpellSelection(CallOfTheWild.Investigator.questioner_archetype.ReplaceSpellbook, CallOfTheWild.Investigator.investigator_class, 5);
+            questioner_spells.AddComponent(Common.createPrerequisiteArchetypeLevel(Investigator.investigator_class, CallOfTheWild.Investigator.questioner_archetype, 1));
+            addFavoredClassBonus(questioner_spells, null, Investigator.investigator_class, 2, human, halfling, gnome, half_elf, half_orc, aasimar, tiefling);
         }
 
 
