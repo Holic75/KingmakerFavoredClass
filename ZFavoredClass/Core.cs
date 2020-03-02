@@ -544,7 +544,7 @@ namespace ZFavoredClass
             addFavoredClassToCompanion(favored_hp, ekun_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, jaethal_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_bombs, jubilost_feature.GetComponent<AddClassLevels>());
-            addFavoredClassToCompanion(favored_hp, nok_nok_companion.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_skill, nok_nok_companion.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(wild_talent, kanerah_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, kalikke_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, octavia_feature.GetComponent<AddClassLevels>());
@@ -859,6 +859,10 @@ namespace ZFavoredClass
             var questioner_spells = CreateExtraSpellSelection(CallOfTheWild.Investigator.questioner_archetype.ReplaceSpellbook, CallOfTheWild.Investigator.investigator_class, 5);
             questioner_spells.AddComponent(Common.createPrerequisiteArchetypeLevel(Investigator.investigator_class, CallOfTheWild.Investigator.questioner_archetype, 1));
             addFavoredClassBonus(questioner_spells, null, Investigator.investigator_class, 2, human, halfling, gnome, half_elf, half_orc, aasimar, tiefling);
+
+            var jynyiwei_spells = CreateExtraSpellSelection(CallOfTheWild.Investigator.jinyiwei_archetype.ReplaceSpellbook, CallOfTheWild.Investigator.investigator_class, 5);
+            jynyiwei_spells.AddComponent(Common.createPrerequisiteArchetypeLevel(Investigator.investigator_class, CallOfTheWild.Investigator.jinyiwei_archetype, 1));
+            addFavoredClassBonus(jynyiwei_spells, null, Investigator.investigator_class, 2, human, halfling, gnome, half_elf, half_orc, aasimar, tiefling);
         }
 
 

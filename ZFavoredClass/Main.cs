@@ -21,8 +21,6 @@ namespace ZFavoredClass
     {
         internal class Settings
         {
-
-
             internal Settings()
             {
 
