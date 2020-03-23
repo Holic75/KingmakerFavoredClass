@@ -29,7 +29,10 @@ It adds the following options for favored class bonuses:
  - +1 to number of internal buffer uses/6 levels for halfling kineticists
  - +1 to maximum number of arcane reservoir points/level for elf or half-elf arcanists
  - +1 to aracane reservoir point restored after rest/6 levels for gnome arcanists
- - +1 to investigator inspiration pool/3 levels for for elf or half-elf investigators.
+ - +1 to investigator inspiration pool/3 levels for for elf or half-elf investigators,
+ - +1 to Eidolon evolution pool/6 levels for half-elf summoners,
+ - +1 DR/evil /2 levels for eidolon of aasimar summoner,
+ - +1 bonus to natural AC of eidolon/4 levels for dwarf summoners.
  
  
 It also add following feats:
@@ -38,7 +41,7 @@ It also add following feats:
 also it will not work if it is taken for spontaneous caster advancing prestige class and you get to select new spells known from some other spontaneous casting class,
 i.e. if you have eldritch knight advancing sorceror spellcasting, you can not take the feat during a level up for let's say inquisitor class)
 
-It requires at least Call of the Wild 1.65.
+It requires at least Call of the Wild 1.68.
 
 This mod supposed to work with all classes that were introduced by other mods as long as it is loaded the last (should be by default).
 

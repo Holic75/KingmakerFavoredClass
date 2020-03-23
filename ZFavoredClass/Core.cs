@@ -78,6 +78,7 @@ namespace ZFavoredClass
         static internal BlueprintCharacterClass ranger = library.Get<BlueprintCharacterClass>("cda0615668a6df14eb36ba19ee881af6");
         static internal BlueprintCharacterClass slayer = library.Get<BlueprintCharacterClass>("c75e0971973957d4dbad24bc7957e4fb");
         static internal BlueprintCharacterClass monk = library.Get<BlueprintCharacterClass>("e8f21e5b58e0569468e420ebea456124");
+        static internal BlueprintCharacterClass animal = library.Get<BlueprintCharacterClass>("4cd1757a0eea7694ba5c933729a53920");
 
         static internal FavoredClassFeature rogue_talent;
         static internal FavoredClassFeature wild_talent;
@@ -127,7 +128,7 @@ namespace ZFavoredClass
                     favored_prestige_class_selection.AllFeatures = favored_prestige_class_selection.AllFeatures.AddToArray(progression);
                     progression.AddComponent(Helpers.Create<PrerequisiteNoClassLevel>(p => p.CharacterClass = c));
                 }
-                else
+                else if (c != animal && c != CallOfTheWild.Eidolon.eidolon_class)
                 {
                     favored_class_selection.AllFeatures = favored_class_selection.AllFeatures.AddToArray(progression);
                 }
@@ -485,6 +486,58 @@ namespace ZFavoredClass
 
             addFavoredClassBonus(master_dr_feature, null, new BlueprintCharacterClass[]{ Hunter.hunter_class, ranger }, 1, gnome);
             addFavoredClassBonus(master_saves_feature, null, new BlueprintCharacterClass[] { Hunter.hunter_class, druid }, 4, halfling);
+
+
+            var eidolon_ac_feature = Helpers.CreateFeature("EidolonACFavoredClassFeature",
+                                                            "Eidolon Natural AC Bonus",
+                                                            "Add a +1/4 natural armor bonus to the AC of the summoner’s eidolon.",
+                                                            "",
+                                                            Helpers.GetIcon("9e1ad5d6f87d19e4d8883d63a6e35568"), //mage armor
+                                                            FeatureGroup.None,
+                                                            Helpers.CreateAddContextStatBonus(StatType.AC, ModifierDescriptor.NaturalArmor)
+                                                            );
+
+
+            eidolon_ac_feature.Ranks = 5;
+            eidolon_ac_feature.ReapplyOnLevelUp = true;
+
+            var summoner_ac_feature = Common.createAddFeatToAnimalCompanion(eidolon_ac_feature, "");
+            eidolon_ac_feature.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueTypeExtender.MasterFeatureRank.ToContextRankBaseValueType(),
+                                                                                        feature: eidolon_ac_feature));
+            addFavoredClassBonus(summoner_ac_feature, null, new BlueprintCharacterClass[] { Summoner.summoner_class }, 4, dwarf);
+
+
+            var eidolon_dr_feature = Helpers.CreateFeature("EidolonDREvilFavoredClassFeature",
+                                               "Eidolon DR/evil Bonus",
+                                               "Add DR 1/evil to your eidolon. Each time you gain another level, the DR increases by 1/2 (maximum DR 10/magic).",
+                                               "",
+                                               Helpers.GetIcon("62888999171921e4dafb46de83f4d67d"), //shield of dawn
+                                               FeatureGroup.None,
+                                               Common.createMagicDR(Helpers.CreateContextValue(AbilityRankType.Default))
+                                               );
+
+            eidolon_dr_feature.Ranks = 19;
+            eidolon_dr_feature.ReapplyOnLevelUp = true;
+
+            var summoner_dr_feature = Common.createAddFeatToAnimalCompanion(eidolon_dr_feature, "");
+            eidolon_dr_feature.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueTypeExtender.MasterFeatureRank.ToContextRankBaseValueType(),
+                                                                                     feature: summoner_dr_feature, progression: ContextRankProgression.OnePlusDiv2));
+            addFavoredClassBonus(summoner_dr_feature, null, new BlueprintCharacterClass[] { Summoner.summoner_class }, 1, aasimar);
+
+
+            var bonus_evolution_point = Helpers.CreateFeature("SummonerExtraEPFavoredClassFeature",
+                                                               "Extra Evolution Pool",
+                                                               "Add +1/6 to the eidolon’s evolution pool.",
+                                                               "",
+                                                               Helpers.GetIcon("93d9d74dac46b9b458d4d2ea7f4b1911"), //polymorph
+                                                               FeatureGroup.None,
+                                                               Helpers.Create< CallOfTheWild.EvolutionMechanics.IncreaseEvolutionPool>(i => i.amount = 1/*Helpers.CreateContextValue(AbilityRankType.Default)*/)
+                                                               );
+            //bonus_evolution_point.AddComponent(Helpers.CreateContextRankConfig(ContextRankBaseValueType.FeatureRank, feature: bonus_evolution_point));
+            //bonus_evolution_point.AddComponent(Helpers.Create<RecalculateOnFactsChange>(r => r.CheckedFacts = new BlueprintUnitFact[] { bonus_evolution_point }));
+            bonus_evolution_point.Ranks = 3;
+            
+            addFavoredClassBonus(bonus_evolution_point, null, new BlueprintCharacterClass[] { Summoner.summoner_class }, 6, half_elf);
         }
 
 
@@ -860,9 +913,9 @@ namespace ZFavoredClass
             questioner_spells.AddComponent(Common.createPrerequisiteArchetypeLevel(Investigator.investigator_class, CallOfTheWild.Investigator.questioner_archetype, 1));
             addFavoredClassBonus(questioner_spells, null, Investigator.investigator_class, 2, human, halfling, gnome, half_elf, half_orc, aasimar, tiefling);
 
-            var jynyiwei_spells = CreateExtraSpellSelection(CallOfTheWild.Investigator.jinyiwei_archetype.ReplaceSpellbook, CallOfTheWild.Investigator.investigator_class, 5);
-            jynyiwei_spells.AddComponent(Common.createPrerequisiteArchetypeLevel(Investigator.investigator_class, CallOfTheWild.Investigator.jinyiwei_archetype, 1));
-            addFavoredClassBonus(jynyiwei_spells, null, Investigator.investigator_class, 2, human, halfling, gnome, half_elf, half_orc, aasimar, tiefling);
+            var jinyiwei_spells = CreateExtraSpellSelection(CallOfTheWild.Investigator.jinyiwei_archetype.ReplaceSpellbook, CallOfTheWild.Investigator.investigator_class, 5);
+            jinyiwei_spells.AddComponent(Common.createPrerequisiteArchetypeLevel(Investigator.investigator_class, CallOfTheWild.Investigator.jinyiwei_archetype, 1));
+            addFavoredClassBonus(jinyiwei_spells, null, Investigator.investigator_class, 2, human, halfling, gnome, half_elf, half_orc, aasimar, tiefling);
         }
 
 
