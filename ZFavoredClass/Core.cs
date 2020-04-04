@@ -509,11 +509,11 @@ namespace ZFavoredClass
 
             var eidolon_dr_feature = Helpers.CreateFeature("EidolonDREvilFavoredClassFeature",
                                                "Eidolon DR/evil Bonus",
-                                               "Add DR 1/evil to your eidolon. Each time you gain another level, the DR increases by 1/2 (maximum DR 10/magic).",
+                                               "Add DR 1/evil to your eidolon. Each time you gain another level, the DR increases by 1/2 (maximum DR 10/evil).",
                                                "",
                                                Helpers.GetIcon("62888999171921e4dafb46de83f4d67d"), //shield of dawn
                                                FeatureGroup.None,
-                                               Common.createMagicDR(Helpers.CreateContextValue(AbilityRankType.Default))
+                                               Common.createAlignmentDRContextRank(Kingmaker.Enums.Damage.DamageAlignment.Evil, AbilityRankType.Default)
                                                );
 
             eidolon_dr_feature.Ranks = 19;
