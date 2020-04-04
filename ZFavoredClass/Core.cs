@@ -811,7 +811,7 @@ namespace ZFavoredClass
                                                                 pool_icon,
                                                                 arcane_pool_resource);
             extra_arcane_pool.AddComponent(Common.prerequisiteNoArchetype(magus, eldritch_scion));
-
+            extra_arcane_pool.AddComponent(Common.prerequisiteNoArchetype(magus, CallOfTheWild.Archetypes.NatureBondedMagus.archetype));
 
             var extra_eldritch_pool = createResourceBonusFeature("FavoredClassExtraArcaneEldritchpoolFeature",
                                                                 "Bonus Eldritch Pool",
@@ -894,7 +894,15 @@ namespace ZFavoredClass
             addFavoredClassBonus(CreateExtraSpellSelection(cleric.Spellbook, CallOfTheWild.Shaman.shaman_class, 8, cleric_spells_for_shaman), null, CallOfTheWild.Shaman.shaman_class, 2, half_elf, human, half_orc, aasimar, tiefling);
             addFavoredClassBonus(CreateExtraSpellSelection(sorceror.Spellbook, sorceror, 8), null, sorceror, 2, human, half_elf, half_orc, aasimar, tiefling);
             addFavoredClassBonus(CreateExtraSpellSelection(wizard.Spellbook, wizard, 8), null, wizard, 2, human, half_elf, half_orc, aasimar, tiefling);
-            addFavoredClassBonus(CreateExtraSpellSelection(CallOfTheWild.Witch.witch_class.Spellbook, CallOfTheWild.Witch.witch_class, 8), null, CallOfTheWild.Witch.witch_class, 2, human, half_orc, half_elf, elf, aasimar, tiefling);
+
+            var witch_extra_spells = CreateExtraSpellSelection(CallOfTheWild.Witch.witch_class.Spellbook, CallOfTheWild.Witch.witch_class, 8);
+            witch_extra_spells.AddComponent(Common.prerequisiteNoArchetype(CallOfTheWild.Witch.witch_class, CallOfTheWild.Witch.winter_witch_archetype));
+            addFavoredClassBonus(witch_extra_spells, null, CallOfTheWild.Witch.witch_class, 2, human, half_orc, half_elf, elf, aasimar, tiefling);
+
+            var winter_witch_extra_spells = CreateExtraSpellSelection(CallOfTheWild.Witch.winter_witch_archetype.ReplaceSpellbook, CallOfTheWild.Witch.witch_class, 8);
+            winter_witch_extra_spells.AddComponent(Common.createPrerequisiteArchetypeLevel(CallOfTheWild.Witch.witch_class, CallOfTheWild.Witch.winter_witch_archetype, 1));
+            addFavoredClassBonus(winter_witch_extra_spells, null, CallOfTheWild.Witch.witch_class, 2, human, half_orc, half_elf, elf, aasimar, tiefling);
+
             addFavoredClassBonus(CreateExtraSpellSelection(CallOfTheWild.Skald.skald_class.Spellbook, CallOfTheWild.Skald.skald_class, 5), null, CallOfTheWild.Skald.skald_class, 2, human, half_elf, half_orc, aasimar, tiefling);
 
             var arcanist_spells = CreateExtraSpellSelection(CallOfTheWild.Arcanist.arcanist_class.Spellbook, CallOfTheWild.Arcanist.arcanist_class, 8);
