@@ -720,7 +720,15 @@ namespace ZFavoredClass
             //arcane exploit 1/6
 
             addFavoredClassBonus(createFeatureCopy(Warpriest.fighter_feat, "Gain 1/6 of a new bonus combat feat.", 3), null, Warpriest.warpriest_class, 6, human, half_elf, half_orc, aasimar, tiefling);
-            rogue_talent = addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("c074a5d615200494b8f2a9c845799d93"), "Gain 1/6 of a new rogue talent.", 3), null, rogue, 6, human, half_elf, half_orc, aasimar, tiefling);
+
+            var extra_rogue_talent = createFeatureCopy(library.Get<BlueprintFeatureSelection>("c074a5d615200494b8f2a9c845799d93"), "Gain 1/6 of a new rogue talent.", 3);
+            extra_rogue_talent.AddComponent(Common.prerequisiteNoArchetype(rogue, CallOfTheWild.Archetypes.Ninja.archetype));
+            rogue_talent = addFavoredClassBonus(extra_rogue_talent, null, rogue, 6, human, half_elf, half_orc, aasimar, tiefling);
+
+            var extra_ninja_talent = createFeatureCopy(CallOfTheWild.Archetypes.Ninja.ninja_trick, "Gain 1/6 of a new ninja trick.", 3);
+            extra_ninja_talent.AddComponent(Common.createPrerequisiteArchetypeLevel(rogue, CallOfTheWild.Archetypes.Ninja.archetype, 1));
+            addFavoredClassBonus(extra_ninja_talent, null, rogue, 6, human, half_elf, half_orc, aasimar, tiefling);
+
             addFavoredClassBonus(createFeatureCopy(Witch.hex_selection, "Gain 1/6 of a new witch hex.", 3), null, Witch.witch_class, 6, gnome);
             addFavoredClassBonus(createFeatureCopy(Arcanist.arcane_exploits, "Gain 1/6 of a new arcanist exploit.", 3), null, Arcanist.arcanist_class, 6, halfling);
             addFavoredClassBonus(createFeatureCopy(Shaman.hex_selection, "Gain 1/6 of a new shaman hex.", 3), null, Shaman.shaman_class, 6, gnome);
