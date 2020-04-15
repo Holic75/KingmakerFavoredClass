@@ -834,6 +834,7 @@ namespace ZFavoredClass
                                                     "Add +1/6 point to the kineticist’s internal buffer.",
                                                     CallOfTheWild.KineticistFix.internal_buffer.Icon,
                                                     CallOfTheWild.KineticistFix.internal_buffer_resource);
+            extra_internal_buffer.AddComponent(Common.prerequisiteNoArchetype(magus, CallOfTheWild.Archetypes.OverwhelmingSoul.archetype));
 
             var extra_max_arcane_reservoir = createResourceBonusFeature("FavoredClassExtraMaxArcaneReservoirFeature",
                                                                         "Bonus Maximum Arcane Reservoir",
