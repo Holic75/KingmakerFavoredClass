@@ -924,6 +924,8 @@ namespace ZFavoredClass
 
             var investigator_formulae = CreateExtraSpellSelection(CallOfTheWild.Investigator.investigator_class.Spellbook, CallOfTheWild.Investigator.investigator_class, 5);
             investigator_formulae.AddComponent(Common.prerequisiteNoArchetype(Investigator.investigator_class, CallOfTheWild.Investigator.questioner_archetype));
+            investigator_formulae.AddComponent(Common.prerequisiteNoArchetype(Investigator.investigator_class, CallOfTheWild.Investigator.jinyiwei_archetype));
+            investigator_formulae.AddComponent(Common.prerequisiteNoArchetype(Investigator.investigator_class, CallOfTheWild.Investigator.psychic_detective));
             addFavoredClassBonus(investigator_formulae, null, Investigator.investigator_class, 2, human, halfling, gnome, half_elf, half_orc, aasimar, tiefling);
 
             var questioner_spells = CreateExtraSpellSelection(CallOfTheWild.Investigator.questioner_archetype.ReplaceSpellbook, CallOfTheWild.Investigator.investigator_class, 5);
@@ -933,6 +935,10 @@ namespace ZFavoredClass
             var jinyiwei_spells = CreateExtraSpellSelection(CallOfTheWild.Investigator.jinyiwei_archetype.ReplaceSpellbook, CallOfTheWild.Investigator.investigator_class, 5);
             jinyiwei_spells.AddComponent(Common.createPrerequisiteArchetypeLevel(Investigator.investigator_class, CallOfTheWild.Investigator.jinyiwei_archetype, 1));
             addFavoredClassBonus(jinyiwei_spells, null, Investigator.investigator_class, 2, human, halfling, gnome, half_elf, half_orc, aasimar, tiefling);
+
+            var psychic_detective_spells = CreateExtraSpellSelection(CallOfTheWild.Investigator.psychic_detective.ReplaceSpellbook, CallOfTheWild.Investigator.investigator_class, 5);
+            psychic_detective_spells.AddComponent(Common.createPrerequisiteArchetypeLevel(Investigator.investigator_class, CallOfTheWild.Investigator.psychic_detective, 1));
+            addFavoredClassBonus(psychic_detective_spells, null, Investigator.investigator_class, 2, human, halfling, gnome, half_elf, half_orc, aasimar, tiefling);
         }
 
 
