@@ -9,6 +9,7 @@ using Kingmaker.Blueprints.Items.Armors;
 using Kingmaker.Designers.Mechanics.Facts;
 using Kingmaker.EntitySystem.Stats;
 using Kingmaker.Enums;
+using Kingmaker.Enums.Damage;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.Abilities.Components;
 using Kingmaker.UnitLogic.ActivatableAbilities;
@@ -61,6 +62,16 @@ namespace ZFavoredClass
         static internal BlueprintRace halfling = library.Get<BlueprintRace>("b0c3ef2729c498f47970bb50fa1acd30");
         static internal BlueprintRace tiefling = library.Get<BlueprintRace>("5c4e42124dc2b4647af6e36cf2590500");
         static internal BlueprintRace aasimar = library.Get<BlueprintRace>("b7f02ba92b363064fb873963bec275ee");
+
+        //Races Unleashed
+        static internal BlueprintRace goblin = library.TryGet<BlueprintRace>("9d168ca7100e9314385ce66852385451");
+        static internal BlueprintRace duergar = library.TryGet<BlueprintRace>("cd40ff5a556bcf3419bf7479616cd2ad");
+        static internal BlueprintRace dhampir = library.TryGet<BlueprintRace>("d1335380a70e4bd7aa535f36770b93de");
+        static internal BlueprintRace drow = library.TryGet<BlueprintRace>("c515d06d35d048e79801d07039338cda");
+        static internal BlueprintRace ganzi = library.TryGet<BlueprintRace>("970bb406a3ac42d795a3ef1b5900fdf3");
+        static internal BlueprintRace suli = library.TryGet<BlueprintRace>("f78db38a553f4f91a10a8e68c91019ad");
+        static internal BlueprintRace fetchling = library.TryGet<BlueprintRace>("3cfdcda8edd74212a58d3b0d9d4041a4");
+        static internal BlueprintRace hobgoblin = library.TryGet<BlueprintRace>("a68578b3a2a945a5b8561ec51a0dff5c");
 
         static internal BlueprintCharacterClass alchemist = library.Get<BlueprintCharacterClass>("0937bec61c0dabc468428f496580c721");
         static internal BlueprintCharacterClass barbarian = library.Get<BlueprintCharacterClass>("f7d7eb166b3dd594fb330d085df41853");
@@ -206,6 +217,8 @@ namespace ZFavoredClass
             favored_skill = addFavoredClassBonus(bonus_skill, null, classes.ToArray(), 2);
             addFavoredClassBonus(bonus_speed, null, new BlueprintCharacterClass[] { barbarian, Bloodrager.bloodrager_class, monk }, 1, elf, half_elf);
 
+            addCasterLevelIncrease();
+            addEnergyResistanceFavoredClassBonus();
             addExtraKnownSpellsFavoredClassBonus();
             addExtraSelectionFavoredClassBonus();
             addExtraResourceFavoredClassBonus();
@@ -218,6 +231,21 @@ namespace ZFavoredClass
           
             loadCustomFavoredClassBonuses();
             createPrestigiousSpellcaster();
+        }
+
+
+        static void addCasterLevelIncrease()
+        {
+            var necromacy_cl_bonus = Helpers.CreateFeature("NecromancyCLFCBBonus",
+                                                           "Necromancy School Spells Caster Level Bonus",
+                                                           "Add +1/4 to the wizard's caster level when casting spells of the necromancy school.",
+                                                           "",
+                                                           Helpers.GetIcon("e9450978cc9feeb468fb8ee3a90607e3"),
+                                                           FeatureGroup.None,
+                                                           Helpers.Create<CallOfTheWild.NewMechanics.ContextIncreaseCasterLevelForSchool>(c => { c.value = Helpers.CreateContextValue(AbilityRankType.Default); c.school = SpellSchool.Necromancy; })
+                                                           );
+            necromacy_cl_bonus.AddComponent(Helpers.CreateContextRankConfig(ContextRankBaseValueType.FeatureRank, feature: necromacy_cl_bonus));
+            addFavoredClassBonus(necromacy_cl_bonus, null, new BlueprintCharacterClass[] { wizard }, 4, drow);
         }
 
 
@@ -367,6 +395,34 @@ namespace ZFavoredClass
             sorc_fire_dmg_bonus.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: sorc_fire_dmg_bonus));
             sorc_fire_dmg_bonus.Ranks = 10;
             addFavoredClassBonus(sorc_fire_dmg_bonus, null, new BlueprintCharacterClass[] { sorceror, magus },  2, half_orc);
+
+
+
+            var negative_energy_dmg_bonus = Helpers.CreateFeature("ClericNegativeEnergyDamageFavoredClassBonusFeature",
+                                      "Negative Energy Spells Damage Bonus",
+                                      "Add +1/2 to negative energy spell damage, including inflict spells.",
+                                      "",
+                                      Helpers.GetIcon("e5cb4c4459e437e49a4cd73fde6b9063"),
+                                      FeatureGroup.None,
+                                      Helpers.Create<CallOfTheWild.NewMechanics.EnergyDamageTypeSpellBonus>(e => { e.energy_type = DamageEnergyType.NegativeEnergy; e.value = Helpers.CreateContextValue(AbilityRankType.Default); })
+                                      );
+            negative_energy_dmg_bonus.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: negative_energy_dmg_bonus));
+            negative_energy_dmg_bonus.Ranks = 10;
+            addFavoredClassBonus(negative_energy_dmg_bonus, null, new BlueprintCharacterClass[] { cleric }, 2, hobgoblin, ganzi);
+
+
+            var negative_energy_dmg_bonus2 = Helpers.CreateFeature("OracleNegativeEnergyDamageFavoredClassBonusFeature",
+                          "Negative Energy Spells Damage Bonus",
+                          "Add +1/2 to negative energy spell damage, including inflict spells.",
+                          "",
+                          Helpers.GetIcon("e5cb4c4459e437e49a4cd73fde6b9063"),
+                          FeatureGroup.None,
+                          Helpers.Create<CallOfTheWild.NewMechanics.EnergyDamageTypeSpellBonus>(e => { e.energy_type = DamageEnergyType.NegativeEnergy; e.value = Helpers.CreateContextValue(AbilityRankType.Default); })
+                          );
+            negative_energy_dmg_bonus2.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: negative_energy_dmg_bonus2));
+            negative_energy_dmg_bonus2.Ranks = 10;
+
+            addFavoredClassBonus(negative_energy_dmg_bonus2, null, new BlueprintCharacterClass[] { Oracle.oracle_class }, 2, dhampir);
         }
         
 
@@ -442,9 +498,40 @@ namespace ZFavoredClass
             var concentration_arcanist = createFeatureCopy(concentration_bonus, concentration_bonus.Description);
             concentration_arcanist.ReplaceComponent<ContextRankConfig>(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: concentration_arcanist));
 
+            var concentration_inquisitor = createFeatureCopy(concentration_bonus, concentration_bonus.Description, prefix: "Inquisitor");
+            concentration_inquisitor.ReplaceComponent<ContextRankConfig>(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: concentration_inquisitor));
+
+            var concentration_bloodrager = createFeatureCopy(concentration_bonus, concentration_bonus.Description, prefix: "Bloodrager");
+            concentration_bloodrager.ReplaceComponent<ContextRankConfig>(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: concentration_bloodrager));
+
             addFavoredClassBonus(concentration_bonus, null, new BlueprintCharacterClass[] { paladin, VindicativeBastard.vindicative_bastard_class }, 1, dwarf);
             addFavoredClassBonus(concentration_arcanist, null, new BlueprintCharacterClass[] { Arcanist.arcanist_class }, 1, half_orc);
+            addFavoredClassBonus(concentration_inquisitor, null, new BlueprintCharacterClass[] { inquistor }, 1, hobgoblin);
+            addFavoredClassBonus(concentration_inquisitor, null, new BlueprintCharacterClass[] { Bloodrager.bloodrager_class }, 1, drow);
         }
+
+
+        static void addEnergyResistanceFavoredClassBonus()
+        {
+            var goblin_fire_resistance = createEnergyResistance("Goblin", DamageEnergyType.Fire);
+            var fetchling_cold_resistance = createEnergyResistance("Fetchling", DamageEnergyType.Cold);
+            var fetchling_electricity_resistance = createEnergyResistance("Fetchling", DamageEnergyType.Electricity);
+
+            var suli_acid_resistance = createEnergyResistance("Suli", DamageEnergyType.Acid, 5);
+            var suli_cold_resistance = createEnergyResistance("Suli", DamageEnergyType.Cold, 5);
+            var suli_fire_resistance = createEnergyResistance("Suli", DamageEnergyType.Fire, 5);
+            var suli_electricity_resistance = createEnergyResistance("Suli", DamageEnergyType.Electricity, 5);
+
+            addFavoredClassBonus(goblin_fire_resistance, null, new BlueprintCharacterClass[] { alchemist}, 1, goblin);
+            addFavoredClassBonus(fetchling_cold_resistance, null, new BlueprintCharacterClass[] { barbarian, sorceror }, 1, fetchling);
+            addFavoredClassBonus(fetchling_electricity_resistance, null, new BlueprintCharacterClass[] { barbarian, sorceror }, 1, fetchling);
+
+            addFavoredClassBonus(suli_acid_resistance, null, new BlueprintCharacterClass[] { ranger }, 1, suli);
+            addFavoredClassBonus(suli_cold_resistance, null, new BlueprintCharacterClass[] { ranger }, 1, suli);
+            addFavoredClassBonus(suli_fire_resistance, null, new BlueprintCharacterClass[] { ranger }, 1, suli);
+            addFavoredClassBonus(suli_electricity_resistance, null, new BlueprintCharacterClass[] { ranger }, 1, suli);
+        }
+
 
         static void addAnimalCompanionFavoredClassBonuses()
         {
@@ -484,7 +571,7 @@ namespace ZFavoredClass
             animal_companion_dr_feature.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueTypeExtender.MasterFeatureRank.ToContextRankBaseValueType(),
                                                                                      feature: master_dr_feature, progression: ContextRankProgression.OnePlusDiv2));
 
-            addFavoredClassBonus(master_dr_feature, null, new BlueprintCharacterClass[]{ Hunter.hunter_class, ranger }, 1, gnome);
+            addFavoredClassBonus(master_dr_feature, null, new BlueprintCharacterClass[]{ Hunter.hunter_class, ranger }, 1, gnome, fetchling);
             addFavoredClassBonus(master_saves_feature, null, new BlueprintCharacterClass[] { Hunter.hunter_class, druid }, 4, halfling);
 
 
@@ -537,7 +624,7 @@ namespace ZFavoredClass
             //bonus_evolution_point.AddComponent(Helpers.Create<RecalculateOnFactsChange>(r => r.CheckedFacts = new BlueprintUnitFact[] { bonus_evolution_point }));
             bonus_evolution_point.Ranks = 3;
             
-            addFavoredClassBonus(bonus_evolution_point, null, new BlueprintCharacterClass[] { Summoner.summoner_class }, 6, half_elf);
+            addFavoredClassBonus(bonus_evolution_point, null, new BlueprintCharacterClass[] { Summoner.summoner_class }, 6, half_elf, goblin);
         }
 
 
@@ -638,7 +725,7 @@ namespace ZFavoredClass
 
         static public FavoredClassFeature addFavoredClassBonus(BlueprintFeature feature, BlueprintFeature partial_feature, BlueprintCharacterClass[] classes, int divisor, params BlueprintRace[] races)
         {
-           
+
             int max_rank = feature.Ranks > 0 ? feature.Ranks : 1;
             if (divisor > 1)
             {
@@ -666,7 +753,10 @@ namespace ZFavoredClass
 
                 foreach (var race in races)
                 {
-                    partial_feature.AddComponent(CallOfTheWild.Helpers.Create<NewMechanics.PrerequisiteRace>(p => { p.race = race; p.Group = Prerequisite.GroupType.Any; }));
+                    if (race != null)
+                    {
+                        partial_feature.AddComponent(CallOfTheWild.Helpers.Create<NewMechanics.PrerequisiteRace>(p => { p.race = race; p.Group = Prerequisite.GroupType.Any; }));
+                    }
                 }
 
                 feature.AddComponents(CallOfTheWild.Helpers.Create<CallOfTheWild.NewMechanics.PrerequisiteFeatureFullRank>(p =>
@@ -679,23 +769,32 @@ namespace ZFavoredClass
                                        CallOfTheWild.Helpers.Create<AddFeatureOnApply>(a => a.Feature = partial_feature)
                                       );
 
-                foreach (var c in classes)
+                if (races.Count(r => r != null) > 0)
                 {
-                    var selection = class_guid_bonus_selection_map[c.AssetGuid];
-                    selection.AllFeatures = selection.AllFeatures.AddToArray(partial_feature);
+                    foreach (var c in classes)
+                    {
+                        var selection = class_guid_bonus_selection_map[c.AssetGuid];
+                        selection.AllFeatures = selection.AllFeatures.AddToArray(partial_feature);
+                    }
                 }
             }
 
 
             foreach (var race in races)
             {
-                feature.AddComponent(CallOfTheWild.Helpers.Create<NewMechanics.PrerequisiteRace>(p => { p.race = race; p.Group = Prerequisite.GroupType.Any; }));
+                if (race != null)
+                {
+                    feature.AddComponent(CallOfTheWild.Helpers.Create<NewMechanics.PrerequisiteRace>(p => { p.race = race; p.Group = Prerequisite.GroupType.Any; }));
+                }
             }
 
-            foreach (var c in classes)
+            if (races.Count(r => r != null) > 0)
             {
-                var selection = class_guid_bonus_selection_map[c.AssetGuid];
-                selection.AllFeatures = selection.AllFeatures.AddToArray(feature);
+                foreach (var c in classes)
+                {
+                    var selection = class_guid_bonus_selection_map[c.AssetGuid];
+                    selection.AllFeatures = selection.AllFeatures.AddToArray(feature);
+                }
             }
 
             return new FavoredClassFeature(partial_feature, feature);
@@ -742,12 +841,15 @@ namespace ZFavoredClass
             eldritch_arcana.AddComponent(Common.createPrerequisiteArchetypeLevel(magus, eldritch_scion, 1));
             addFavoredClassBonus(magus_arcana, null, magus, 6, elf, halfling, half_elf);
             addFavoredClassBonus(eldritch_arcana, null, magus, 6, elf, halfling, half_elf);
+
+            var extra_teamwork_feat = createFeatureCopy(library.Get<BlueprintFeatureSelection>("d87e2f6a9278ac04caeb0f93eff95fcb"), "Gain 1/6 of a new teamwork feat.", 3);     
+            addFavoredClassBonus(extra_teamwork_feat, null, inquistor, 6, drow);
         }
 
 
-        static BlueprintFeature createFeatureCopy(BlueprintFeature original, string description,int rank = 0)
+        static BlueprintFeature createFeatureCopy(BlueprintFeature original, string description, int rank = 0, string prefix = "")
         {
-            var feat =  library.CopyAndAdd<BlueprintFeature>(original, "FavoredClass" + original.name, "");
+            var feat =  library.CopyAndAdd<BlueprintFeature>(original, prefix + "FavoredClass" + original.name, "");
             feat.SetDescription(description);
             if (rank != 0)
             {
@@ -855,19 +957,27 @@ namespace ZFavoredClass
                                                             Investigator.inspiration_resource);
 
 
+            var extra_judgment = createResourceBonusFeature("FavoredClassExtraJudgmentFeature",
+                                                "Bonus Judgment",
+                                                "Add +1/6 to the number of times per day the inquisitor can use the judgment class feature.",
+                                                Helpers.GetIcon("981def910b98200499c0c8f85a78bde8"),
+                                                library.Get<BlueprintAbilityResource>("394088e9e54ccd64698c7bd87534027f"));
+
+
 
             addFavoredClassBonus(extra_bloodrage, null, Bloodrager.bloodrager_class, 1, dwarf, half_orc, human, half_elf, aasimar, tiefling);
             addFavoredClassBonus(extra_rage, null, barbarian, 1, dwarf, half_orc);
-            addFavoredClassBonus(extra_performance, null, bard, 1, half_elf, half_orc, gnome);
+            addFavoredClassBonus(extra_performance, null, bard, 1, half_elf, half_orc, gnome, goblin);
             addFavoredClassBonus(extra_skald_performance, null, Skald.skald_class, 1, half_elf, half_orc);
-            favored_bombs = addFavoredClassBonus(extra_bombs, null, alchemist, 2, gnome);
+            favored_bombs = addFavoredClassBonus(extra_bombs, null, alchemist, 2, gnome, hobgoblin);
             addFavoredClassBonus(extra_ki, null, monk, 4, human, half_elf, half_orc, aasimar, tiefling);
-            addFavoredClassBonus(extra_arcane_pool, null, magus, 4, human, half_elf, tiefling, aasimar, half_orc);
-            addFavoredClassBonus(extra_eldritch_pool, null, magus, 4, human, half_elf,tiefling, aasimar, half_orc);
+            addFavoredClassBonus(extra_arcane_pool, null, magus, 4, human, half_elf, tiefling, aasimar, half_orc, suli, fetchling);
+            addFavoredClassBonus(extra_eldritch_pool, null, magus, 4, human, half_elf,tiefling, aasimar, half_orc, suli, fetchling);
             addFavoredClassBonus(extra_internal_buffer, null, kineticist, 6, halfling);
             addFavoredClassBonus(extra_max_arcane_reservoir, null, Arcanist.arcanist_class, 1, elf, half_elf);
             addFavoredClassBonus(extra_arcane_reservoir, null, Arcanist.arcanist_class, 6, gnome);
-            addFavoredClassBonus(extra_inspiration, null, Investigator.investigator_class, 3, elf, half_elf);
+            addFavoredClassBonus(extra_inspiration, null, Investigator.investigator_class, 3, elf, half_elf, ganzi);
+            addFavoredClassBonus(extra_judgment, null, inquistor, 6, duergar);
         }
 
 
@@ -898,19 +1008,36 @@ namespace ZFavoredClass
             addFavoredClassBonus(CreateExtraSpellSelection(inquistor.Spellbook, inquistor, 5), null, inquistor, 2, elf, human, half_elf, half_orc, aasimar, tiefling);
             addFavoredClassBonus(CreateExtraSpellSelection(Oracle.oracle_class.Spellbook, Oracle.oracle_class, 8), null, Oracle.oracle_class, 2, elf, human, half_elf, half_orc, aasimar, tiefling);
 
+            var ganzi_oracle_spell_list = Common.combineSpellLists("GanziOracleFCBSpellList", wizard.Spellbook.SpellList, cleric.Spellbook.SpellList);
+            Common.filterSpellList(ganzi_oracle_spell_list, s => s.School == SpellSchool.Enchantment);
+            addFavoredClassBonus(CreateExtraSpellSelection(Oracle.oracle_class.Spellbook, Oracle.oracle_class, 8, ganzi_oracle_spell_list, 
+                                                           custom_name: "FavoredClassOracleGanziEnchantment",
+                                                           custom_description: "Add 1/2 spell known of the enchantment school from the cleric or wizard spell list. This spell must be at least 1 level below the highest spell level the oracle can cast."),
+                                                           null, Oracle.oracle_class, 2, ganzi);
+
+
+
             var cleric_spells_for_shaman = Common.combineSpellLists("ShamanFavoredClassClericSpellList", cleric.Spellbook.SpellList);
             Common.excludeSpellsFromList(cleric_spells_for_shaman, Shaman.shaman_class.Spellbook.SpellList);
             addFavoredClassBonus(CreateExtraSpellSelection(cleric.Spellbook, CallOfTheWild.Shaman.shaman_class, 8, cleric_spells_for_shaman), null, CallOfTheWild.Shaman.shaman_class, 2, half_elf, human, half_orc, aasimar, tiefling);
             addFavoredClassBonus(CreateExtraSpellSelection(sorceror.Spellbook, sorceror, 8), null, sorceror, 2, human, half_elf, half_orc, aasimar, tiefling);
             addFavoredClassBonus(CreateExtraSpellSelection(wizard.Spellbook, wizard, 8), null, wizard, 2, human, half_elf, half_orc, aasimar, tiefling);
 
+
+            var goblin_sorc_spell_list = Common.combineSpellLists("GoblinSorcererFCBSpellList", wizard.Spellbook.SpellList);
+            Common.filterSpellList(goblin_sorc_spell_list, s => (s.SpellDescriptor & SpellDescriptor.Fire) != 0);
+            addFavoredClassBonus(CreateExtraSpellSelection(sorceror.Spellbook, sorceror, 8, goblin_sorc_spell_list,
+                                                           custom_name: "FavoredClassSorcererGoblinFire",
+                                                           custom_description: "Add + 1/2 spell known from the sorcerer spell list. This spell must be at least one level below the highest spell level the sorcerer can cast, and must have the fire descriptor."),
+                                                           null, sorceror, 2, goblin);
+
             var witch_extra_spells = CreateExtraSpellSelection(CallOfTheWild.Witch.witch_class.Spellbook, CallOfTheWild.Witch.witch_class, 8);
             witch_extra_spells.AddComponent(Common.prerequisiteNoArchetype(CallOfTheWild.Witch.witch_class, CallOfTheWild.Witch.winter_witch_archetype));
-            addFavoredClassBonus(witch_extra_spells, null, CallOfTheWild.Witch.witch_class, 2, human, half_orc, half_elf, elf, aasimar, tiefling);
+            addFavoredClassBonus(witch_extra_spells, null, CallOfTheWild.Witch.witch_class, 2, human, half_orc, half_elf, elf, aasimar, tiefling, goblin);
 
             var winter_witch_extra_spells = CreateExtraSpellSelection(CallOfTheWild.Witch.winter_witch_archetype.ReplaceSpellbook, CallOfTheWild.Witch.witch_class, 8);
             winter_witch_extra_spells.AddComponent(Common.createPrerequisiteArchetypeLevel(CallOfTheWild.Witch.witch_class, CallOfTheWild.Witch.winter_witch_archetype, 1));
-            addFavoredClassBonus(winter_witch_extra_spells, null, CallOfTheWild.Witch.witch_class, 2, human, half_orc, half_elf, elf, aasimar, tiefling);
+            addFavoredClassBonus(winter_witch_extra_spells, null, CallOfTheWild.Witch.witch_class, 2, human, half_orc, half_elf, elf, aasimar, tiefling, goblin);
 
             addFavoredClassBonus(CreateExtraSpellSelection(CallOfTheWild.Skald.skald_class.Spellbook, CallOfTheWild.Skald.skald_class, 5), null, CallOfTheWild.Skald.skald_class, 2, human, half_elf, half_orc, aasimar, tiefling);
 
@@ -942,7 +1069,31 @@ namespace ZFavoredClass
         }
 
 
-        static BlueprintFeatureSelection CreateExtraSpellSelection(BlueprintSpellbook spellbook, BlueprintCharacterClass @class, int max_spellLevel, BlueprintSpellList custom_spell_list = null)
+        static BlueprintFeature createEnergyResistance(string prefix, DamageEnergyType energy, int base_value = 0, int max_ranks = 20)
+        {
+            var map_energy_icon = new Dictionary<DamageEnergyType, string>();
+
+            map_energy_icon.Add(DamageEnergyType.Acid, "fedc77de9b7aad54ebcc43b4daf8decd");
+            map_energy_icon.Add(DamageEnergyType.Cold, "5368cecec375e1845ae07f48cdc09dd1");
+            map_energy_icon.Add(DamageEnergyType.Electricity, "90987584f54ab7a459c56c2d2f22cee2");
+            map_energy_icon.Add(DamageEnergyType.Fire, "ddfb4ac970225f34dbff98a10a4a8844");
+
+            var feature = Helpers.CreateFeature(prefix + energy.ToString() + "ResistanceFCBFeature",
+                                                    energy.ToString() + " Resistance",
+                                                    "You gain resistance 1 to specified energy type or your racial resistance increases by 1. Each time this reward is selected, increase resistance by +1. This resistance does not stack with resistance gained from other sources.",
+                                                    "",
+                                                    Helpers.GetIcon(map_energy_icon[energy]),
+                                                    FeatureGroup.None,
+                                                    Helpers.Create<NewMechanics.AddDamageResistanceEnergyWithBaseValue>(a => { a.Type = energy; a.Value = 1; a.initial_value = base_value; })
+                                                    );
+
+            feature.Ranks = max_ranks;
+            return feature;
+        }
+
+
+        static BlueprintFeatureSelection CreateExtraSpellSelection(BlueprintSpellbook spellbook, BlueprintCharacterClass @class, int max_spellLevel, BlueprintSpellList custom_spell_list = null, 
+                                                                  string custom_name = null, string custom_display_name = null, string custom_description = null)
         {
             String[] spellLevelGuids = new String[] {"1541c1ef94e24659b1120cf18792094a",
                                                      "5c570cda113846ea86b800d64a90c2d5",
@@ -954,17 +1105,18 @@ namespace ZFavoredClass
                                                      "4ca9c712af684d609b5e168b5ad4eec1",
                                                      "15794bead9f4417796c77667fdba1068" };
 
+            var name = custom_name ?? $"Favored{@class.name.Replace("Class", "").Replace("Witcher", "Witch")}{spellbook.SpellList.name}";
 
             var icon = Helpers.GetIcon("55edf82380a1c8540af6c6037d34f322"); // elven magic
-            BlueprintFeatureSelection learn_selection = CallOfTheWild.Helpers.CreateFeatureSelection($"Favored{@class.name.Replace("Class", "").Replace("Witcher", "Witch")}{spellbook.SpellList.name}BonusSpellFeatureSelection",
-                                                                          $"Bonus {spellbook.Name} Spell",
-                                                                           $"Add 1/2 spell to your spellbook from the {spellbook.Name} spell list. This spell must be at least one level below the highest {@class.Name} spell you can cast.",
+            BlueprintFeatureSelection learn_selection = CallOfTheWild.Helpers.CreateFeatureSelection(name + "BonusSpellFeatureSelection",
+                                                                          custom_display_name ?? $"Bonus {spellbook.Name} Spell",
+                                                                          custom_description ?? $"Add 1/2 spell to your spellbook from the {spellbook.Name} spell list. This spell must be at least one level below the highest {@class.Name} spell you can cast.",
                                                                           "",
                                                                           icon,
                                                                           FeatureGroup.None);
             for (int i = 1; i <= max_spellLevel; i++)
             {
-                var learn_spell = library.CopyAndAdd<BlueprintParametrizedFeature>("bcd757ac2aeef3c49b77e5af4e510956", $"Favored{@class.name.Replace("Class", "").Replace("Witcher", "Witch")}{spellbook.SpellList.name}{i}ParametrizedFeature", "");
+                var learn_spell = library.CopyAndAdd<BlueprintParametrizedFeature>("bcd757ac2aeef3c49b77e5af4e510956", name + $"{i}ParametrizedFeature", "");
                 learn_spell.SpellLevel = i;
                 learn_spell.SpecificSpellLevel = true;
                 learn_spell.SpellLevelPenalty = 0;
@@ -973,7 +1125,7 @@ namespace ZFavoredClass
                 learn_spell.ReplaceComponent<LearnSpellParametrized>(l => { l.SpellList = custom_spell_list ?? spellbook.SpellList; l.SpecificSpellLevel = true; l.SpellLevel = i; l.SpellcasterClass = @class; });
                 learn_spell.AddComponents(Common.createPrerequisiteClassSpellLevel(@class, i + 1)
                     );
-                learn_spell.SetName(Helpers.CreateString($"Favored{@class.Name}{spellbook.SpellList.name}BonusSpellParametrizedFeature{i}.Name", $"Bonus {spellbook.Name} Spell" + $" (level {i})"));
+                learn_spell.SetName(Helpers.CreateString(name + $"BonusSpellParametrizedFeature{i}.Name", (custom_display_name ?? $"Bonus {spellbook.Name} Spell") + $" (level {i})"));
                 learn_spell.SetDescription(learn_selection.Description);
                 learn_spell.SetIcon(learn_selection.Icon);
 
@@ -1024,7 +1176,7 @@ namespace ZFavoredClass
 
                 foreach (var race_guid in races_guids)
                 {
-                    races.Add(library.Get<BlueprintRace>(race_guid));
+                    races.Add(library.TryGet<BlueprintRace>(race_guid));
                 }
                 addFavoredClassBonus(feature, partial_feature, classes.ToArray(), divisor, races.ToArray());
                 Main.logger.Log("Success");

@@ -7,9 +7,15 @@ using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.Blueprints.Facts;
 using Kingmaker.Blueprints.Root;
 using Kingmaker.EntitySystem.Entities;
+using Kingmaker.Enums.Damage;
+using Kingmaker.Items;
 using Kingmaker.PubSubSystem;
+using Kingmaker.RuleSystem.Rules.Damage;
 using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Class.LevelUp;
+using Kingmaker.UnitLogic.FactLogic;
+using Kingmaker.UnitLogic.Mechanics;
+using Kingmaker.Utility;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -127,6 +133,34 @@ namespace ZFavoredClass.NewMechanics
 
            // Main.logger.Log($"Adding spell selection to level {SpellLevel}");
             spellSelection.SetLevelSpells(SpellLevel, 1 + existingNewSpells);
+        }
+    }
+
+
+
+    [ComponentName("Buffs/AddEffect/EnergyResistance")]
+    [AllowedOn(typeof(BlueprintUnitFact))]
+    [AllowedOn(typeof(BlueprintUnit))]
+    [AllowMultipleComponents]
+    public class AddDamageResistanceEnergyWithBaseValue : AddDamageResistanceBase
+    {
+        public DamageEnergyType Type;
+        public ContextValue initial_value;
+        public bool UseValueMultiplier;
+        [ShowIf("UseValueMultiplier")]
+        public ContextValue ValueMultiplier;
+
+        public override int GetValue()
+        {
+            return this.Fact.GetRank() * (!this.UseValueMultiplier ? base.GetValue() : base.GetValue() * this.ValueMultiplier.Calculate(this.Fact.MaybeContext)) + initial_value.Calculate(this.Fact.MaybeContext);
+        }
+
+        public override bool Bypassed(BaseDamage damage, ItemEntityWeapon weapon)
+        {
+            EnergyDamage energyDamage = damage as EnergyDamage;
+            if (energyDamage != null)
+                return energyDamage.EnergyType != this.Type;
+            return true;
         }
     }
 

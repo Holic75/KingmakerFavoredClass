@@ -70,6 +70,7 @@ namespace ZFavoredClass
         }
         [Harmony12.HarmonyPatch(typeof(LibraryScriptableObject), "LoadDictionary")]
         [Harmony12.HarmonyPatch(typeof(LibraryScriptableObject), "LoadDictionary", new Type[0])]
+        [Harmony12.HarmonyAfter("RacesUnleashed")] //make it run after races unleashed to correctly update new races
         static class LibraryScriptableObject_LoadDictionary_Patch
         {
             static void Postfix(LibraryScriptableObject __instance)
