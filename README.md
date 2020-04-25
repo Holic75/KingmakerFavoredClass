@@ -39,7 +39,7 @@ It adds the following options for favored class bonuses:
  - +1 bonus to natural AC of eidolon/4 levels for dwarf summoners,
  - +1 energy resistance to specific energy type/level for certain classes and races,
  - +1 caster level for necromancy school spells/4 levels for drow wizards,
- - +1 judgment use per day/6 levels for duergar inquisitors
+ - +1 judgment use per day/6 levels for duergar inquisitors.
  
  
 It also add following feats:

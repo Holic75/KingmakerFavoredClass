@@ -769,7 +769,7 @@ namespace ZFavoredClass
                                        CallOfTheWild.Helpers.Create<AddFeatureOnApply>(a => a.Feature = partial_feature)
                                       );
 
-                if (races.Count(r => r != null) > 0)
+                if (races.Count(r => r != null) > 0 || races.Count() == 0)
                 {
                     foreach (var c in classes)
                     {
@@ -788,7 +788,7 @@ namespace ZFavoredClass
                 }
             }
 
-            if (races.Count(r => r != null) > 0)
+            if (races.Count(r => r != null) > 0 || races.Count() == 0)
             {
                 foreach (var c in classes)
                 {
