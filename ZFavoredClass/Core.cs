@@ -245,6 +245,7 @@ namespace ZFavoredClass
                                                            Helpers.Create<CallOfTheWild.NewMechanics.ContextIncreaseCasterLevelForSchool>(c => { c.value = Helpers.CreateContextValue(AbilityRankType.Default); c.school = SpellSchool.Necromancy; })
                                                            );
             necromacy_cl_bonus.AddComponent(Helpers.CreateContextRankConfig(ContextRankBaseValueType.FeatureRank, feature: necromacy_cl_bonus));
+            necromacy_cl_bonus.Ranks = 5;
             addFavoredClassBonus(necromacy_cl_bonus, null, new BlueprintCharacterClass[] { wizard }, 4, drow);
         }
 
