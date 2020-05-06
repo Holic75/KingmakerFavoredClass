@@ -39,7 +39,10 @@ It adds the following options for favored class bonuses:
  - +1 bonus to natural AC of eidolon/4 levels for dwarf summoners,
  - +1 energy resistance to specific energy type/level for certain classes and races,
  - +1 caster level for necromancy school spells/4 levels for drow wizards,
- - +1 judgment use per day/6 levels for duergar inquisitors.
+ - +1 caster level for patron spells/4 levels for halfling witches,
+ - +1 judgment use per day/6 levels for duergar inquisitors,
+ - +1 disarm cmb bonus/3 levels for drow fighters,
+ - +1 trip and grapple cmb bonus/4 levels for hobgoblin monks.
  
  
 It also add following feats:
@@ -48,7 +51,7 @@ It also add following feats:
 also it will not work if it is taken for spontaneous caster advancing prestige class and you get to select new spells known from some other spontaneous casting class,
 i.e. if you have eldritch knight advancing sorceror spellcasting, you can not take the feat during a level up for let's say inquisitor class)
 
-It requires at least Call of the Wild 1.79.
+It requires at least Call of the Wild 1.84.
 
 This mod supposed to work with all classes that were introduced by other mods as long as it is loaded the last (should be by default).
 

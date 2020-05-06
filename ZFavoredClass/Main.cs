@@ -82,7 +82,7 @@ namespace ZFavoredClass
                 {
                     Main.DebugLog("Loading Favored Class");
 
-                    CallOfTheWild.LoadIcons.Image2Sprite.icons_folder = @"./Mods/ZFavoredClass/Icons/";
+                    CallOfTheWild.LoadIcons.Image2Sprite.icons_folder = UnityModManager.modsPath + @"/ZFavoredClass/Icons/";
 #if DEBUG                
                     bool allow_guid_generation = true;
 #else
@@ -96,7 +96,7 @@ namespace ZFavoredClass
                     string guid_file_name = @"C:\Repositories\KingmakerFavoredClass\ZFavoredClass\blueprints.txt";
                     CallOfTheWild.Helpers.GuidStorage.dump(guid_file_name);
 #endif
-                    CallOfTheWild.Helpers.GuidStorage.dump(@"./Mods/ZFavoredClass/loaded_blueprints.txt");
+                    CallOfTheWild.Helpers.GuidStorage.dump(UnityModManager.modsPath + @"/ZFavoredClass/loaded_blueprints.txt");
                 }
                 catch (Exception ex)
                 {

@@ -227,6 +227,7 @@ namespace ZFavoredClass
             addPaladinFavoredClassBonuses();
             addAbilityDamageBonus();
             addDwarfAlchemistMutagenBonus();
+            addStatBonus();
             fixCompanions();
           
             loadCustomFavoredClassBonuses();
@@ -246,7 +247,34 @@ namespace ZFavoredClass
                                                            );
             necromacy_cl_bonus.AddComponent(Helpers.CreateContextRankConfig(ContextRankBaseValueType.FeatureRank, feature: necromacy_cl_bonus));
             necromacy_cl_bonus.Ranks = 5;
-            addFavoredClassBonus(necromacy_cl_bonus, null, new BlueprintCharacterClass[] { wizard }, 4, drow);
+            addFavoredClassBonus(necromacy_cl_bonus, null, new BlueprintCharacterClass[] { wizard }, 4, drow);            
+        }
+
+
+        static void addStatBonus()
+        {
+            var trip_bonus = Helpers.CreateFeature("GrappleTripMonkFCBFeature",
+                                                   "CMB Grapple and Trip Bonus",
+                                                   "Add a +1/4 bonus on combat maneuver checks made to grapple or trip.",
+                                                   "",
+                                                   Helpers.GetIcon("0f15c6f70d8fb2b49aa6cc24239cc5fa"),
+                                                   FeatureGroup.None,
+                                                   Helpers.Create<ManeuverBonus>(c => { c.Bonus = 1; c.Type = Kingmaker.RuleSystem.Rules.CombatManeuver.Trip; }),
+                                                   Helpers.Create<ManeuverBonus>(c => { c.Bonus = 1; c.Type = Kingmaker.RuleSystem.Rules.CombatManeuver.Grapple; })
+                                                   );
+            trip_bonus.Ranks = 5;
+            addFavoredClassBonus(trip_bonus, null, new BlueprintCharacterClass[] { monk }, 4, hobgoblin);
+
+            var disarm_bonus = Helpers.CreateFeature("DisarmFCBFeature",
+                                       "CMB Disarm Bonus",
+                                       "Add +1/3 to the fighter’s CMB when attempting disarm maneuver (maximum bonus of +4).",
+                                       "",
+                                       Helpers.GetIcon("25bc9c439ac44fd44ac3b1e58890916f"),
+                                       FeatureGroup.None,
+                                       Helpers.Create<ManeuverBonus>(c => { c.Bonus = 1; c.Type = Kingmaker.RuleSystem.Rules.CombatManeuver.Disarm; })
+                                       );
+            trip_bonus.Ranks = 4;
+            addFavoredClassBonus(disarm_bonus, null, new BlueprintCharacterClass[] { fighter }, 3, drow);
         }
 
 
