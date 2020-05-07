@@ -42,8 +42,10 @@ It adds the following options for favored class bonuses:
  - +1 caster level for patron spells/4 levels for halfling witches,
  - +1 judgment use per day/6 levels for duergar inquisitors,
  - +1 disarm cmb bonus/3 levels for drow fighters,
- - +1 trip and grapple cmb bonus/4 levels for hobgoblin monks.
- 
+ - +1 trip and grapple cmb bonus/4 levels for hobgoblin monks,
+ - +1 to dodge bonus against favored enemies/4 levels for halfling rangers,
+ - +1 to dodge bonus against studied targets/4 levels for halfling and fetchling slayers,
+ - +1 to attack bonus against one favored enemy/4 levels for hobgoblin rangers.
  
 It also add following feats:
 - Favored Prestige Class (due to technical reasons should always be taken before taking first level in corresponding prestige class)

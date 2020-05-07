@@ -228,10 +228,70 @@ namespace ZFavoredClass
             addAbilityDamageBonus();
             addDwarfAlchemistMutagenBonus();
             addStatBonus();
+            addFavoredEnemyBonuses();
+            addSlayerAcBonus();
             fixCompanions();
           
             loadCustomFavoredClassBonuses();
             createPrestigiousSpellcaster();
+        }
+
+
+        static void addSlayerAcBonus()
+        {
+            var studied_target_buff = library.Get<BlueprintBuff>("45548967b714e254aa83f23354f174b0");
+            var dodge_ac_bonus = Helpers.CreateFeature("StudiedTargetDodgeACFCBFeature",
+                                                       "Dodge AC Bonus Against Studied Target",
+                                                       "Add a +1/4 dodge bonus to Armor Class against the slayer’s studied target.",
+                                                       "",
+                                                       Helpers.GetIcon("97e216dbb46ae3c4faef90cf6bbe6fd5"), //dodge
+                                                       FeatureGroup.None,
+                                                       Helpers.Create<ACBonusAgainstFactOwner>(a => { a.Bonus = 1; a.Descriptor = ModifierDescriptor.Dodge; a.CheckedFact = studied_target_buff; })
+                                                       );
+            dodge_ac_bonus.Ranks = 5;
+            addFavoredClassBonus(dodge_ac_bonus, null, new BlueprintCharacterClass[] { slayer }, 4, halfling, fetchling);
+        }
+
+
+        static void addFavoredEnemyBonuses()
+        {
+            var dodge_ac_bonus = Helpers.CreateFeature("FavoredEnemyDodgeACFCBFeature",
+                                               "Dodge AC Bonus Against Favored Enemies",
+                                               "Add + 1/4 dodge bonus to armor class against the ranger‘s favored enemies.",
+                                               "",
+                                               Helpers.GetIcon("97e216dbb46ae3c4faef90cf6bbe6fd5"), //dodge
+                                               FeatureGroup.None,
+                                               Helpers.Create<CallOfTheWild.FavoredEnemyMechanics.ACBonusAgainstFavoredEnemy>(a => { a.value = 1; a.descriptor = ModifierDescriptor.Dodge; })
+                                               );
+            dodge_ac_bonus.Ranks = 5;
+            addFavoredClassBonus(dodge_ac_bonus, null, new BlueprintCharacterClass[] { ranger }, 4, halfling);
+
+            var favored_enemy = library.Get<BlueprintFeatureSelection>("16cc2c937ea8d714193017780e7d4fc6");
+            var favored_enemy_attack_bonus = Helpers.CreateFeatureSelection("FavoredEnemyAttackBonusFCBFeatureSelection",
+                                                                            "Favored Enemy Attack Bonus",
+                                                                            "Add +1/4 to a single existing favored enemy bonus (maximum bonus +1 per favored enemy).",
+                                                                            "",
+                                                                            Helpers.GetIcon("1e1f627d26ad36f43bbd26cc2bf8ac7e"),
+                                                                            FeatureGroup.None
+                                                                            );
+
+            foreach (var fe in favored_enemy.AllFeatures)
+            {
+                var enemy_type = fe.GetComponent<AddFavoredEnemy>().CheckedFacts[0];
+                var feature = Helpers.CreateFeature("AttackBonusFCB" + fe.name,
+                                                    favored_enemy_attack_bonus.Name + $" ({fe.Name})",
+                                                    favored_enemy_attack_bonus.Description,
+                                                    Helpers.MergeIds(fe.AssetGuid, "3eb3fba584b8425b95fc4b643f5c1cd0"),
+                                                    fe.Icon,
+                                                    FeatureGroup.None,
+                                                    Helpers.Create<AttackBonusAgainstFactOwner>(a => { a.AttackBonus = 1; a.Bonus = 0; a.CheckedFact = enemy_type; }),
+                                                    Helpers.PrerequisiteFeature(fe)
+                                                    );
+                favored_enemy_attack_bonus.AllFeatures = favored_enemy_attack_bonus.AllFeatures.AddToArray(feature);
+            }
+          
+            var ff = addFavoredClassBonus(favored_enemy_attack_bonus, null, new BlueprintCharacterClass[] { ranger }, 4, hobgoblin);
+            ff.partial.Ranks = 20;
         }
 
 
