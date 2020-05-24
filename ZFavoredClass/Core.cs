@@ -25,6 +25,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityModManagerNet;
 
 namespace ZFavoredClass
 {
@@ -719,7 +720,7 @@ namespace ZFavoredClass
 
         static void loadCustomFavoredClassBonuses()
         {
-            string[] filePaths = Directory.GetFiles(@"./Mods/ZFavoredClass/Custom/", "*.json", SearchOption.TopDirectoryOnly);
+            string[] filePaths = Directory.GetFiles(UnityModManager.modsPath + @"/ZFavoredClass/Custom/", "*.json", SearchOption.TopDirectoryOnly);
             foreach (var fp in filePaths)
             {
                 loadCustomFeature(fp);
@@ -729,7 +730,6 @@ namespace ZFavoredClass
 
         static void createPrestigiousSpellcaster()
         {
-
             prestigious_spellcaster = Helpers.CreateFeatureSelection("PrestigiousSpellcasterFeature",
                                                                      "Prestigious Spellcaster",
                                                                      "You gain new spells per day and spells known and +1 spellcasting level in caster class that is advanced by your prestige class.\n"
@@ -739,7 +739,7 @@ namespace ZFavoredClass
                                                                      library.Get<BlueprintFeature>("06964d468fde1dc4aa71a92ea04d930d").Icon,
                                                                      FeatureGroup.Feat);
             library.AddFeats(prestigious_spellcaster);
-            string[] filePaths = Directory.GetFiles(@"./Mods/ZFavoredClass/PrestigiousSpellcaster/", "*.json", SearchOption.TopDirectoryOnly);
+            string[] filePaths = Directory.GetFiles(UnityModManager.modsPath + @"/ZFavoredClass/PrestigiousSpellcaster/", "*.json", SearchOption.TopDirectoryOnly);
             foreach (var fp in filePaths)
             {
                 loadPrestigiousSpellCaster(fp);
