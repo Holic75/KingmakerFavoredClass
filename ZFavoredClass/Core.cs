@@ -921,7 +921,14 @@ namespace ZFavoredClass
             addFavoredClassBonus(createFeatureCopy(Arcanist.arcane_exploits, "Gain 1/6 of a new arcanist exploit.", 3), null, Arcanist.arcanist_class, 6, halfling);
             addFavoredClassBonus(createFeatureCopy(Shaman.hex_selection, "Gain 1/6 of a new shaman hex.", 3), null, Shaman.shaman_class, 6, gnome);
             addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("43d1b15873e926848be2abf0ea3ad9a8"), "Gain 1/6 of a new slayer talent.", 3), null, slayer, 6, human, gnome, half_elf, half_orc, aasimar, tiefling);
-            wild_talent = addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("5c883ae0cd6d7d5448b7a420f51f8459"), "Gain 1/6 of a new wild talent.", 3), null, kineticist, 6, human, half_elf, half_orc, aasimar, tiefling);
+
+            var wild_talent_fcb = createFeatureCopy(library.Get<BlueprintFeatureSelection>("5c883ae0cd6d7d5448b7a420f51f8459"), "Gain 1/6 of a new wild talent.", 3);
+            wild_talent_fcb.AddComponent(Common.prerequisiteNoArchetype(kineticist, CallOfTheWild.Archetypes.KineticChirurgeion.archetype));
+            wild_talent = addFavoredClassBonus(wild_talent_fcb, null, kineticist, 6, human, half_elf, half_orc, aasimar, tiefling);
+
+            var metahealer_talent_fcb = createFeatureCopy(CallOfTheWild.Archetypes.KineticChirurgeion.metahealer_wild_talent, "Gain 1/6 of a new metahealer talent.", 3);
+            metahealer_talent_fcb.AddComponent(Common.createPrerequisiteArchetypeLevel(kineticist, CallOfTheWild.Archetypes.KineticChirurgeion.archetype, 1));
+            addFavoredClassBonus(metahealer_talent_fcb, null, kineticist, 6, human, half_elf, half_orc, aasimar, tiefling);
 
             var magus_arcana = createFeatureCopy(library.Get<BlueprintFeatureSelection>("e9dc4dfc73eaaf94aae27e0ed6cc9ada"), "Gain 1/6 of a new magus arcana.", 3);
             magus_arcana.AddComponent(Common.prerequisiteNoArchetype(magus, eldritch_scion));
