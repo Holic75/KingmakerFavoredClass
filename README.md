@@ -51,7 +51,7 @@ It also add following feats:
 - Favored Prestige Class (due to technical reasons should always be taken before taking first level in corresponding prestige class)
 - Prestigious Spellcaster (again due to technical reasons can be taken only after you select a spellbook to advance with corresponding prestige class,
 also it will not work if it is taken for spontaneous caster advancing prestige class and you get to select new spells known from some other spontaneous casting class,
-i.e. if you have eldritch knight advancing sorceror spellcasting, you can not take the feat during a level up for let's say inquisitor class)
+i.e. if you have eldritch knight advancing sorcerer spellcasting, you can not take the feat during a level up for let's say inquisitor class)
 
 It requires at least Call of the Wild 1.90.
 

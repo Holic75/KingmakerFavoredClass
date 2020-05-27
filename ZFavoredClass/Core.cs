@@ -1033,6 +1033,15 @@ namespace ZFavoredClass
                                                     CallOfTheWild.KineticistFix.internal_buffer.Icon,
                                                     CallOfTheWild.KineticistFix.internal_buffer_resource);
             extra_internal_buffer.AddComponent(Common.prerequisiteNoArchetype(kineticist, CallOfTheWild.Archetypes.OverwhelmingSoul.archetype));
+            extra_internal_buffer.AddComponent(Common.prerequisiteNoArchetype(kineticist, CallOfTheWild.Archetypes.KineticChirurgeion.archetype));
+
+
+            var extra_healer_buffer = createResourceBonusFeature("FavoredClassExtraHealingBufferFeature",
+                                        "Bonus Healing Buffer",
+                                        "Add +1/3 point to the kineticist’s internal buffer.",
+                                        CallOfTheWild.Archetypes.KineticChirurgeion.healing_buffer.Icon,
+                                        CallOfTheWild.Archetypes.KineticChirurgeion.healing_buffer_resource);
+            extra_healer_buffer.AddComponent(Common.createPrerequisiteArchetypeLevel(kineticist, CallOfTheWild.Archetypes.KineticChirurgeion.archetype, 1));
 
             var extra_max_arcane_reservoir = createResourceBonusFeature("FavoredClassExtraMaxArcaneReservoirFeature",
                                                                         "Bonus Maximum Arcane Reservoir",
@@ -1070,6 +1079,7 @@ namespace ZFavoredClass
             addFavoredClassBonus(extra_arcane_pool, null, magus, 4, human, half_elf, tiefling, aasimar, half_orc, suli, fetchling);
             addFavoredClassBonus(extra_eldritch_pool, null, magus, 4, human, half_elf,tiefling, aasimar, half_orc, suli, fetchling);
             addFavoredClassBonus(extra_internal_buffer, null, kineticist, 6, halfling);
+            addFavoredClassBonus(extra_healer_buffer, null, kineticist, 3, halfling);
             addFavoredClassBonus(extra_max_arcane_reservoir, null, Arcanist.arcanist_class, 1, elf, half_elf);
             addFavoredClassBonus(extra_arcane_reservoir, null, Arcanist.arcanist_class, 6, gnome);
             addFavoredClassBonus(extra_inspiration, null, Investigator.investigator_class, 3, elf, half_elf, ganzi);
