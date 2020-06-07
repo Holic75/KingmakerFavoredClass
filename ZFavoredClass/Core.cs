@@ -814,7 +814,6 @@ namespace ZFavoredClass
 
         static public FavoredClassFeature addFavoredClassBonus(BlueprintFeature feature, BlueprintFeature partial_feature, BlueprintCharacterClass[] classes, int divisor, params BlueprintRace[] races)
         {
-
             int max_rank = feature.Ranks > 0 ? feature.Ranks : 1;
             if (divisor > 1)
             {
