@@ -1110,7 +1110,15 @@ namespace ZFavoredClass
         {
             addFavoredClassBonus(CreateExtraSpellSelection(alchemist.Spellbook, alchemist, 5), null, alchemist, 2, elf, human, halfling, half_elf, half_orc, aasimar, tiefling);
             addFavoredClassBonus(CreateExtraSpellSelection(bard.Spellbook, bard, 5), null, bard, 2,human, half_elf, half_orc, aasimar, tiefling, half_elf);
-            addFavoredClassBonus(CreateExtraSpellSelection(inquistor.Spellbook, inquistor, 5), null, inquistor, 2, elf, human, half_elf, half_orc, aasimar, tiefling);
+
+            var inquisitor_spells = CreateExtraSpellSelection(inquistor.Spellbook, inquistor, 5);
+            inquisitor_spells.AddComponent(Common.prerequisiteNoArchetype(CallOfTheWild.Archetypes.RavenerHunter.archetype));
+            addFavoredClassBonus(inquisitor_spells, null, inquistor, 2, elf, human, half_elf, half_orc, aasimar, tiefling);
+
+            var ravener_spells = CreateExtraSpellSelection(CallOfTheWild.Archetypes.RavenerHunter.archetype.ReplaceSpellbook, inquistor, 5);
+            ravener_spells.AddComponent(Common.createPrerequisiteArchetypeLevel(CallOfTheWild.Archetypes.RavenerHunter.archetype, 1));
+            addFavoredClassBonus(ravener_spells, null, inquistor, 2, elf, human, half_elf, half_orc, aasimar, tiefling);
+
             addFavoredClassBonus(CreateExtraSpellSelection(Oracle.oracle_class.Spellbook, Oracle.oracle_class, 8), null, Oracle.oracle_class, 2, elf, human, half_elf, half_orc, aasimar, tiefling);
 
             var ganzi_oracle_spell_list = Common.combineSpellLists("GanziOracleFCBSpellList", wizard.Spellbook.SpellList, cleric.Spellbook.SpellList);
