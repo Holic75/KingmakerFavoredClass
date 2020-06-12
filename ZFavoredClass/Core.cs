@@ -916,7 +916,9 @@ namespace ZFavoredClass
             extra_ninja_talent.AddComponent(Common.createPrerequisiteArchetypeLevel(rogue, CallOfTheWild.Archetypes.Ninja.archetype, 1));
             addFavoredClassBonus(extra_ninja_talent, null, rogue, 6, human, half_elf, half_orc, aasimar, tiefling);
 
-            addFavoredClassBonus(createFeatureCopy(Witch.hex_selection, "Gain 1/6 of a new witch hex.", 3), null, Witch.witch_class, 6, gnome);
+            var extra_hex = createFeatureCopy(Witch.hex_selection, "Gain 1/6 of a new witch hex.", 3);
+            extra_hex.AddComponent(CallOfTheWild.Common.prerequisiteNoArchetype(Witch.havocker));
+            addFavoredClassBonus(extra_hex, null, Witch.witch_class, 6, gnome);
             addFavoredClassBonus(createFeatureCopy(Arcanist.arcane_exploits, "Gain 1/6 of a new arcanist exploit.", 3), null, Arcanist.arcanist_class, 6, halfling);
             addFavoredClassBonus(createFeatureCopy(Shaman.hex_selection, "Gain 1/6 of a new shaman hex.", 3), null, Shaman.shaman_class, 6, gnome);
             addFavoredClassBonus(createFeatureCopy(library.Get<BlueprintFeatureSelection>("43d1b15873e926848be2abf0ea3ad9a8"), "Gain 1/6 of a new slayer talent.", 3), null, slayer, 6, human, gnome, half_elf, half_orc, aasimar, tiefling);
