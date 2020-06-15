@@ -399,6 +399,7 @@ namespace ZFavoredClass
                 }
             }
 
+            natural_ac.AddComponent(Common.prerequisiteNoArchetype(CallOfTheWild.Archetypes.Toxicant.archetype));
             addFavoredClassBonus(natural_ac, null, alchemist, 4, dwarf);
         }
 
@@ -1005,6 +1006,7 @@ namespace ZFavoredClass
                                                         bomb_icon,
                                                         bomb_resource);
             extra_bombs.AddComponent(Common.prerequisiteNoArchetype(alchemist, library.Get<BlueprintArchetype>("68cbcd9fbf1fb1d489562f829bb97e38"))); //no bombs on vivisectionist
+            extra_bombs.AddComponent(Common.prerequisiteNoArchetype(CallOfTheWild.Archetypes.Toxicant.archetype));//and toxicant
 
             var extra_ki = createResourceBonusFeature("FavoredClassExtraKiFeature",
                                             "Bonus Ki",
