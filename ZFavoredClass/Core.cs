@@ -308,7 +308,7 @@ namespace ZFavoredClass
                                                            );
             necromacy_cl_bonus.AddComponent(Helpers.CreateContextRankConfig(ContextRankBaseValueType.FeatureRank, feature: necromacy_cl_bonus));
             necromacy_cl_bonus.Ranks = 5;
-            addFavoredClassBonus(necromacy_cl_bonus, null, new BlueprintCharacterClass[] { wizard }, 4, drow);            
+            addFavoredClassBonus(necromacy_cl_bonus, null, new BlueprintCharacterClass[] { wizard }, 4, dhampir);            
         }
 
 
