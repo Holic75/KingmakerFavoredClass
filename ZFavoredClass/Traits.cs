@@ -689,6 +689,7 @@ namespace ZFavoredClass
                                                              s.stat = StatType.CheckIntimidate;
                                                              s.old_stat = StatType.Charisma;
                                                              s.new_stat = StatType.Intelligence;
+                                                             s.do_not_apply_if_has_fact = library.Get<BlueprintFeature>("d76497bfc48516e45a0831628f767a0f");
                                                          }),
                                                          Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckBluff; a.value = 3; })
                                                          );

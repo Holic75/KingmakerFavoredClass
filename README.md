@@ -1,8 +1,8 @@
 # Favored Class
 
-This is a mod for Pathfinder:Kingmaker that adds favored class mechanics.
+This is a mod for Pathfinder:Kingmaker that adds favored class mechanics and traits.
 
-It is not compatible with favored class from Eldritch Arcana mod (you will normally get two favored classes - one from this mod and one from EA, so you probably might just pick some dummy class from one mod and use bonus from the other).
+It is not compatible with favored class from Eldritch Arcana mod.
 
 It adds the following options for favored class bonuses:
  - +1 HP/level
@@ -47,7 +47,13 @@ It adds the following options for favored class bonuses:
  - +1 to dodge bonus against studied targets/4 levels for halfling and fetchling slayers,
  - +1 to attack bonus against one favored enemy/4 levels for hobgoblin rangers.
  
+Other features:
+- Everyone can select a Deity (optional),
+- Everyone can select 2 traits at character creation (optional).
+ 
+ 
 It also add following feats:
+- Additional Traits (if traits are enabled),
 - Favored Prestige Class (due to technical reasons should always be taken before taking first level in corresponding prestige class)
 - Prestigious Spellcaster (again due to technical reasons can be taken only after you select a spellbook to advance with corresponding prestige class,
 also it will not work if it is taken for spontaneous caster advancing prestige class and you get to select new spells known from some other spontaneous casting class,
