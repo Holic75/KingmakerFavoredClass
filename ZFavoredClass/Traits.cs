@@ -1439,6 +1439,7 @@ namespace ZFavoredClass
                                                     "",
                                                     Helpers.GetIcon("4e42460798665fd4cb9173ffa7ada323"), // sickened
                                                     FeatureGroup.None,
+                                                    Helpers.CreateAddStatBonus(StatType.AC, 1, ModifierDescriptor.NaturalArmor),
                                                     Helpers.Create<CallOfTheWild.HealingMechanics.OnHealingReceivedActionTrigger>(o =>
                                                     {
                                                         o.actions = Helpers.CreateActionList(Common.createContextActionApplyBuff(sickened, Helpers.CreateContextDuration(1), dispellable: false));

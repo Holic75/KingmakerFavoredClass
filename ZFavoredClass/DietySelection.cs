@@ -43,11 +43,11 @@ namespace ZFavoredClass
             addDeityToCompanion(linzi_feature.GetComponent<AddClassLevels>(), ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("b382afa31e4287644b77a8b30ed4aa0b"));//shaelyn
             //addDeityToCompanion(kanerah_feature.GetComponent<AddClassLevels>(), ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("6262cfce7c31626458325ca0909de997"));//nethys
             //addDeityToCompanion(kalikke_feature.GetComponent<AddClassLevels>(), ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("6262cfce7c31626458325ca0909de997"));//nethys
-            addDeityToCompanion(octavia_feature.GetComponent<AddClassLevels>(), ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("c7531715a3f046d4da129619be63f44c"));//callistria
-            addDeityToCompanion(regongar_feature.GetComponent<AddClassLevels>(), ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("c7531715a3f046d4da129619be63f44c"));//callistria
+            addDeityToCompanion(octavia_feature.GetComponent<AddClassLevels>(), ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("c7531715a3f046d4da129619be63f44c"));//calistria
+            addDeityToCompanion(regongar_feature.GetComponent<AddClassLevels>(), ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("c7531715a3f046d4da129619be63f44c"));//calistria
             //nok-nok should have lamashtu
             //jubilost
-            //jaethal - first uragathoa
+            //jaethal - uragathoa
             //varn ?
             addDeityToCompanion(ekun_feature.GetComponent<AddClassLevels>(), ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("d2d5c5a58885a6b489727467e13c3337"));//torag
             addDeityToCompanion(cephal_feature.GetComponent<AddClassLevels>(), ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("a3a5ccc9c670e6f4ca4a686d23b89900"));//asmodeus
