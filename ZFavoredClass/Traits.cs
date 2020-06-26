@@ -125,6 +125,7 @@ namespace ZFavoredClass
         static public BlueprintFeature shield_bearer;
         static public BlueprintFeature grounded;
         static public BlueprintFeature shadow_stabber;
+        static public BlueprintFeature warrior_of_old;
 
         //REGIONAL TRAITS
         static public BlueprintFeature honeyed_tongue;
@@ -144,6 +145,18 @@ namespace ZFavoredClass
         static public BlueprintFeature rice_runner;
         static public BlueprintFeature sound_of_mind;
         static public BlueprintFeature xa_hoi_soldier;
+
+        static public BlueprintFeature blighted_physiology;
+        static public BlueprintFeature child_of_crusades;
+        static public BlueprintFeature demon_bane_summoner;
+        static public BlueprintFeature elemental_pupil;
+        static public BlueprintFeature empathic_diplomat;
+        static public BlueprintFeature flotsam;
+        static public BlueprintFeature minkai_advocate;
+        static public BlueprintFeature pirate_duelist;
+        static public BlueprintParametrizedFeature secret_of_the_impossible_kingdom;
+
+
 
 
 
@@ -283,7 +296,7 @@ namespace ZFavoredClass
                                                    FeatureGroup.None,
                                                    Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusOnAttacksOfOpportunity>(a =>
                                                    {
-                                                       a.categories = new WeaponCategory[] { WeaponCategory.BastardSword, WeaponCategory.DuelingSword, WeaponCategory.Scimitar, WeaponCategory.Falchion, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.PunchingDagger };
+                                                       a.categories = new WeaponCategory[] { WeaponCategory.BastardSword, WeaponCategory.DuelingSword, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.Longsword, WeaponCategory.Greatsword };
                                                        a.Value = 1;
                                                        a.Descriptor = ModifierDescriptor.Trait;
                                                    }
@@ -1040,13 +1053,22 @@ namespace ZFavoredClass
 
             elven_reflexes = Helpers.CreateFeature("ElvenReflexesTrait",
                                                     "Elven Reflexes",
-                                                    "One of your parents was a member of a wild elven tribe, and you’ve inherited a portion of your elven parent’s quick ref lexes.\nBenefit: You gain a +2 trait bonus on initiative checks.",
+                                                    "One of your parents was a member of a wild elven tribe, and you’ve inherited a portion of your elven parent’s quick reflexes.\nBenefit: You gain a +2 trait bonus on initiative checks.",
                                                     "",
                                                     Helpers.GetIcon("797f25d709f559546b29e7bcb181cc74"), // Improved Initiative
                                                     FeatureGroup.None,
                                                     Helpers.CreateAddStatBonus(StatType.Initiative, 2, ModifierDescriptor.Trait),
-                                                    Helpers.Create<NewMechanics.PrerequisiteRace>(p => { p.race = Core.elf; p.Group = Prerequisite.GroupType.Any; }),
-                                                    Helpers.Create<NewMechanics.PrerequisiteRace>(p => { p.race = Core.half_elf; p.Group = Prerequisite.GroupType.Any; })
+                                                    Helpers.Create<NewMechanics.PrerequisiteRace>(p =>  p.race = Core.half_elf )
+                                                    );
+
+            warrior_of_old = Helpers.CreateFeature("WarriorOfOldTrait",
+                                                    "Warrior of Old",
+                                                    "As a child, you put in long hours on combat drills, and though time has made this training a dim memory, you still have a knack for quickly responding to trouble.\nBenefit: You gain a +2 trait bonus on initiative checks.",
+                                                    "",
+                                                    Helpers.GetIcon("797f25d709f559546b29e7bcb181cc74"), // Improved Initiative
+                                                    FeatureGroup.None,
+                                                    Helpers.CreateAddStatBonus(StatType.Initiative, 2, ModifierDescriptor.Trait),
+                                                    Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.elf)
                                                     );
 
             forlorn = Helpers.CreateFeature("ForlornTrait",
@@ -1226,7 +1248,8 @@ namespace ZFavoredClass
                                     varisian_tattoo,
                                     shield_bearer,
                                     grounded,
-                                    shadow_stabber
+                                    shadow_stabber,
+                                    warrior_of_old
                                     );
         }
 
@@ -1408,6 +1431,112 @@ namespace ZFavoredClass
                                     Helpers.CreateAddStatBonus(StatType.SaveReflex, 1, ModifierDescriptor.Trait)
                                     );
 
+            var sickened = library.Get<BlueprintBuff>("4e42460798665fd4cb9173ffa7ada323");
+            blighted_physiology = Helpers.CreateFeature("BlightedPhysiologyTrait",
+                                                    "Blighted Physiology",
+                                                    "Exposure to the corruption that seeps through every drop of water and grain of dirt in Numeria has altered your body.\n"
+                                                    + "Benifit: Horrif ic growths beneath your skin provide you a +1 natural armor bonus to AC, but your body does not work as a normal creature’s would. You become sickened for 1 round anytime you receive magical healing.",
+                                                    "",
+                                                    Helpers.GetIcon("4e42460798665fd4cb9173ffa7ada323"), // sickened
+                                                    FeatureGroup.None,
+                                                    Helpers.Create<CallOfTheWild.HealingMechanics.OnHealingReceivedActionTrigger>(o =>
+                                                    {
+                                                        o.actions = Helpers.CreateActionList(Common.createContextActionApplyBuff(sickened, Helpers.CreateContextDuration(1), dispellable: false));
+                                                    }
+                                                    )
+                                                    );
+
+            child_of_crusades = Helpers.CreateFeature("ChildOfCrusadesTrait",
+                                                    "Child of Crusades",
+                                                    "Your parents stood strong against the demons of the Worldwound, facing down the worst of this world and the Great Beyond. You have inherited their indomitable spirit.\n"
+                                                    + "Benifit:  you gain a +2 trait bonus on all saves against fear.",
+                                                    "",
+                                                    Helpers.GetIcon("87fda237f2f0efa4db9d9c0cf0c2779f"), // blessing of courage
+                                                    FeatureGroup.None,
+                                                    Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.Bonus = 2; s.ModifierDescriptor = ModifierDescriptor.Trait; s.SpellDescriptor = SpellDescriptor.Fear | SpellDescriptor.Shaken; })
+                                                    );
+
+            var demon_bane_summoner_buff = Helpers.CreateBuff("DemonbaneSummonerBuff",
+                                                               "Demonbane Summoner",
+                                                               "Your line is derived directly from the god callers of Sarkoris. You adamantly oppose the demonic forces of the Worldwound in hopes of reclaiming your lost lands.",
+                                                               "",
+                                                               Helpers.GetIcon("ce0ece459ebed9941bb096f559f36fa8"),
+                                                               null,
+                                                               Common.createAddOutgoingMaterial(Kingmaker.Enums.Damage.PhysicalDamageMaterial.ColdIron));
+
+            demon_bane_summoner = Helpers.CreateFeature("DemonbaneSummonerTrait",
+                                                        demon_bane_summoner_buff.Name,
+                                                        demon_bane_summoner_buff.Description,
+                                                        "",
+                                                        demon_bane_summoner_buff.Icon,
+                                                        FeatureGroup.None);
+            demon_bane_summoner.AddComponent(Helpers.Create<OnSpawnBuff>(o =>
+                                                                        {
+                                                                            o.buff = demon_bane_summoner_buff;
+                                                                            o.IfHaveFact = demon_bane_summoner;
+                                                                            o.SpellDescriptor = SpellDescriptor.Summoning;
+                                                                            o.IsInfinity = true;
+                                                                            o.CheckDescriptor = true;
+                                                                        })
+                                             );
+
+            empathic_diplomat = Helpers.CreateFeature("EmpathicDiplomatTrait",
+                                                     "Empathic Diplomat",
+                                                     "You have long followed the path of common sense and empathic insight when using diplomacy.\n"
+                                                     + "Benefit: You modify your Diplomacy checks using your Wisdom modifier, not your Charisma modifier.",
+                                                     "",
+                                                     Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // sf diplomacy
+                                                     FeatureGroup.None,
+                                                     Helpers.Create<CallOfTheWild.SkillMechanics.DependentAbilityScoreCheckStatReplacement>(s =>
+                                                     {
+                                                         s.stat = StatType.CheckBluff;
+                                                         s.old_stat = StatType.Charisma;
+                                                         s.new_stat = StatType.Wisdom;
+                                                     })
+                                                     );
+            flotsam = Helpers.CreateFeature("FlotsamTrait",
+                                            "Flotsam",
+                                            "You were one of only a few that survived the destruction of the merchant vessel Vantage. Your crew was more than able to hold off the blundering pirate attackers, but their red dragon ally proved too much for your defenses. As you watched the sharks and eels feast on the bodies of your fallen comrades, you vowed to see Aashaq slain. \n"
+                                            + "Benifit:  you gain a +2 trait bonus against spells and effects with the fire descriptor.",
+                                            "",
+                                            Helpers.GetIcon("3f9605134d34e1243b096e1f6cb4c148"), // protection from fire
+                                            FeatureGroup.None,
+                                            Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.Bonus = 2; s.ModifierDescriptor = ModifierDescriptor.Trait; s.SpellDescriptor = SpellDescriptor.Fear | SpellDescriptor.Shaken; })
+                                            );
+
+            minkai_advocate = Helpers.CreateFeature("MinkaiAdvocateTrait",
+                                         "Minkai Advocate",
+                                         "You possess strong ties to Minkai, and spread flattering words regarding your empire.\n"
+                                         + "Benefits: You gain a +1 trait bonus on attacks of opportunity made with daggers, short swords, rapiers, and scimitars.",
+                                         "",
+                                         Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // skill focus diplomacy
+                                         FeatureGroup.None,
+                                         Helpers.CreateAddStatBonus(StatType.CheckBluff, 1, ModifierDescriptor.Trait),
+                                         Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckBluff; })
+                                         );
+
+            pirate_duelist = Helpers.CreateFeature("PirateDuelistTrait",
+                                       "Pirate Duelist",
+                                       "You’ve rubbed elbows with pirates of all stripes in Ilizmagorti’s taverns and convinced a few to show off their swordfighting skills.\n"
+                                       + "Benefits: You gain a +1 trait bonus on attacks of opportunity when using a dagger or a sword.",
+                                       "",
+                                       Helpers.GetIcon("5bb6dc5ce00550441880a6ff8ad4c968"), //opportunist
+                                       FeatureGroup.None,
+                                       Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusOnAttacksOfOpportunity>(a =>
+                                       {
+                                           a.categories = new WeaponCategory[] { WeaponCategory.Rapier, WeaponCategory.Scimitar, WeaponCategory.Shortsword, WeaponCategory.Dagger };
+                                           a.Value = 1;
+                                           a.Descriptor = ModifierDescriptor.Trait;
+                                       }
+                                       )
+                                       );
+
+            secret_of_the_impossible_kingdom = library.CopyAndAdd(gifted_adept, "SecretOfTheImpossibleKingdomTrait", "");
+            secret_of_the_impossible_kingdom.SetNameDescription("Secret of the Impossible Kingdom",
+                                                                "You have studied the ancient lore of Vudra at a monastery in Jalmeray, and have learned a mystical secret that empowers your spellcasting.\n"
+                                                                + "Benifit:  Pick one spell when you choose this trait—from this point on, whenever you cast that spell, you do so at +1 caster level."
+                                                                );
+
             regional_traits = createTraitSelction("RegionalTrait",
                                                 "Regional Trait",
                                                 "Regional traits are keyed to specific regions, be they large (such as a nation or geographic region) or small (such as a city or a specific mountain). In order to select a regional trait, your PC must have spent at least a year living in that region. At first level, you can only select one regional trait (typically the one tied to your character’s place of birth or homeland), despite the number of regions you might wish to write into your character’s background.",
@@ -1427,7 +1556,15 @@ namespace ZFavoredClass
                                                 valashmai_veteran,
                                                 rice_runner,
                                                 sound_of_mind,
-                                                xa_hoi_soldier
+                                                xa_hoi_soldier,
+                                                blighted_physiology,
+                                                child_of_crusades,
+                                                demon_bane_summoner,
+                                                empathic_diplomat,
+                                                flotsam,
+                                                minkai_advocate,
+                                                pirate_duelist,
+                                                secret_of_the_impossible_kingdom
                                                 );
 
         }
