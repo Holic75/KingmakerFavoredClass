@@ -629,7 +629,7 @@ namespace ZFavoredClass
 
 
             fast_talker = Helpers.CreateFeature("FastTalkerTrait",
-                                                 "Bully",
+                                                 "Fast Talker",
                                                  "You had a knack for getting yourself into trouble as a child, and as a result developed a silver tongue at an early age.\n"
                                                  + "Benefits: You gain a +1 trait bonus on bluff checks, and Persuation is always considered a class skill for you for purpose of bluff checks.",
                                                  "",
@@ -689,7 +689,6 @@ namespace ZFavoredClass
                                                              s.stat = StatType.CheckIntimidate;
                                                              s.old_stat = StatType.Charisma;
                                                              s.new_stat = StatType.Intelligence;
-                                                             s.do_not_apply_if_has_fact = library.Get<BlueprintFeature>("d76497bfc48516e45a0831628f767a0f");
                                                          }),
                                                          Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckBluff; a.value = 3; })
                                                          );
@@ -1380,7 +1379,7 @@ namespace ZFavoredClass
 
             rice_runner = Helpers.CreateFeature("RiceRunnerTrait",
                                          "Rice Runner",
-                                         "You grew up as a slave in Wanshou, harvesting rice for your kraken despot, and you know how to move agilely across sodden and unsteady ground. \n"
+                                         "You grew up as a slave in Wanshou, harvesting rice for your kraken despot, and you know how to move agilely across sodden and unsteady ground.\n"
                                          + "Benefits: You gain a +1 trait bonus on Mobility checks, and Mobility becomes a class skill for you.",
                                          "",
                                          Helpers.GetIcon("52dd89af385466c499338b7297896ded"), // sf perception
