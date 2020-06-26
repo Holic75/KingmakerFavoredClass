@@ -4,6 +4,7 @@ using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Classes.Prerequisites;
 using Kingmaker.Blueprints.Classes.Selection;
+using Kingmaker.Blueprints.Classes.Spells;
 using Kingmaker.Blueprints.Facts;
 using Kingmaker.Blueprints.Root;
 using Kingmaker.EntitySystem.Entities;
@@ -185,6 +186,31 @@ namespace ZFavoredClass.NewMechanics
         }
     }
 
+
+    [AllowMultipleComponents]
+    public class PrerequisiteSpellbook : Prerequisite
+    {
+        public override bool Check(
+          FeatureSelectionState selectionState,
+          UnitDescriptor unit,
+          LevelUpState state)
+        {
+            foreach (ClassData classData in unit.Progression.Classes)
+            {
+                BlueprintSpellbook spellbook = classData.Spellbook;
+                if (spellbook != null)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public override string GetUIText()
+        {
+            return "Ability to cast spells";
+        }
+    }
 
 
     public class PrerequisiteRace : Prerequisite

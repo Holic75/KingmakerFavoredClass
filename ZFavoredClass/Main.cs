@@ -19,17 +19,21 @@ namespace ZFavoredClass
 {
     internal class Main
     {
-        internal class Settings
-        {
-            internal Settings()
+            internal class Settings
             {
-
-                using (StreamReader settings_file = File.OpenText(UnityModManager.modsPath + @"/ZFavoredClass/settings.json"))
-                using (JsonTextReader reader = new JsonTextReader(settings_file))
+                internal bool deity_for_everyone { get; }
+                internal bool enable_traits { get; }
+                internal Settings()
                 {
-                    JObject jo = (JObject)JToken.ReadFrom(reader);
+
+                    using (StreamReader settings_file = File.OpenText(UnityModManager.modsPath + @"/ZFavoredClass/settings.json"))
+                    using (JsonTextReader reader = new JsonTextReader(settings_file))
+                    {
+                        JObject jo = (JObject)JToken.ReadFrom(reader);
+                        deity_for_everyone = (bool)jo["deity_for_everyone"];
+                        enable_traits = (bool)jo["enable_traits"];
                 }
-            }
+                }
         }
 
         static internal Settings settings = new Settings();
@@ -91,6 +95,15 @@ namespace ZFavoredClass
                     CallOfTheWild.Helpers.GuidStorage.load(Properties.Resources.blueprints, allow_guid_generation);
 
                     Core.load();
+                    if (settings.deity_for_everyone)
+                    {
+                        logger.Log("Enabling deity selection for everyone.");
+                        DietySelection.run();
+                    }
+
+                    
+                    Traits.load(settings.enable_traits);
+
 
 #if DEBUG
                     string guid_file_name = @"C:\Repositories\KingmakerFavoredClass\ZFavoredClass\blueprints.txt";
