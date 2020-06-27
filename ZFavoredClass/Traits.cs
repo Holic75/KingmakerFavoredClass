@@ -28,11 +28,13 @@ using Kingmaker.UnitLogic.ActivatableAbilities.Restrictions;
 using Kingmaker.UnitLogic.Alignments;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Kingmaker.UnitLogic.Buffs.Components;
+using Kingmaker.UnitLogic.Class.Kineticist.Properties;
 using Kingmaker.UnitLogic.FactLogic;
 using Kingmaker.UnitLogic.Mechanics;
 using Kingmaker.UnitLogic.Mechanics.Actions;
 using Kingmaker.UnitLogic.Mechanics.Components;
 using Kingmaker.UnitLogic.Mechanics.Conditions;
+using Kingmaker.UnitLogic.Mechanics.Properties;
 using Kingmaker.UnitLogic.Parts;
 using Kingmaker.Utility;
 using System;
@@ -210,7 +212,7 @@ namespace ZFavoredClass
                                                              );
             traits_selection.AllFeatures = new BlueprintFeature[] { combat_traits, faith_traits, magic_traits, religion_traits, social_traits, racial_traits, regional_traits };
 
-
+            
             adopted = library.CopyAndAdd(racial_traits, "AdoptedTraitSelection", "");
             adopted.SetNameDescription("Adopted",
                                        "You were adopted and raised by someone not of your race, and raised in a society not your own. As a result, you picked up a race trait from your adoptive parents and society, and may immediately select a race trait from your adoptive parents’ race.");
@@ -218,6 +220,7 @@ namespace ZFavoredClass
             adopted.IgnorePrerequisites = true;
 
             social_traits.AllFeatures = social_traits.AllFeatures.AddToArray(adopted);
+            var traits_selection2 = library.CopyAndAdd(traits_selection, "TraitSelection2Feature", "");
             additional_traits = Helpers.CreateFeature("AdditionalTraitsFeature",
                                                       "Additional Traits",
                                                       "You gain two character traits of your choice. These traits must be chosen from different lists, and cannot be chosen from lists from which you have already selected a character trait. You must meet any additional qualifications for the character traits you choose — this feat cannot enable you to select a dwarf character trait if you are an elf, for example.",
@@ -225,14 +228,16 @@ namespace ZFavoredClass
                                                       Helpers.GetIcon("0d3651b2cb0d89448b112e23214e744e"), // Extra Performance
                                                       FeatureGroup.Feat,
                                                       Helpers.Create<CallOfTheWild.EvolutionMechanics.addSelection>(a => a.selection = traits_selection),
-                                                      Helpers.Create<CallOfTheWild.EvolutionMechanics.addSelection>(a => a.selection = traits_selection)
+                                                      Helpers.Create<CallOfTheWild.EvolutionMechanics.addSelection>(a => a.selection = traits_selection2)
                                                       );
             additional_traits.AddComponent(Helpers.PrerequisiteNoFeature(additional_traits));
+
+            
             if (enable)
             {
                 Main.logger.Log("Enabling Traits.");
                 var basic_feats_progression = library.Get<BlueprintProgression>("5b72dd2ca2cb73b49903806ee8986325"); //basic feats
-                basic_feats_progression.LevelEntries[0].Features = new BlueprintFeatureBase[] { traits_selection, traits_selection }.AddToArray(basic_feats_progression.LevelEntries[0].Features).ToList();
+                basic_feats_progression.LevelEntries[0].Features = new BlueprintFeatureBase[] { traits_selection, traits_selection2 }.AddToArray(basic_feats_progression.LevelEntries[0].Features).ToList();
                 library.AddFeats(additional_traits);
             }
 
@@ -1207,17 +1212,12 @@ namespace ZFavoredClass
                                                 "You know how to avoid a blow while still maintaining your offensive posture.\nBenefit: When you use Combat Expertise, reduce the number you subtract from your melee attack rolls by 1.",
                                                 "",
                                                 combat_expertise_buff.Icon,
-                                                FeatureGroup.None,
-                                                CallOfTheWild.Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusOnAttackInitiationIfHasFact>(a =>
-                                                        {
-                                                            a.CheckedFact = combat_expertise_buff;
-                                                            a.Bonus = 1;
-                                                            a.OnlyFirstAttack = false;
-                                                            a.WeaponAttackTypes = new AttackType[] { AttackType.Melee, AttackType.Ranged, AttackType.RangedTouch, AttackType.Touch };
-                                                            a.Descriptor = ModifierDescriptor.Trait;
-                                                        }
-                                                )
+                                                FeatureGroup.None
                                                 );
+
+            var ce_property = library.Get<BlueprintUnitProperty>("8a63b06d20838954e97eb444f805ec89");
+            var comp = ce_property.GetComponent<BaseAttackPropertyWithFeatureList>();
+            comp.Features = comp.Features.AddToArray(threatening_defender);
 
             combat_traits = createTraitSelction("CombatTrait",
                                                 "Combat Trait",
@@ -1244,7 +1244,7 @@ namespace ZFavoredClass
         {
             auspicious_tatoo = Helpers.CreateFeature("AuspiciousTrait",
                                          "Auspicious Tattoo",
-                                         "You bear a tattoo depicting one of the totems listed for your quah  that favors you with good fortune.\n"
+                                         "You bear a tattoo depicting one of the totems listed for your quah that favors you with good fortune.\n"
                                          + "Benefit: You gain a +1 trait bonus on Will saving throws.",
                                          "",
                                          Helpers.GetIcon("175d1577bb6c9a04baf88eec99c66334"), // iron will
@@ -1695,7 +1695,8 @@ namespace ZFavoredClass
 
             var demon_bane_summoner_buff = Helpers.CreateBuff("DemonbaneSummonerBuff",
                                                                "Demonbane Summoner",
-                                                               "Your line is derived directly from the god callers of Sarkoris. You adamantly oppose the demonic forces of the Worldwound in hopes of reclaiming your lost lands.",
+                                                               "Your line is derived directly from the god callers of Sarkoris. You adamantly oppose the demonic forces of the Worldwound in hopes of reclaiming your lost lands.\n"
+                                                               + "Benifit: The attacks of creatures you summon are treated as cold iron for the purpose of overcoming damage reduction.",
                                                                "",
                                                                Helpers.GetIcon("ce0ece459ebed9941bb096f559f36fa8"),
                                                                null,
