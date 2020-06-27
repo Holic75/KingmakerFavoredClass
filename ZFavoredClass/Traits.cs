@@ -424,7 +424,7 @@ namespace ZFavoredClass
                                                 Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // skill focus diplomacy
                                                 FeatureGroup.None,
                                                 Helpers.CreateAddStatBonus(StatType.CheckDiplomacy, 2, ModifierDescriptor.Trait),
-                                                Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckDiplomacy; a.value = 5; }),
+                                                Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckDiplomacy; }),
                                                 Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("c1c4f7f64842e7e48849e5e67be11a1b")) //sarenrae
                                                 );
 
@@ -461,7 +461,7 @@ namespace ZFavoredClass
 
             demoralizing_presence = Helpers.CreateFeature("DemoralizingPresenceTrait",
                                   "Bestial Wrath",
-                                  "Your very existence is unsettling to your foes.\nBenefit: YYou gain a +2 trait bonus on Intimidate checks.",
+                                  "Your very existence is unsettling to your foes.\nBenefit: You gain a +2 trait bonus on Intimidate checks.",
                                   "",
                                   Helpers.GetIcon("d2aeac47450c76347aebbc02e4f463e0"), // fear
                                   FeatureGroup.None,
@@ -844,7 +844,7 @@ namespace ZFavoredClass
                                                              s.old_stat = StatType.Charisma;
                                                              s.new_stat = StatType.Intelligence;
                                                          }),
-                                                         Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckBluff; a.value = 3; })
+                                                         Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckBluff; })
                                                          );
 
             clever_wordplay = Helpers.CreateFeature("CleverWordpalyTrait",
