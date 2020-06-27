@@ -54,10 +54,17 @@ namespace ZFavoredClass
         static public BlueprintFeature blade_of_the_society;
         static public BlueprintFeature defender_of_the_society;
         static public BlueprintFeature deft_dodger;
-        static public BlueprintFeature dirty_fighter; //fix in proper flanking 2
+        static public BlueprintFeature dirty_fighter;
         static public BlueprintFeature reactionary;
         static public BlueprintFeature resilent;
         static public BlueprintFeature slippery;
+        //dirty trickster
+        static public BlueprintFeatureSelection dragon_armor;
+        //evasive_sting;
+        static public BlueprintFeature fencer;
+        static public BlueprintFeature honored_fist_of_society;
+        static public BlueprintFeature threatening_defender;
+        
 
 
         //FAITH TRAITS
@@ -71,9 +78,11 @@ namespace ZFavoredClass
         static public BlueprintFeature scholar_of_the_greate_beyond;
         static public BlueprintFeature fates_favored;
         static public BlueprintFeature omen;
+        static public BlueprintFeature reincarnated;
+        //martial manuscript
 
         //SOCIAL TRAITS
-        //adopted
+        static public BlueprintFeatureSelection adopted;
         static public BlueprintFeature bully;
         static public BlueprintFeature fast_talker;
         static public BlueprintFeature maestro_of_the_society;
@@ -96,7 +105,7 @@ namespace ZFavoredClass
         static public BlueprintFeature trickster;
 
         //RELIGION TRAITS
-        //deadeye bowman - will be done in proper flanking
+        //deadeye bowman - done in proper flanking 2
         static public BlueprintFeature shield_trained;
         static public BlueprintFeatureSelection wisdom_in_flesh;
         static public BlueprintFeature opportunistic;
@@ -108,6 +117,18 @@ namespace ZFavoredClass
         static public BlueprintFeature spirit_guide;
         static public BlueprintFeature illuminator;
         static public BlueprintFeature defensive_strategist;
+        static public BlueprintFeature bestial_wrath;
+        static public BlueprintFeature corpse_hunter;
+        static public BlueprintFeature demoralizing_presence;
+        static public BlueprintFeature eyes_and_ears_of_the_city;
+        static public BlueprintFeature good_natured;
+        static public BlueprintFeature liars_tongue;
+        //pain_in_pleasure;
+        static public BlueprintFeature regal_presence;
+        static public BlueprintFeature stoic_optimism;
+        static public BlueprintFeature strong_willed;
+        static public BlueprintFeature unswaying_love;
+
 
         //RACE TRAITS
         static public BlueprintFeature auspicious_tatoo;
@@ -145,11 +166,10 @@ namespace ZFavoredClass
         static public BlueprintFeature rice_runner;
         static public BlueprintFeature sound_of_mind;
         static public BlueprintFeature xa_hoi_soldier;
-
         static public BlueprintFeature blighted_physiology;
         static public BlueprintFeature child_of_crusades;
         static public BlueprintFeature demon_bane_summoner;
-        static public BlueprintFeature elemental_pupil;
+        //elemental_pupil;
         static public BlueprintFeature empathic_diplomat;
         static public BlueprintFeature flotsam;
         static public BlueprintFeature minkai_advocate;
@@ -169,8 +189,8 @@ namespace ZFavoredClass
         static public BlueprintFeatureSelection traits_selection;
         static public BlueprintFeatureSelection regional_traits;
 
-        static public BlueprintFeatureSelection adopted;
         static public BlueprintFeature additional_traits;
+
         static internal void load(bool enable)
         {
             createCombatTratits();
@@ -358,7 +378,7 @@ namespace ZFavoredClass
                                                  "",
                                                  Helpers.GetIcon("35f3724d4e8877845af488d167cb8a89"), //mind blank
                                                  FeatureGroup.None,
-                                                 Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("6262cfce7c31626458325ca0909de997")) //nethys
+                                                 Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("805b6bdc8c96f4749afc687a003f9628")) //norgorber
                                                  );
 
             var knowledge_skills = new StatType[] { StatType.SkillLoreNature, StatType.SkillLoreReligion, StatType.SkillKnowledgeArcana, StatType.SkillKnowledgeWorld };
@@ -414,6 +434,112 @@ namespace ZFavoredClass
                                                         Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("d2d5c5a58885a6b489727467e13c3337")) //torag
                                                         );
 
+            bestial_wrath = Helpers.CreateFeature("BestialWrathTrait",
+                                              "Bestial Wrath",
+                                              "When you strike hard, you strike deep.\nBenefit: You gain a +2 trait bonus on all rolls made to confirm critical hits.",
+                                              "",
+                                              Helpers.GetIcon("f4201c85a991369408740c6888362e20"), // Improved Critical
+                                              FeatureGroup.None,
+                                              Helpers.Create<CriticalConfirmationBonus>(a => { a.Bonus = 2; a.Value = 0; }),
+                                              Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("04bc2b62273ab744092d992ed72bff41")) //rovagug
+                                              );
+
+            corpse_hunter = Helpers.CreateFeature("CorpseHunterTrait",
+                                              "Corpse Hunter",
+                                              "You have dedicated yourself to the destruction of undead.\nBenefit: You gain a +1 trait bonus on attacks made against undead.",
+                                              "",
+                                              Helpers.GetIcon("652739779aa05504a9ad5db1db6d02ae"), // disrupt unded
+                                              FeatureGroup.None,
+                                              Helpers.Create<AttackBonusAgainstFactOwner>(a => { a.AttackBonus = 2; a.Bonus = 0; a.CheckedFact = Common.undead; a.Descriptor = ModifierDescriptor.Trait; }),
+                                              Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("458750bc214ab2e44abdeae404ab22e9"))//pharasma
+                                              );
+
+            demoralizing_presence = Helpers.CreateFeature("DemoralizingPresenceTrait",
+                                  "Bestial Wrath",
+                                  "Your very existence is unsettling to your foes.\nBenefit: YYou gain a +2 trait bonus on Intimidate checks.",
+                                  "",
+                                  Helpers.GetIcon("d2aeac47450c76347aebbc02e4f463e0"), // fear
+                                  FeatureGroup.None,
+                                  Helpers.CreateAddStatBonus(StatType.CheckIntimidate, 2, ModifierDescriptor.Trait),
+                                  Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("f7eed400baa66a744ad361d4df0e6f1b"))//zon-kuthion
+                                  );
+
+            eyes_and_ears_of_the_city = Helpers.CreateFeature("EyesAndEarsOfTheCityTrait",
+                                         "Eyes and Ears of the City ",
+                                         "Your religious training involved serving in the city watch of a large city, the primary duty of which was standing sentinel on a city wall.\n"
+                                         + "Benefits: You gain a +1 trait bonus on Perception checks, and Perception is always a class skill for you.",
+                                         "",
+                                         Helpers.GetIcon("f74c6bdf5c5f5374fb9302ecdc1f7d64"), // sf perception
+                                         FeatureGroup.None,
+                                         Helpers.CreateAddStatBonus(StatType.SkillPerception, 1, ModifierDescriptor.Trait),
+                                         Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillPerception),
+                                         Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("6122dacf418611540a3c91e67197ee4e"))//abadar
+                                         );
+            good_natured = Helpers.CreateFeature("GoodNaturedTrait",
+                                                    "Good Natured",
+                                                    "You have an unusually sunny spirit, and it takes serious doing to dampen your mood.\n"
+                                                    + "Benifit: you gain a +2 trait bonus on all saves against fear.",
+                                                    "",
+                                                    Helpers.GetIcon("dd38f33c56ad00a4da386c1afaa49967"), // blessing of courage
+                                                    FeatureGroup.None,
+                                                    Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.Bonus = 2; s.ModifierDescriptor = ModifierDescriptor.Trait; s.SpellDescriptor = SpellDescriptor.Fear | SpellDescriptor.Shaken; }),
+                                                    Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("300e212868bca984687c92bcb66d381b"))//cayden cailean
+                                                    );
+            liars_tongue = Helpers.CreateFeature("LiarsTongueTrait",
+                                                 "Liar's Tongue",
+                                                 "Thanks to your friendly mien and sly tongue, your lies are often believed.\n"
+                                                 + "Benefits: You gain a +1 trait bonus on Bluff checks, and Persuasion is always considered a class skill for you for purpose of Bluff checks.",
+                                                 "",
+                                                 Helpers.GetIcon("231a37321e26551489503e4e1d99e681"), // deceitful
+                                                 FeatureGroup.None,
+                                                 Helpers.CreateAddStatBonus(StatType.CheckBluff, 1, ModifierDescriptor.Trait),
+                                                 Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckBluff; }),
+                                                 Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("a3a5ccc9c670e6f4ca4a686d23b89900"))//asmodeus
+                                                 );
+
+            regal_presence = Helpers.CreateFeature("RegalPresenceTrait",
+                                                 "Regal Presence",
+                                                 "You’ve always had a presence that people respect.\n"
+                                                 + "Benefits: You gain a +1 trait bonus on Diplomacy checks, and Persuasion is always considered a class skill for you for purpose of Diplomacy checks.",
+                                                 "",
+                                                 Helpers.GetIcon("231a37321e26551489503e4e1d99e681"), // deceitful
+                                                 FeatureGroup.None,
+                                                 Helpers.CreateAddStatBonus(StatType.CheckDiplomacy, 1, ModifierDescriptor.Trait),
+                                                 Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckDiplomacy; }),
+                                                 Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("88d5da04361b16746bf5b65795e0c38c"))//iomedae
+                                                 );
+
+            stoic_optimism = Helpers.CreateFeature("StoicOptimismTrait",
+                                        "Stoic Optimism",
+                                        "You realize that accepting the pain in life accentuates its joys by contrast, and so your hope sustains you where others despair.\n"
+                                        + "Benifit: you gain a +2 trait bonus on all saves against fear.",
+                                        "",
+                                        Helpers.GetIcon("dd38f33c56ad00a4da386c1afaa49967"), // blessing of courage
+                                        FeatureGroup.None,
+                                        Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.Bonus = 2; s.ModifierDescriptor = ModifierDescriptor.Trait; s.SpellDescriptor = SpellDescriptor.Fear | SpellDescriptor.Shaken; }),
+                                        Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("2c0a3b9971327ba4d9d85354d16998c1"))//desna
+                                        );
+
+            strong_willed = Helpers.CreateFeature("StrongWilledTrait",
+                                                 "Strong Willed",
+                                                 "Your fervent desire to choose your own path gives you strong willpower.\nBenefit: You receive a +2 trait bonus on saving throws against charm and compulsion effects.",
+                                                 "",
+                                                 Helpers.GetIcon("175d1577bb6c9a04baf88eec99c66334"), // Iron will
+                                                 FeatureGroup.None,
+                                                 Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.ModifierDescriptor = ModifierDescriptor.Trait; s.Bonus = 2; s.SpellDescriptor = SpellDescriptor.Compulsion | SpellDescriptor.Charm; }),
+                                                 Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("300e212868bca984687c92bcb66d381b"))//cayden cailean
+                                                 );
+
+            unswaying_love = Helpers.CreateFeature("UnswayingLoveTrait",
+                                                 "Unswaying Love",
+                                                 "Your resolute devotion to the unadulterated purity of your goddess protects you from those who would manipulate you. \nBenefit: You receive a +2 trait bonus on saving throws against charm and compulsion effects.",
+                                                 "",
+                                                 Helpers.GetIcon("175d1577bb6c9a04baf88eec99c66334"), // Iron will
+                                                 FeatureGroup.None,
+                                                 Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.ModifierDescriptor = ModifierDescriptor.Trait; s.Bonus = 2; s.SpellDescriptor = SpellDescriptor.Compulsion | SpellDescriptor.Charm; }),
+                                                 Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("b382afa31e4287644b77a8b30ed4aa0b"))//shelyn
+                                                 );
+
             religion_traits = createTraitSelction("ReligionTrait",
                                                 "Religion Trait",
                                                 "Religion traits indicate that your character has an established faith in a specific deity; you need not be a member of a class that can wield divine magic to pick a religion trait, but you do have to have a patron deity and have some amount of religion in your background to justify this trait.",
@@ -427,7 +553,17 @@ namespace ZFavoredClass
                                                 secret_knowledge,
                                                 spirit_guide,
                                                 illuminator,
-                                                defensive_strategist
+                                                defensive_strategist,
+                                                bestial_wrath,
+                                                corpse_hunter,
+                                                demoralizing_presence,
+                                                eyes_and_ears_of_the_city,
+                                                good_natured,
+                                                liars_tongue,
+                                                regal_presence,
+                                                stoic_optimism,
+                                                strong_willed,
+                                                unswaying_love
                                                 );
 
             var deadeye_bowman = library.TryGet<BlueprintFeature>("98656c735106478c9944316c2b62fa54");
@@ -632,7 +768,7 @@ namespace ZFavoredClass
             bully = Helpers.CreateFeature("BullyTrait",
                                  "Bully",
                                  "You grew up in an environment where the meek were ignored and you often had to resort to threats or violence to be heard.\n"
-                                 + "Benefits: You gain a +1 trait bonus on intimidate checks, and Persuation is always considered a class skill for you for purpose of intimidate checks.",
+                                 + "Benefits: You gain a +1 trait bonus on intimidate checks, and Persuasion is always considered a class skill for you for purpose of intimidate checks.",
                                  "",
                                  Helpers.GetIcon("d76497bfc48516e45a0831628f767a0f"), // intimidating prowess
                                  FeatureGroup.None,
@@ -644,7 +780,7 @@ namespace ZFavoredClass
             fast_talker = Helpers.CreateFeature("FastTalkerTrait",
                                                  "Fast Talker",
                                                  "You had a knack for getting yourself into trouble as a child, and as a result developed a silver tongue at an early age.\n"
-                                                 + "Benefits: You gain a +1 trait bonus on bluff checks, and Persuation is always considered a class skill for you for purpose of bluff checks.",
+                                                 + "Benefits: You gain a +1 trait bonus on bluff checks, and Persuasion is always considered a class skill for you for purpose of bluff checks.",
                                                  "",
                                                  Helpers.GetIcon("231a37321e26551489503e4e1d99e681"), // deceitful
                                                  FeatureGroup.None,
@@ -693,7 +829,7 @@ namespace ZFavoredClass
             bruising_intellect = Helpers.CreateFeature("BruisingIntellectTrait",
                                                          "Bruising Intellect",
                                                          "Your sharp intellect and rapier-like wit bruise egos.\n"
-                                                         + "Benefit: Persuation is considered a class skill for you for the purpose of Intimidate checks, and you may use your Intelligence modifier when making Intimidate checks instead of your Charisma modifier. ",
+                                                         + "Benefit: Persuasion is considered a class skill for you for the purpose of Intimidate checks, and you may use your Intelligence modifier when making Intimidate checks instead of your Charisma modifier. ",
                                                          "",
                                                          Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // sf diplomacy
                                                          FeatureGroup.None,
@@ -839,7 +975,7 @@ namespace ZFavoredClass
             omen = Helpers.CreateFeature("OmenTrait",
                                  "Omen",
                                  "You are the harbinger of some future event. Whether this event bodes good or ill, you exude an ominous presence.\n"
-                                 + "Benefits: You gain a +1 trait bonus on Intimidate checks, and Persuation is always a class skill for you for the purpose of intimidate checks. Once per day, you may attempt to demoralize an opponent as a swift action.",
+                                 + "Benefits: You gain a +1 trait bonus on Intimidate checks, and Persuasion is always a class skill for you for the purpose of intimidate checks. Once per day, you may attempt to demoralize an opponent as a swift action.",
                                  "",
                                  Helpers.GetIcon("d2aeac47450c76347aebbc02e4f463e0"), // fear
                                  FeatureGroup.None,
@@ -865,6 +1001,15 @@ namespace ZFavoredClass
                                                   Helpers.Create<CallOfTheWild.SpellManipulationMechanics.TargetDescriptorModifierBonus>(t => { t.descriptor = ModifierDescriptor.Luck; t.bonus = 1; })
                                                   );
 
+            reincarnated = Helpers.CreateFeature("ReincarnatedTrait",
+                                        "Reincarnated",
+                                        "You lived a previous life as someone—or something— else. For you, life and death are a cycle, and you have no fear of death.\n"
+                                        + "Benifit: You gain a +2 trait bonus on saving throws against fear and death effects.",
+                                        "",
+                                        Helpers.GetIcon("0413915f355a38146bc6ad40cdf27b3f"), // death ward
+                                        FeatureGroup.None,
+                                        Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.Bonus = 2; s.ModifierDescriptor = ModifierDescriptor.Trait; s.SpellDescriptor = SpellDescriptor.Fear | SpellDescriptor.Shaken | SpellDescriptor.Death; })
+                                        );
 
             faith_traits = createTraitSelction("FaithTrait",
                                     "Faith Trait",
@@ -878,7 +1023,8 @@ namespace ZFavoredClass
                                     sacred_conduit,
                                     scholar_of_the_greate_beyond,
                                     fates_favored,
-                                    omen
+                                    omen,
+                                    reincarnated
                                     );
         }
 
@@ -987,6 +1133,92 @@ namespace ZFavoredClass
                                              Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillStealth)
                                              );
 
+
+           dragon_armor = Helpers.CreateFeatureSelection("DragonArmorTraitSelection",
+                                                         "Dragon Armor",
+                                                         "Xa Hoi’s elite warriors are trained to deflect energy attacks.\nBenefit: Choose an energy type (acid, cold, electricity, fire, or sonic) when you acquire this trait. When you are wearing medium or heavy armor, you gain a +2 trait bonus on Reflex saves against spells and effects of the chosen energy type.",
+                                                         "",
+                                                         Helpers.GetIcon("d2f116cfe05fcdd4a94e80143b67046f"), // protection from energy
+                                                         FeatureGroup.None,
+                                                         Helpers.CreateAddStatBonus(StatType.SkillStealth, 1, ModifierDescriptor.Trait),
+                                                         Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillStealth)
+                                                         );
+            dragon_armor.HideInCharacterSheetAndLevelUp = true;
+            var descriptors = new SpellDescriptor[] { SpellDescriptor.Fire, SpellDescriptor.Acid, SpellDescriptor.Cold, SpellDescriptor.Electricity };
+            foreach (var d in descriptors)
+            {
+                var effect = Helpers.CreateFeature(d.ToString() + "DragonArmorTraitEffect",
+                                                     dragon_armor.Name + ": " + d.ToString(),
+                                                     dragon_armor.Description,
+                                                     "",
+                                                     dragon_armor.Icon,
+                                                     FeatureGroup.None,
+                                                     Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.ModifierDescriptor = ModifierDescriptor.Trait; s.Bonus = 2; s.SpellDescriptor = d; })
+                                                     );
+                effect.HideInCharacterSheetAndLevelUp = true;
+
+                var f = Helpers.CreateFeature(d.ToString() + "DragonArmorTraitFeature",
+                                     dragon_armor.Name + ": " + d.ToString(),
+                                     dragon_armor.Description,
+                                     "",
+                                     dragon_armor.Icon,
+                                     FeatureGroup.None,
+                                     Helpers.Create<CallOfTheWild.WeaponTrainingMechanics.AddFeatureOnArmor>(a => 
+                                              {
+                                                  a.feature = effect;
+                                                  a.required_armor = new ArmorProficiencyGroup[] { ArmorProficiencyGroup.Medium, ArmorProficiencyGroup.Heavy };
+                                              })
+                                     );
+                dragon_armor.AllFeatures = dragon_armor.AllFeatures.AddToArray(f);
+            }
+            fencer = Helpers.CreateFeature("FencerTrait",
+                                                   "Fencer",
+                                                   "You trained with blades for long hours as a youth, either taking lessons in the genteel art of fencing from tutors paid for by your parents or being taken under the wing of a disenfranchised fencer who may have turned to a life of crime.\n"
+                                                   + "Benefits: You gain a +1 trait bonus on attacks of opportunity when using a dagger or a sword.",
+                                                   "",
+                                                   Helpers.GetIcon("5bb6dc5ce00550441880a6ff8ad4c968"), //opportunist
+                                                   FeatureGroup.None,
+                                                   Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusOnAttacksOfOpportunity>(a =>
+                                                   {
+                                                       a.categories = new WeaponCategory[] { WeaponCategory.BastardSword, WeaponCategory.DuelingSword, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.Longsword, WeaponCategory.Greatsword };
+                                                       a.Value = 1;
+                                                       a.Descriptor = ModifierDescriptor.Trait;
+                                                   }
+                                                   )
+                                                   );
+
+            var ki_resource = library.Get<BlueprintAbilityResource>("9d9c90a9a1f52d04799294bf91c80a82");
+            var scaled_fist_ki_resource = library.Get<BlueprintAbilityResource>("7d002c1025fbfe2458f1509bf7a89ce1");
+            var monk = library.Get<BlueprintCharacterClass>("e8f21e5b58e0569468e420ebea456124");
+            honored_fist_of_society = Helpers.CreateFeature("HonoredFistOfTheSocietyTrait",
+                                                            "Honored Fist of the Society",
+                                                            "You have studied dozens of ancient texts on martial arts that only the Society possesses, and are more learned in these arts than most.\nBenefit: You increase your ki pool by 1 point.",
+                                                            "",
+                                                            Helpers.GetIcon("c36562b8e7ae12d408487ba8b532d966"), // pummeling style
+                                                            FeatureGroup.None,
+                                                            ki_resource.CreateIncreaseResourceAmount(1),
+                                                            scaled_fist_ki_resource.CreateIncreaseResourceAmount(1),
+                                                            Helpers.PrerequisiteClassLevel(monk, 1)
+                                                            );
+
+            var combat_expertise_buff = library.Get<BlueprintBuff>("e81cd772a7311554090e413ea28ceea1");
+            threatening_defender = Helpers.CreateFeature("ThreateningDefenderTrait",
+                                                "Threatening Defender ",
+                                                "You know how to avoid a blow while still maintaining your offensive posture.\nBenefit: When you use Combat Expertise, reduce the number you subtract from your melee attack rolls by 1.",
+                                                "",
+                                                combat_expertise_buff.Icon,
+                                                FeatureGroup.None,
+                                                CallOfTheWild.Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusOnAttackInitiationIfHasFact>(a =>
+                                                        {
+                                                            a.CheckedFact = combat_expertise_buff;
+                                                            a.Bonus = 1;
+                                                            a.OnlyFirstAttack = false;
+                                                            a.WeaponAttackTypes = new AttackType[] { AttackType.Melee, AttackType.Ranged, AttackType.RangedTouch, AttackType.Touch };
+                                                            a.Descriptor = ModifierDescriptor.Trait;
+                                                        }
+                                                )
+                                                );
+
             combat_traits = createTraitSelction("CombatTrait",
                                                 "Combat Trait",
                                                 "Combat traits are associated with combat, battle, and physical prowess; they give characters minor bonuses in battle and represent conflicts and physical struggles in the character’s backstory.",
@@ -999,7 +1231,11 @@ namespace ZFavoredClass
                                                  dirty_fighter,
                                                  reactionary,
                                                  resilent,
-                                                 slippery
+                                                 slippery,
+                                                 dragon_armor,
+                                                 fencer,
+                                                 honored_fist_of_society,
+                                                 threatening_defender
                                                 );
         }
 
@@ -1042,7 +1278,7 @@ namespace ZFavoredClass
             brute = Helpers.CreateFeature("BruteTrait",
                                          "Brute",
                                          "You have worked for a crime lord, either as a lowlevel enforcer or as a guard, and are adept at frightening away people.\n"
-                                         + "Benefits: You gain a +1 trait bonus on intimidate checks, and Persuation is always considered a class skill for you for purpose of intimidate checks.",
+                                         + "Benefits: You gain a +1 trait bonus on intimidate checks, and Persuasion is always considered a class skill for you for purpose of intimidate checks.",
                                          "",
                                          Helpers.GetIcon("d76497bfc48516e45a0831628f767a0f"), // intimidating prowess
                                          FeatureGroup.None,
@@ -1289,7 +1525,7 @@ namespace ZFavoredClass
             aspiring_hellknight = Helpers.CreateFeature("AspiringHellknightTrait",
                                                          "Aspiring Hellknight",
                                                          "Your family has a long tradition of service in the Hellknights, and your strict upbringing and training have given you a forceful aura of command.\n"
-                                                         + "Benefits: You gain a +1 trait bonus on intimidate checks, and Persuation is always considered a class skill for you for purpose of intimidate checks.",
+                                                         + "Benefits: You gain a +1 trait bonus on intimidate checks, and Persuasion is always considered a class skill for you for purpose of intimidate checks.",
                                                          "",
                                                          Helpers.GetIcon("d76497bfc48516e45a0831628f767a0f"), // intimidating prowess
                                                          FeatureGroup.None,
@@ -1335,7 +1571,7 @@ namespace ZFavoredClass
             viking_blood = Helpers.CreateFeature("VikingBloodTrait",
                                              "Viking Blood",
                                              "You have the imposing build of a Viking, and people of the south fear your unpredictable nature.\n"
-                                             + "Benefits: You gain a +1 trait bonus on intimidate checks, and Persuation is always considered a class skill for you for purpose of intimidate checks.",
+                                             + "Benefits: You gain a +1 trait bonus on intimidate checks, and Persuasion is always considered a class skill for you for purpose of intimidate checks.",
                                              "",
                                              Helpers.GetIcon("d76497bfc48516e45a0831628f767a0f"), // intimidating prowess
                                              FeatureGroup.None,
@@ -1450,9 +1686,9 @@ namespace ZFavoredClass
             child_of_crusades = Helpers.CreateFeature("ChildOfCrusadesTrait",
                                                     "Child of Crusades",
                                                     "Your parents stood strong against the demons of the Worldwound, facing down the worst of this world and the Great Beyond. You have inherited their indomitable spirit.\n"
-                                                    + "Benifit:  you gain a +2 trait bonus on all saves against fear.",
+                                                    + "Benifit: You gain a +2 trait bonus on all saves against fear.",
                                                     "",
-                                                    Helpers.GetIcon("87fda237f2f0efa4db9d9c0cf0c2779f"), // blessing of courage
+                                                    Helpers.GetIcon("dd38f33c56ad00a4da386c1afaa49967"), // blessing of courage
                                                     FeatureGroup.None,
                                                     Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.Bonus = 2; s.ModifierDescriptor = ModifierDescriptor.Trait; s.SpellDescriptor = SpellDescriptor.Fear | SpellDescriptor.Shaken; })
                                                     );
@@ -1498,7 +1734,7 @@ namespace ZFavoredClass
             flotsam = Helpers.CreateFeature("FlotsamTrait",
                                             "Flotsam",
                                             "You were one of only a few that survived the destruction of the merchant vessel Vantage. Your crew was more than able to hold off the blundering pirate attackers, but their red dragon ally proved too much for your defenses. As you watched the sharks and eels feast on the bodies of your fallen comrades, you vowed to see Aashaq slain. \n"
-                                            + "Benifit:  you gain a +2 trait bonus against spells and effects with the fire descriptor.",
+                                            + "Benifit: You gain a +2 trait bonus against spells and effects with the fire descriptor.",
                                             "",
                                             Helpers.GetIcon("3f9605134d34e1243b096e1f6cb4c148"), // protection from fire
                                             FeatureGroup.None,
@@ -1535,7 +1771,7 @@ namespace ZFavoredClass
             secret_of_the_impossible_kingdom = library.CopyAndAdd(gifted_adept, "SecretOfTheImpossibleKingdomTrait", "");
             secret_of_the_impossible_kingdom.SetNameDescription("Secret of the Impossible Kingdom",
                                                                 "You have studied the ancient lore of Vudra at a monastery in Jalmeray, and have learned a mystical secret that empowers your spellcasting.\n"
-                                                                + "Benifit:  Pick one spell when you choose this trait—from this point on, whenever you cast that spell, you do so at +1 caster level."
+                                                                + "Benifit: Pick one spell when you choose this trait—from this point on, whenever you cast that spell, you do so at +1 caster level."
                                                                 );
 
             regional_traits = createTraitSelction("RegionalTrait",
