@@ -127,6 +127,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlternativeRacialTraits.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="DietySelection.cs" />
     <Compile Include="Main.cs" />

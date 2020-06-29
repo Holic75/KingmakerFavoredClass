@@ -101,7 +101,7 @@ namespace ZFavoredClass
                         DietySelection.run();
                     }
 
-                    
+                    AlternativeRacialTraits.load();
                     Traits.load(settings.enable_traits);
 
 

@@ -1733,7 +1733,7 @@ namespace ZFavoredClass
                                                      FeatureGroup.None,
                                                      Helpers.Create<CallOfTheWild.SkillMechanics.DependentAbilityScoreCheckStatReplacement>(s =>
                                                      {
-                                                         s.stat = StatType.CheckBluff;
+                                                         s.stat = StatType.CheckDiplomacy;
                                                          s.old_stat = StatType.Charisma;
                                                          s.new_stat = StatType.Wisdom;
                                                      })
@@ -1751,7 +1751,7 @@ namespace ZFavoredClass
             minkai_advocate = Helpers.CreateFeature("MinkaiAdvocateTrait",
                                          "Minkai Advocate",
                                          "You possess strong ties to Minkai, and spread flattering words regarding your empire.\n"
-                                         + "Benefits: You gain a +1 trait bonus on attacks of opportunity made with daggers, short swords, rapiers, and scimitars.",
+                                         + "Benefits: You gain a +1 trait bonus on Bluff checks, and Persuasion is always considered a class skill for you for purpose of Bluff checks.",
                                          "",
                                          Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // skill focus diplomacy
                                          FeatureGroup.None,
