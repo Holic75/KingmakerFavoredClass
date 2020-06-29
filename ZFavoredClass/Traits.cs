@@ -211,8 +211,8 @@ namespace ZFavoredClass
                                                              FeatureGroup.None
                                                              );
             traits_selection.AllFeatures = new BlueprintFeature[] { combat_traits, faith_traits, magic_traits, religion_traits, social_traits, racial_traits, regional_traits };
+            traits_selection.HideInCharacterSheetAndLevelUp = true;
 
-            
             adopted = library.CopyAndAdd(racial_traits, "AdoptedTraitSelection", "");
             adopted.SetNameDescription("Adopted",
                                        "You were adopted and raised by someone not of your race, and raised in a society not your own. As a result, you picked up a race trait from your adoptive parents and society, and may immediately select a race trait from your adoptive parents’ race.");
@@ -226,7 +226,7 @@ namespace ZFavoredClass
                                                       "You gain two character traits of your choice. These traits must be chosen from different lists, and cannot be chosen from lists from which you have already selected a character trait. You must meet any additional qualifications for the character traits you choose — this feat cannot enable you to select a dwarf character trait if you are an elf, for example.",
                                                       "",
                                                       Helpers.GetIcon("0d3651b2cb0d89448b112e23214e744e"), // Extra Performance
-                                                      FeatureGroup.Feat,
+                                                      FeatureGroup.None,
                                                       Helpers.Create<CallOfTheWild.EvolutionMechanics.addSelection>(a => a.selection = traits_selection),
                                                       Helpers.Create<CallOfTheWild.EvolutionMechanics.addSelection>(a => a.selection = traits_selection2)
                                                       );
@@ -253,7 +253,7 @@ namespace ZFavoredClass
                                                 description,
                                                 "",
                                                 null,
-                                                FeatureGroup.None
+                                                FeatureGroup.Trait
                                                 );
             selection.AddComponent(Helpers.PrerequisiteNoFeature(selection));
             selection.AllFeatures = features;
@@ -268,7 +268,7 @@ namespace ZFavoredClass
                                                            "",
                                                            "",
                                                            null,
-                                                           FeatureGroup.None,
+                                                           FeatureGroup.Trait,
                                                            Common.createAddWeaponProficiencies(WeaponCategory.SpikedHeavyShield, WeaponCategory.SpikedLightShield, WeaponCategory.WeaponLightShield, WeaponCategory.WeaponHeavyShield)
                                                            );
             shield_proficiency.HideInUI = true;
@@ -279,7 +279,7 @@ namespace ZFavoredClass
                                                    + "Benefits: Heavy and light shields are considered simple weapons rather than martial weapons for you. Heavy shields are considered light weapons for you.",
                                                    "",
                                                    Helpers.GetIcon("121811173a614534e8720d7550aae253"), //shield bash
-                                                   FeatureGroup.None,
+                                                   FeatureGroup.Trait,
                                                    Helpers.Create<CallOfTheWild.HoldingItemsMechanics.ConsiderWeaponCategoriesAsLightWeapon>(c => c.categories = new WeaponCategory[] { WeaponCategory.SpikedHeavyShield, WeaponCategory.WeaponHeavyShield }),
                                                    Common.createAddFeatureIfHasFact(library.Get<BlueprintFeature>("203992ef5b35c864390b4e4a1e200629"), shield_proficiency),
                                                    Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("8f49a5d8528a82c44b8c117a89f6b68c")) //gorum
@@ -291,7 +291,7 @@ namespace ZFavoredClass
                                                              + "Benifits: Select any Strength-, Constitution-, or Dexterity-based skill. You may make checks with that skill using your Wisdom modifier instead of the skill’s normal ability score. That skill is always a class skill for you.",
                                                              "",
                                                              Helpers.GetIcon("35f3724d4e8877845af488d167cb8a89"), //mind blank
-                                                             FeatureGroup.None,
+                                                             FeatureGroup.Trait,
                                                              Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("23a77a5985de08349820429ce1b5a234")) //irori
                                                              );
 
@@ -305,7 +305,7 @@ namespace ZFavoredClass
                                                wisdom_in_flesh.Description,
                                                "",
                                                wisdom_in_flesh.Icon,
-                                               FeatureGroup.None,
+                                               FeatureGroup.Trait,
                                                  Helpers.Create<CallOfTheWild.StatReplacementMechanics.ReplaceBaseStatForStatTypeLogic>(r =>
                                                  {
                                                      r.StatTypeToReplaceBastStatFor = s;
@@ -324,7 +324,7 @@ namespace ZFavoredClass
                                                    + "Benefits: You gain a +1 trait bonus on attacks of opportunity when using a dagger or a sword.",
                                                    "",
                                                    Helpers.GetIcon("5bb6dc5ce00550441880a6ff8ad4c968"), //opportunist
-                                                   FeatureGroup.None,
+                                                   FeatureGroup.Trait,
                                                    Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusOnAttacksOfOpportunity>(a =>
                                                    {
                                                        a.categories = new WeaponCategory[] { WeaponCategory.BastardSword, WeaponCategory.DuelingSword, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.Longsword, WeaponCategory.Greatsword };
@@ -341,7 +341,7 @@ namespace ZFavoredClass
                                                      + "Benefits: You gain a +1 bonus on Diplomacy checks, and consider Persutaion skill as class skill for the purpose of diplomacy checks.",
                                                      "",
                                                      Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // skill focus diplomacy
-                                                     FeatureGroup.None,
+                                                     FeatureGroup.Trait,
                                                      Helpers.CreateAddStatBonus(StatType.CheckDiplomacy, 1, ModifierDescriptor.Trait),
                                                      Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckDiplomacy; }),
                                                      Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("afc775188deb7a44aa4cbde03512c671")) //erastil
@@ -353,7 +353,7 @@ namespace ZFavoredClass
                                                      + "Benefits: You gain a +2 bonus on Lore Nature checks, and Lore Nature is always a class skill for you.",
                                                      "",
                                                      Helpers.GetIcon("6507d2da389ed55448e0e1e5b871c013"), // sf nature
-                                                     FeatureGroup.None,
+                                                     FeatureGroup.Trait,
                                                      Helpers.CreateAddStatBonus(StatType.SkillLoreNature, 2, ModifierDescriptor.Trait),
                                                      Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillLoreNature),
                                                      Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("4af983eec2d821b40a3065eb5e8c3a72")) //gozreh
@@ -365,7 +365,7 @@ namespace ZFavoredClass
                                                      + "Benefits: You gain a +1 trait bonus on Will saving throws and a +1 trait bonus on saving throws against spells and effects originating from an outsider with the evil subtype.",
                                                      "",
                                                      Helpers.GetIcon("175d1577bb6c9a04baf88eec99c66334"), // iron will
-                                                     FeatureGroup.None,
+                                                     FeatureGroup.Trait,
                                                      Helpers.CreateAddStatBonus(StatType.SaveWill, 1, ModifierDescriptor.Trait),
                                                      Common.createContextSavingThrowBonusAgainstFact(Common.outsider, AlignmentComponent.Evil, 1, ModifierDescriptor.Trait),
                                                      Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("88d5da04361b16746bf5b65795e0c38c")) //iomedae
@@ -377,7 +377,7 @@ namespace ZFavoredClass
                                              + "Benefits: You gain a +1 bonus on Use Magic Device checks, and Use Magic Device is always a class skill for you.",
                                              "",
                                              Helpers.GetIcon("f43ffc8e3f8ad8a43be2d44ad6e27914"), // sf umd
-                                             FeatureGroup.None,
+                                             FeatureGroup.Trait,
                                              Helpers.CreateAddStatBonus(StatType.SkillUseMagicDevice, 1, ModifierDescriptor.Trait),
                                              Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillUseMagicDevice),
                                              Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("6262cfce7c31626458325ca0909de997")) //nethys
@@ -388,7 +388,7 @@ namespace ZFavoredClass
                                                  "You may choose one Knowledge skill. You gain a permanent +2 trait bonus on checks with that skill, and it is a class skill for you.",
                                                  "",
                                                  Helpers.GetIcon("35f3724d4e8877845af488d167cb8a89"), //mind blank
-                                                 FeatureGroup.None,
+                                                 FeatureGroup.Trait,
                                                  Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("805b6bdc8c96f4749afc687a003f9628")) //norgorber
                                                  );
 
@@ -402,7 +402,7 @@ namespace ZFavoredClass
                                                secret_knowledge.Description,
                                                "",
                                                secret_knowledge.Icon,
-                                               FeatureGroup.None,
+                                               FeatureGroup.Trait,
                                                Helpers.CreateAddStatBonus(s, 2, ModifierDescriptor.Trait),
                                                Helpers.Create<AddClassSkill>(a => a.Skill = s)
                                                );
@@ -415,7 +415,7 @@ namespace ZFavoredClass
                                              "As someone who has performed or observed funeral rites for a wide variety of people, you have a basic understanding of many different religions.\nBenefits: You gain a +2 trait bonus on Lore Religion checks, and Lore Religion is always a class skill for you.",
                                              "",
                                              Helpers.GetIcon("f6f95242abdfac346befd6f4f6222140"), // remove sickness
-                                             FeatureGroup.None,
+                                             FeatureGroup.Trait,
                                              Helpers.CreateAddStatBonus(StatType.SkillLoreReligion, 2, ModifierDescriptor.Trait),
                                              Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillLoreReligion),
                                              Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("458750bc214ab2e44abdeae404ab22e9")) //pharasma
@@ -428,7 +428,7 @@ namespace ZFavoredClass
                                                 + "Benefits: You gain a +2 bonus on Diplomacy checks, and consider Persutaion skill as class skill for the purpose of diplomacy checks.",
                                                 "",
                                                 Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // skill focus diplomacy
-                                                FeatureGroup.None,
+                                                FeatureGroup.Trait,
                                                 Helpers.CreateAddStatBonus(StatType.CheckDiplomacy, 2, ModifierDescriptor.Trait),
                                                 Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckDiplomacy; }),
                                                 Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("c1c4f7f64842e7e48849e5e67be11a1b")) //sarenrae
@@ -439,8 +439,8 @@ namespace ZFavoredClass
                                                         "Your study of dwarven history has trained you in defensive strategy.\n"
                                                         + "Benefits: You aren’t flat-footed during a surprise round that you don’t get to act in or before you get to act at the start of a battle.",
                                                         "",
-                                                        Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // skill focus diplomacy
-                                                        FeatureGroup.None,
+                                                        Helpers.GetIcon("ac57069b6bf8c904086171683992a92a"), // shield focus
+                                                        FeatureGroup.Trait,
                                                         Helpers.Create<CallOfTheWild.InitiativeMechanics.CanActInSurpriseRoundLogic>(),
                                                         Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("d2d5c5a58885a6b489727467e13c3337")) //torag
                                                         );
@@ -450,7 +450,7 @@ namespace ZFavoredClass
                                               "When you strike hard, you strike deep.\nBenefit: You gain a +2 trait bonus on all rolls made to confirm critical hits.",
                                               "",
                                               Helpers.GetIcon("f4201c85a991369408740c6888362e20"), // Improved Critical
-                                              FeatureGroup.None,
+                                              FeatureGroup.Trait,
                                               Helpers.Create<CriticalConfirmationBonus>(a => { a.Bonus = 2; a.Value = 0; }),
                                               Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("04bc2b62273ab744092d992ed72bff41")) //rovagug
                                               );
@@ -460,17 +460,17 @@ namespace ZFavoredClass
                                               "You have dedicated yourself to the destruction of undead.\nBenefit: You gain a +1 trait bonus on attacks made against undead.",
                                               "",
                                               Helpers.GetIcon("652739779aa05504a9ad5db1db6d02ae"), // disrupt unded
-                                              FeatureGroup.None,
+                                              FeatureGroup.Trait,
                                               Helpers.Create<AttackBonusAgainstFactOwner>(a => { a.AttackBonus = 2; a.Bonus = 0; a.CheckedFact = Common.undead; a.Descriptor = ModifierDescriptor.Trait; }),
                                               Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("458750bc214ab2e44abdeae404ab22e9"))//pharasma
                                               );
 
             demoralizing_presence = Helpers.CreateFeature("DemoralizingPresenceTrait",
-                                  "Bestial Wrath",
+                                  "Demoralizing Presence",
                                   "Your very existence is unsettling to your foes.\nBenefit: You gain a +2 trait bonus on Intimidate checks.",
                                   "",
                                   Helpers.GetIcon("d2aeac47450c76347aebbc02e4f463e0"), // fear
-                                  FeatureGroup.None,
+                                  FeatureGroup.Trait,
                                   Helpers.CreateAddStatBonus(StatType.CheckIntimidate, 2, ModifierDescriptor.Trait),
                                   Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("f7eed400baa66a744ad361d4df0e6f1b"))//zon-kuthion
                                   );
@@ -481,7 +481,7 @@ namespace ZFavoredClass
                                          + "Benefits: You gain a +1 trait bonus on Perception checks, and Perception is always a class skill for you.",
                                          "",
                                          Helpers.GetIcon("f74c6bdf5c5f5374fb9302ecdc1f7d64"), // sf perception
-                                         FeatureGroup.None,
+                                         FeatureGroup.Trait,
                                          Helpers.CreateAddStatBonus(StatType.SkillPerception, 1, ModifierDescriptor.Trait),
                                          Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillPerception),
                                          Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("6122dacf418611540a3c91e67197ee4e"))//abadar
@@ -492,7 +492,7 @@ namespace ZFavoredClass
                                                     + "Benifit: you gain a +2 trait bonus on all saves against fear.",
                                                     "",
                                                     Helpers.GetIcon("dd38f33c56ad00a4da386c1afaa49967"), // blessing of courage
-                                                    FeatureGroup.None,
+                                                    FeatureGroup.Trait,
                                                     Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.Bonus = 2; s.ModifierDescriptor = ModifierDescriptor.Trait; s.SpellDescriptor = SpellDescriptor.Fear | SpellDescriptor.Shaken; }),
                                                     Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("300e212868bca984687c92bcb66d381b"))//cayden cailean
                                                     );
@@ -502,7 +502,7 @@ namespace ZFavoredClass
                                                  + "Benefits: You gain a +1 trait bonus on Bluff checks, and Persuasion is always considered a class skill for you for purpose of Bluff checks.",
                                                  "",
                                                  Helpers.GetIcon("231a37321e26551489503e4e1d99e681"), // deceitful
-                                                 FeatureGroup.None,
+                                                 FeatureGroup.Trait,
                                                  Helpers.CreateAddStatBonus(StatType.CheckBluff, 1, ModifierDescriptor.Trait),
                                                  Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckBluff; }),
                                                  Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("a3a5ccc9c670e6f4ca4a686d23b89900"))//asmodeus
@@ -514,7 +514,7 @@ namespace ZFavoredClass
                                                  + "Benefits: You gain a +1 trait bonus on Diplomacy checks, and Persuasion is always considered a class skill for you for purpose of Diplomacy checks.",
                                                  "",
                                                  Helpers.GetIcon("231a37321e26551489503e4e1d99e681"), // deceitful
-                                                 FeatureGroup.None,
+                                                 FeatureGroup.Trait,
                                                  Helpers.CreateAddStatBonus(StatType.CheckDiplomacy, 1, ModifierDescriptor.Trait),
                                                  Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckDiplomacy; }),
                                                  Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("88d5da04361b16746bf5b65795e0c38c"))//iomedae
@@ -526,7 +526,7 @@ namespace ZFavoredClass
                                         + "Benifit: you gain a +2 trait bonus on all saves against fear.",
                                         "",
                                         Helpers.GetIcon("dd38f33c56ad00a4da386c1afaa49967"), // blessing of courage
-                                        FeatureGroup.None,
+                                        FeatureGroup.Trait,
                                         Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.Bonus = 2; s.ModifierDescriptor = ModifierDescriptor.Trait; s.SpellDescriptor = SpellDescriptor.Fear | SpellDescriptor.Shaken; }),
                                         Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("2c0a3b9971327ba4d9d85354d16998c1"))//desna
                                         );
@@ -536,7 +536,7 @@ namespace ZFavoredClass
                                                  "Your fervent desire to choose your own path gives you strong willpower.\nBenefit: You receive a +2 trait bonus on saving throws against charm and compulsion effects.",
                                                  "",
                                                  Helpers.GetIcon("175d1577bb6c9a04baf88eec99c66334"), // Iron will
-                                                 FeatureGroup.None,
+                                                 FeatureGroup.Trait,
                                                  Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.ModifierDescriptor = ModifierDescriptor.Trait; s.Bonus = 2; s.SpellDescriptor = SpellDescriptor.Compulsion | SpellDescriptor.Charm; }),
                                                  Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("300e212868bca984687c92bcb66d381b"))//cayden cailean
                                                  );
@@ -546,7 +546,7 @@ namespace ZFavoredClass
                                                  "Your resolute devotion to the unadulterated purity of your goddess protects you from those who would manipulate you. \nBenefit: You receive a +2 trait bonus on saving throws against charm and compulsion effects.",
                                                  "",
                                                  Helpers.GetIcon("175d1577bb6c9a04baf88eec99c66334"), // Iron will
-                                                 FeatureGroup.None,
+                                                 FeatureGroup.Trait,
                                                  Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.ModifierDescriptor = ModifierDescriptor.Trait; s.Bonus = 2; s.SpellDescriptor = SpellDescriptor.Compulsion | SpellDescriptor.Charm; }),
                                                  Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("b382afa31e4287644b77a8b30ed4aa0b"))//shelyn
                                                  );
@@ -593,7 +593,7 @@ namespace ZFavoredClass
                                          + "Benefits: You gain a +1 trait bonus on Knowledge Arcana checks, and Knowledge Arcana is always a class skill for you.",
                                          "",
                                          Helpers.GetIcon("cad1b9175e8c0e64583432a22134d33c"), // sf arcana
-                                         FeatureGroup.None,
+                                         FeatureGroup.Trait,
                                          Helpers.CreateAddStatBonus(StatType.SkillKnowledgeArcana, 1, ModifierDescriptor.Trait),
                                          Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillKnowledgeArcana)
                                          );
@@ -604,7 +604,7 @@ namespace ZFavoredClass
                                                          + "Benefits: You gain a +1 bonus on Use Magic Device checks, and Use Magic Device is always a class skill for you.",
                                                          "",
                                                          Helpers.GetIcon("f43ffc8e3f8ad8a43be2d44ad6e27914"), // sf umd
-                                                         FeatureGroup.None,
+                                                         FeatureGroup.Trait,
                                                          Helpers.CreateAddStatBonus(StatType.SkillUseMagicDevice, 1, ModifierDescriptor.Trait),
                                                          Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillUseMagicDevice)
                                                          );
@@ -615,11 +615,12 @@ namespace ZFavoredClass
                                              + "Benefit: You gain a +2 trait bonus on concentration checks.",
                                              "",
                                              Helpers.GetIcon("06964d468fde1dc4aa71a92ea04d930d"), // sf umd
-                                             FeatureGroup.None,
+                                             FeatureGroup.Trait,
                                              Helpers.Create<ConcentrationBonus>(c => c.Value = 2)
                                              );
 
             gifted_adept = library.CopyAndAdd<BlueprintParametrizedFeature>("e69a85f633ae8ca4398abeb6fa11b1fe", "GiftedAdeptParametrizedTrait", "");
+            gifted_adept.Groups = new FeatureGroup[] { FeatureGroup.Trait };
             gifted_adept.SetNameDescription("Gifted Adept",
                                             "Your interest in magic was inspired by witnessing a spell being cast in a particularly dramatic method, perhaps even one that affected you physically or spiritually. This early exposure to magic has made it easier for you to work similar magic on your own.\n"
                                             + "Benefit: Pick one spell when you choose this trait—from this point on, whenever you cast that spell, its effects manifest at +1 caster level.");
@@ -630,6 +631,7 @@ namespace ZFavoredClass
             gifted_adept.AddComponent(Helpers.Create<NewMechanics.PrerequisiteSpellbook>());
 
             magical_lineage = library.CopyAndAdd<BlueprintParametrizedFeature>("e69a85f633ae8ca4398abeb6fa11b1fe", "MagicalLineageParametrizedTrait", "");
+            magical_lineage.Groups = new FeatureGroup[] { FeatureGroup.Trait };
             magical_lineage.SetNameDescription("Magical Lineage",
                                             "One of your parents was a gifted spellcaster who not only used metamagic often, but also developed many magical items and perhaps even a new spell or two—and you have inherited a fragment of this greatness.\n"
                                             + "Benefit: Pick one spell when you choose this trait. When you apply metamagic feats to this spell that add at least 1 level to the spell, treat its actual level as 1 lower for determining the spell’s final adjusted level.");
@@ -646,7 +648,7 @@ namespace ZFavoredClass
                                                          + "Whenever you cast a spell from the transmutation school, its effects manifest at +1 caster level. Additionally, once per day you can double the duration of one of the following spells: bear’s endurance, bull’s strength, cat’s grace, eagle’s splendor, fox’s cunning, or owl’s wisdom. A spell affected by this trait cannot be modified further by the Extend Spell metamagic feat or similar abilities.",
                                                          "",
                                                          Helpers.GetIcon("b6a604dab356ac34788abf4ad79449ec"), // transmutation
-                                                         FeatureGroup.None,
+                                                         FeatureGroup.Trait,
                                                          Helpers.Create<IncreaseSpellSchoolCasterLevel>(i => { i.BonusLevel = 1; i.School = SpellSchool.Transmutation; })
                                                          );
             var transmuter_of_korada_resource = Helpers.CreateAbilityResource("TransmuterOfKoradaResource", "", "", "", null);
@@ -696,7 +698,7 @@ namespace ZFavoredClass
                                              + "Benefit: You may use your Intelligence modifier when making Use Magic Device checks instead of your Charisma modifier.",
                                              "",
                                              Helpers.GetIcon("f43ffc8e3f8ad8a43be2d44ad6e27914"), // sf umd
-                                             FeatureGroup.None,
+                                             FeatureGroup.Trait,
                                              Helpers.Create<CallOfTheWild.StatReplacementMechanics.ReplaceBaseStatForStatTypeLogic>(s =>
                                              {
                                                  s.StatTypeToReplaceBastStatFor = StatType.SkillUseMagicDevice;
@@ -711,7 +713,7 @@ namespace ZFavoredClass
                                                          + "Benefit: You gain a +1 trait bonus on caster level checks while touching the ground or unworked stone. This includes dispel checks and checks to overcome spell resistance.",
                                                          "",
                                                          Helpers.GetIcon("ee7dc126939e4d9438357fbd5980d459"), // spell penetration
-                                                         FeatureGroup.None,
+                                                         FeatureGroup.Trait,
                                                          Helpers.Create<SpellPenetrationBonus>(s => s.Value = 1),
                                                          Helpers.Create<DispelCasterLevelCheckBonus>(d => d.Value = 1),
                                                          Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = library.Get<BlueprintRace>("c4faf439f0e70bd40b5e36ee80d06be7"))//dwarf
@@ -723,7 +725,7 @@ namespace ZFavoredClass
                                              + "Benefit: Whenever you cast a spell from the illusion school, its effects manifest at +1 caster level. ",
                                              "",
                                              Helpers.GetIcon("24d5402c0c1de48468b563f6174c6256"), // transmutation
-                                             FeatureGroup.None,
+                                             FeatureGroup.Trait,
                                              Helpers.Create<IncreaseSpellSchoolCasterLevel>(i => { i.BonusLevel = 1; i.School = SpellSchool.Illusion; }),
                                              Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = library.Get<BlueprintRace>("ef35a22c9a27da345a4528f0d5889157"))//gnome
                                              );
@@ -734,7 +736,7 @@ namespace ZFavoredClass
                                                          + "Benifit: Pick a class when you gain this trait—your caster level in that class gains a +2 trait bonus as long as this bonus doesn’t raise your caster level above your current Hit Dice.",
                                                          "",
                                                          Helpers.GetIcon("55edf82380a1c8540af6c6037d34f322"), //elven magic
-                                                         FeatureGroup.None
+                                                         FeatureGroup.Trait
                                                          );
 
             var classes = library.Root.Progression.CharacterClasses.Where(c => !c.HideIfRestricted && !c.PrestigeClass && c.Spellbook != null).ToList();
@@ -745,7 +747,7 @@ namespace ZFavoredClass
                                               magical_knack.Description,
                                               "",
                                               magical_knack.Icon,
-                                              FeatureGroup.None,
+                                              FeatureGroup.Trait,
                                               Helpers.Create<CallOfTheWild.SpellbookMechanics.CasterLevelBonusBounded>(c =>
                                                                                                                        {
                                                                                                                            c.character_class = cls;
@@ -782,7 +784,7 @@ namespace ZFavoredClass
                                  + "Benefits: You gain a +1 trait bonus on intimidate checks, and Persuasion is always considered a class skill for you for purpose of intimidate checks.",
                                  "",
                                  Helpers.GetIcon("d76497bfc48516e45a0831628f767a0f"), // intimidating prowess
-                                 FeatureGroup.None,
+                                 FeatureGroup.Trait,
                                  Helpers.CreateAddStatBonus(StatType.CheckIntimidate, 1, ModifierDescriptor.Trait),
                                  Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckIntimidate; })
                                  );
@@ -794,7 +796,7 @@ namespace ZFavoredClass
                                                  + "Benefits: You gain a +1 trait bonus on bluff checks, and Persuasion is always considered a class skill for you for purpose of bluff checks.",
                                                  "",
                                                  Helpers.GetIcon("231a37321e26551489503e4e1d99e681"), // deceitful
-                                                 FeatureGroup.None,
+                                                 FeatureGroup.Trait,
                                                  Helpers.CreateAddStatBonus(StatType.CheckBluff, 1, ModifierDescriptor.Trait),
                                                  Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckBluff; })
                                                  );
@@ -806,7 +808,7 @@ namespace ZFavoredClass
                                                            "The skills of the greatest musicians are at your fingertips, thanks to the vast treasure trove of musical knowledge in the vaults you have access to.\nBenefit: You may use bardic performance 3 additional rounds per day.",
                                                            "",
                                                            Helpers.GetIcon("0d3651b2cb0d89448b112e23214e744e"),
-                                                           FeatureGroup.None,
+                                                           FeatureGroup.Trait,
                                                            Helpers.Create<IncreaseResourceAmount>(i => { i.Resource = perfromance_resource; i.Value = 3; }),
                                                            Helpers.PrerequisiteClassLevel(bard, 1)
                                                            );
@@ -817,7 +819,7 @@ namespace ZFavoredClass
                                                      + "Benefits: You gain a +1 bonus on Lore Nature checks, and Lore Nature is always a class skill for you.",
                                                      "",
                                                      Helpers.GetIcon("6507d2da389ed55448e0e1e5b871c013"), // sf nature
-                                                     FeatureGroup.None,
+                                                     FeatureGroup.Trait,
                                                      Helpers.CreateAddStatBonus(StatType.SkillLoreNature, 1, ModifierDescriptor.Trait),
                                                      Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillLoreNature)
                                                      );
@@ -828,7 +830,7 @@ namespace ZFavoredClass
                                                          + "Benefit: You can use your Intelligence modifier in place of your Charisma modifier on Diplomacy checks.",
                                                          "",
                                                          Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // sf diplomacy
-                                                         FeatureGroup.None,
+                                                         FeatureGroup.Trait,
                                                          Helpers.Create<CallOfTheWild.SkillMechanics.DependentAbilityScoreCheckStatReplacement>(s =>
                                                          {
                                                              s.stat = StatType.CheckDiplomacy;
@@ -843,7 +845,7 @@ namespace ZFavoredClass
                                                          + "Benefit: Persuasion is considered a class skill for you for the purpose of Intimidate checks, and you may use your Intelligence modifier when making Intimidate checks instead of your Charisma modifier. ",
                                                          "",
                                                          Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // sf diplomacy
-                                                         FeatureGroup.None,
+                                                         FeatureGroup.Trait,
                                                          Helpers.Create<CallOfTheWild.SkillMechanics.DependentAbilityScoreCheckStatReplacement>(s =>
                                                          {
                                                              s.stat = StatType.CheckIntimidate;
@@ -859,7 +861,7 @@ namespace ZFavoredClass
                                              + "Benefit: You may use your Intelligence modifier when making Bluff checks instead of your Charisma modifier. ",
                                              "",
                                              Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // sf diplomacy
-                                             FeatureGroup.None,
+                                             FeatureGroup.Trait,
                                              Helpers.Create<CallOfTheWild.SkillMechanics.DependentAbilityScoreCheckStatReplacement>(s =>
                                              {
                                                  s.stat = StatType.CheckBluff;
@@ -875,7 +877,7 @@ namespace ZFavoredClass
                                          + "Benefits: You gain a +1 trait bonus on Trickery checks, and Trckery is always a class skill for you.",
                                          "",
                                          Helpers.GetIcon("7feda1b98f0c169418aa9af78a85953b"), // sf nature
-                                         FeatureGroup.None,
+                                         FeatureGroup.Trait,
                                          Helpers.CreateAddStatBonus(StatType.SkillThievery, 1, ModifierDescriptor.Trait),
                                          Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillThievery)
                                          );
@@ -902,7 +904,7 @@ namespace ZFavoredClass
                                               "You were born with a strange birthmark that looks very similar to the holy symbol of the god you chose to worship later in life.\nBenefits: This birthmark increases your devotion to your god. You gain a +2 trait bonus on all saving throws against charm and compulsion effects.",
                                               "",
                                               Helpers.GetIcon("2483a523984f44944a7cf157b21bf79c"), // Elven Immunities
-                                              FeatureGroup.None,
+                                              FeatureGroup.Trait,
                                               Helpers.Create<SavingThrowBonusAgainstSchool>(a =>
                                                 {
                                                     a.School = SpellSchool.Enchantment;
@@ -916,7 +918,7 @@ namespace ZFavoredClass
                                              + "Benefits: You gain a +1 trait bonus on Lore Nature checks, and Lore Nature is always a class skill for you.",
                                              "",
                                              Helpers.GetIcon("6507d2da389ed55448e0e1e5b871c013"), // lore nature
-                                             FeatureGroup.None,
+                                             FeatureGroup.Trait,
                                              Helpers.CreateAddStatBonus(StatType.SkillLoreNature, 1, ModifierDescriptor.Trait),
                                              Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillLoreNature)
                                              );
@@ -927,7 +929,7 @@ namespace ZFavoredClass
                                                          "As the child of an herbalist or an assistant in a temple infirmary, you often had to assist in tending to the sick and wounded.\nBenefits: You gain a +1 trait bonus on Lore Religion checks, and Lore Religion is always a class skill for you.",
                                                          "",
                                                          Helpers.GetIcon("f6f95242abdfac346befd6f4f6222140"), // remove sickness
-                                                         FeatureGroup.None,
+                                                         FeatureGroup.Trait,
                                                          Helpers.CreateAddStatBonus(StatType.SkillLoreReligion, 1, ModifierDescriptor.Trait),
                                                          Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillLoreReligion)
                                                          );
@@ -939,7 +941,7 @@ namespace ZFavoredClass
                                              + "Benefits: You gain a +1 bonus on Diplomacy checks, and consider Persutaion skill as class skill for the purpose of diplomacy checks.",
                                              "",
                                              Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // skill focus diplomacy
-                                             FeatureGroup.None,
+                                             FeatureGroup.Trait,
                                              Helpers.CreateAddStatBonus(StatType.CheckDiplomacy, 1, ModifierDescriptor.Trait),
                                              Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckDiplomacy; })
                                              );
@@ -952,7 +954,7 @@ namespace ZFavoredClass
                                                             "The vaults of the great city contain many secrets of the divine powers of the gods, and you have studied your god extensively.\nBenefit: You may channel energy 1 additional time per day.",
                                                             "",
                                                             Helpers.GetIcon("cd9f19775bd9d3343a31a065e93f0c47"), // Extra Channel
-                                                            FeatureGroup.None,
+                                                            FeatureGroup.Trait,
                                                             channel_resource.CreateIncreaseResourceAmount(1),
                                                             Helpers.PrerequisiteClassLevel(cleric, 1)
                                                             );
@@ -962,7 +964,7 @@ namespace ZFavoredClass
                                                       "You were born in a region where your faith was not popular, but you still have never abandoned it. Your constant struggle to maintain your own faith has bolstered your drive.\nBenefit: You gain a +1 trait bonus on Will saves.",
                                                       "",
                                                       Helpers.GetIcon("175d1577bb6c9a04baf88eec99c66334"), // Iron Will
-                                                      FeatureGroup.None,
+                                                      FeatureGroup.Trait,
                                                       Helpers.CreateAddStatBonus(StatType.SaveWill, 1, ModifierDescriptor.Trait)
                                                       );
 
@@ -975,7 +977,7 @@ namespace ZFavoredClass
                                                                  + "You gain a +1 trait bonus on Knowledge World checks, and Knowledge World is always a class skill for you.",
                                                                  "",
                                                                  Helpers.GetIcon("611e863120c0f9a4cab2d099f1eb20b4"), // sf world
-                                                                 FeatureGroup.None,
+                                                                 FeatureGroup.Trait,
                                                                  Helpers.CreateAddStatBonus(StatType.SkillKnowledgeWorld, 1, ModifierDescriptor.Trait),
                                                                  Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillKnowledgeWorld)
                                                                  );
@@ -989,7 +991,7 @@ namespace ZFavoredClass
                                  + "Benefits: You gain a +1 trait bonus on Intimidate checks, and Persuasion is always a class skill for you for the purpose of intimidate checks. Once per day, you may attempt to demoralize an opponent as a swift action.",
                                  "",
                                  Helpers.GetIcon("d2aeac47450c76347aebbc02e4f463e0"), // fear
-                                 FeatureGroup.None,
+                                 FeatureGroup.Trait,
                                  Helpers.CreateAddStatBonus(StatType.CheckIntimidate, 1, ModifierDescriptor.Trait),
                                  Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckIntimidate; })
                                  );
@@ -1008,7 +1010,7 @@ namespace ZFavoredClass
                                                   "Whenever you are under the effect of a luck bonus of any kind, that bonus increases by 1.",
                                                   "",
                                                   Helpers.GetIcon("9a7e3cd1323dfe347a6dcce357844769"), // blessing luck & resolve
-                                                  FeatureGroup.None,
+                                                  FeatureGroup.Trait,
                                                   Helpers.Create<CallOfTheWild.SpellManipulationMechanics.TargetDescriptorModifierBonus>(t => { t.descriptor = ModifierDescriptor.Luck; t.bonus = 1; })
                                                   );
 
@@ -1018,7 +1020,7 @@ namespace ZFavoredClass
                                         + "Benifit: You gain a +2 trait bonus on saving throws against fear and death effects.",
                                         "",
                                         Helpers.GetIcon("0413915f355a38146bc6ad40cdf27b3f"), // death ward
-                                        FeatureGroup.None,
+                                        FeatureGroup.Trait,
                                         Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.Bonus = 2; s.ModifierDescriptor = ModifierDescriptor.Trait; s.SpellDescriptor = SpellDescriptor.Fear | SpellDescriptor.Shaken | SpellDescriptor.Death; })
                                         );
 
@@ -1047,7 +1049,7 @@ namespace ZFavoredClass
                                               "You have studied the workings of anatomy, either as a student at university or as an apprentice mortician or necromancer. You know where to aim your blows to strike vital organs.\nBenefit: You gain a +1 trait bonus on all rolls made to confirm critical hits.",
                                               "",
                                               Helpers.GetIcon("f4201c85a991369408740c6888362e20"), // Improved Critical
-                                              FeatureGroup.None,
+                                              FeatureGroup.Trait,
                                               Helpers.Create<CriticalConfirmationBonus>(a => { a.Bonus = 1; a.Value = 0; })
                                               );
 
@@ -1056,10 +1058,10 @@ namespace ZFavoredClass
                                                 "You have worn armor as long as you can remember, either as part of your training to become a knight’s squire or simply because you were seeking to emulate a hero. Your childhood armor wasn’t the real thing as far as protection, but it did encumber you as much as real armor would have, and you’ve grown used to moving in such suits with relative grace.\nBenefit: When you wear armor of any sort, reduce that suit’s armor check penalty by 1, to a minimum check penalty of 0.",
                                                 "",
                                                 Helpers.GetIcon("3bc6e1d2b44b5bb4d92e6ba59577cf62"), // Armor Focus (light)
-                                                FeatureGroup.None,
-                                                Helpers.Create<ArmorCheckPenaltyIncrease>(a => { a.Bonus = 1; a.CheckCategory = true; a.Category = ArmorProficiencyGroup.Light; }),
-                                                Helpers.Create<ArmorCheckPenaltyIncrease>(a => { a.Bonus = 1; a.CheckCategory = true; a.Category = ArmorProficiencyGroup.Medium; }),
-                                                Helpers.Create<ArmorCheckPenaltyIncrease>(a => { a.Bonus = 1; a.CheckCategory = true; a.Category = ArmorProficiencyGroup.Heavy; })
+                                                FeatureGroup.Trait,
+                                                Helpers.Create<CallOfTheWild.NewMechanics.ArmorCheckPenaltyIncrease>(a => { a.Bonus = 1; a.CheckCategory = true; a.Category = ArmorProficiencyGroup.Light;  }),
+                                                Helpers.Create<CallOfTheWild.NewMechanics.ArmorCheckPenaltyIncrease>(a => { a.Bonus = 1; a.CheckCategory = true; a.Category = ArmorProficiencyGroup.Medium; }),
+                                                Helpers.Create<CallOfTheWild.NewMechanics.ArmorCheckPenaltyIncrease>(a => { a.Bonus = 1; a.CheckCategory = true; a.Category = ArmorProficiencyGroup.Heavy; })
                                                 );
 
             var rage_resource = library.Get<BlueprintAbilityResource>("24353fcf8096ea54684a72bf58dedbc9");
@@ -1068,7 +1070,7 @@ namespace ZFavoredClass
                                                              "Your time spent as a society member has taught you new truths about the origins of the your rage ability.\nBenefit: You may use your rage ability for 3 additional rounds per day.",
                                                              "",
                                                              Helpers.GetIcon("1a54bbbafab728348a015cf9ffcf50a7"), // Extra Rage
-                                                             FeatureGroup.None,
+                                                             FeatureGroup.Trait,
                                                              rage_resource.CreateIncreaseResourceAmount(3),
                                                              Helpers.PrerequisiteClassLevel(library.Get<BlueprintCharacterClass>("f7d7eb166b3dd594fb330d085df41853"), 1));
 
@@ -1077,7 +1079,7 @@ namespace ZFavoredClass
                                                          "You have studied and learned the weak spots of many humanoids and monsters.\nBenefit: You gain a +1 trait bonus to damage rolls from sneak attacks.",
                                                          "",
                                                          Helpers.GetIcon("9f0187869dc23744292c0e5bb364464e"), // Accomplished Sneak Attacker
-                                                         FeatureGroup.None,
+                                                         FeatureGroup.Trait,
                                                          Helpers.Create<CallOfTheWild.NewMechanics.SneakAttackDamageBonus>(a => a.value = 1)
                                                          );
 
@@ -1086,7 +1088,7 @@ namespace ZFavoredClass
                                                             "Your time spent fighting and studying the greatest warriors of the society has taught you new defensive skills while wearing armor.\nBenefit: You gain a +1 trait bonus to Armor Class when wearing medium or heavy armor.",
                                                             "",
                                                             Helpers.GetIcon("7dc004879037638489b64d5016997d12"), // Armor Focus Medium
-                                                            FeatureGroup.None,
+                                                            FeatureGroup.Trait,
                                                             Helpers.Create<CallOfTheWild.NewMechanics.ArmorCategoryAcBonus>(a => { a.category = ArmorProficiencyGroup.Medium; a.descriptor = ModifierDescriptor.Trait; a.value = 1; }),
                                                             Helpers.Create<CallOfTheWild.NewMechanics.ArmorCategoryAcBonus>(a => { a.category = ArmorProficiencyGroup.Heavy; a.descriptor = ModifierDescriptor.Trait; a.value = 1; }),
                                                             Helpers.PrerequisiteClassLevel(library.Get<BlueprintCharacterClass>("48ac8db94d5de7645906c7d0ad3bcfbd"), 1)
@@ -1097,7 +1099,7 @@ namespace ZFavoredClass
                                                 "Growing up in a rough neighborhood or a dangerous environment has honed your senses.\nBenefit: You gain a +1 trait bonus on Reflex saves.",
                                                 "",
                                                 Helpers.GetIcon("15e7da6645a7f3d41bdad7c8c4b9de1e"), // Lightning Reflexes
-                                                FeatureGroup.None,
+                                                FeatureGroup.Trait,
                                                 Helpers.CreateAddStatBonus(StatType.SaveReflex, 1, ModifierDescriptor.Trait)
                                                 );
 
@@ -1107,7 +1109,7 @@ namespace ZFavoredClass
                                                  "Benefit: When you hit a foe you are flanking, you deal 1 additional point of damage (this damage is added to your base damage, and is multiplied on a critical hit). This additional damage is a trait bonus.",
                                                  "",
                                                  Helpers.GetIcon("5662d1b793db90c4b9ba68037fd2a768"), // precise strike
-                                                 FeatureGroup.None,
+                                                 FeatureGroup.Trait,
                                                  Helpers.Create<CallOfTheWild.NewMechanics.DamageBonusAgainstFlankedTarget>(d => d.bonus = 1)
                                                  );
 
@@ -1122,7 +1124,7 @@ namespace ZFavoredClass
                                                 "You were bullied often as a child, but never quite developed an offensive response. Instead, you became adept at anticipating sudden attacks and reacting to danger quickly.\nBenefit: You gain a +2 trait bonus on initiative checks.",
                                                 "",
                                                 Helpers.GetIcon("797f25d709f559546b29e7bcb181cc74"), // Improved Initiative
-                                                FeatureGroup.None,
+                                                FeatureGroup.Trait,
                                                 Helpers.CreateAddStatBonus(StatType.Initiative, 2, ModifierDescriptor.Trait)
                                                 );
 
@@ -1131,7 +1133,7 @@ namespace ZFavoredClass
                                              "Growing up in a poor neighborhood or in the unforgiving wilds often forced you to subsist on food and water from doubtful sources. You’ve built up your constitution as a result.\nBenefit: You gain a +1 trait bonus on Fortitude saves.",
                                              "",
                                              Helpers.GetIcon("79042cb55f030614ea29956177977c52"), // Great Fortitude
-                                             FeatureGroup.None,
+                                             FeatureGroup.Trait,
                                              Helpers.CreateAddStatBonus(StatType.SaveFortitude, 1, ModifierDescriptor.Trait));
 
             slippery = Helpers.CreateFeature("SlipperTrait",
@@ -1139,7 +1141,7 @@ namespace ZFavoredClass
                                              "You have escaped from so many dangerous situations in your life that you’ve gotten quite good at not getting caught.\nBenefit: You gain a +1 trait bonus on Stealth checks and Stealth is a class skill for you.",
                                              "",
                                              Helpers.GetIcon("97a6aa2b64dd21a4fac67658a91067d7"), // fast stealth
-                                             FeatureGroup.None,
+                                             FeatureGroup.Trait,
                                              Helpers.CreateAddStatBonus(StatType.SkillStealth, 1, ModifierDescriptor.Trait),
                                              Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillStealth)
                                              );
@@ -1150,7 +1152,7 @@ namespace ZFavoredClass
                                                          "Xa Hoi’s elite warriors are trained to deflect energy attacks.\nBenefit: Choose an energy type (acid, cold, electricity, fire, or sonic) when you acquire this trait. When you are wearing medium or heavy armor, you gain a +2 trait bonus on Reflex saves against spells and effects of the chosen energy type.",
                                                          "",
                                                          Helpers.GetIcon("d2f116cfe05fcdd4a94e80143b67046f"), // protection from energy
-                                                         FeatureGroup.None,
+                                                         FeatureGroup.Trait,
                                                          Helpers.CreateAddStatBonus(StatType.SkillStealth, 1, ModifierDescriptor.Trait),
                                                          Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillStealth)
                                                          );
@@ -1163,7 +1165,7 @@ namespace ZFavoredClass
                                                      dragon_armor.Description,
                                                      "",
                                                      dragon_armor.Icon,
-                                                     FeatureGroup.None,
+                                                     FeatureGroup.Trait,
                                                      Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.ModifierDescriptor = ModifierDescriptor.Trait; s.Bonus = 2; s.SpellDescriptor = d; })
                                                      );
                 effect.HideInCharacterSheetAndLevelUp = true;
@@ -1173,7 +1175,7 @@ namespace ZFavoredClass
                                      dragon_armor.Description,
                                      "",
                                      dragon_armor.Icon,
-                                     FeatureGroup.None,
+                                     FeatureGroup.Trait,
                                      Helpers.Create<CallOfTheWild.WeaponTrainingMechanics.AddFeatureOnArmor>(a => 
                                               {
                                                   a.feature = effect;
@@ -1188,7 +1190,7 @@ namespace ZFavoredClass
                                                    + "Benefits: You gain a +1 trait bonus on attacks of opportunity when using a dagger or a sword.",
                                                    "",
                                                    Helpers.GetIcon("5bb6dc5ce00550441880a6ff8ad4c968"), //opportunist
-                                                   FeatureGroup.None,
+                                                   FeatureGroup.Trait,
                                                    Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusOnAttacksOfOpportunity>(a =>
                                                    {
                                                        a.categories = new WeaponCategory[] { WeaponCategory.BastardSword, WeaponCategory.DuelingSword, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.Longsword, WeaponCategory.Greatsword };
@@ -1206,7 +1208,7 @@ namespace ZFavoredClass
                                                             "You have studied dozens of ancient texts on martial arts that only the Society possesses, and are more learned in these arts than most.\nBenefit: You increase your ki pool by 1 point.",
                                                             "",
                                                             Helpers.GetIcon("c36562b8e7ae12d408487ba8b532d966"), // pummeling style
-                                                            FeatureGroup.None,
+                                                            FeatureGroup.Trait,
                                                             ki_resource.CreateIncreaseResourceAmount(1),
                                                             scaled_fist_ki_resource.CreateIncreaseResourceAmount(1),
                                                             Helpers.PrerequisiteClassLevel(monk, 1)
@@ -1218,7 +1220,7 @@ namespace ZFavoredClass
                                                 "You know how to avoid a blow while still maintaining your offensive posture.\nBenefit: When you use Combat Expertise, reduce the number you subtract from your melee attack rolls by 1.",
                                                 "",
                                                 combat_expertise_buff.Icon,
-                                                FeatureGroup.None
+                                                FeatureGroup.Trait
                                                 );
 
             var ce_property = library.Get<BlueprintUnitProperty>("8a63b06d20838954e97eb444f805ec89");
@@ -1254,7 +1256,7 @@ namespace ZFavoredClass
                                          + "Benefit: You gain a +1 trait bonus on Will saving throws.",
                                          "",
                                          Helpers.GetIcon("175d1577bb6c9a04baf88eec99c66334"), // iron will
-                                         FeatureGroup.None,
+                                         FeatureGroup.Trait,
                                          Helpers.CreateAddStatBonus(StatType.SaveWill, 1, ModifierDescriptor.Trait),
                                          Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.human)
                                          );
@@ -1264,7 +1266,7 @@ namespace ZFavoredClass
                                             "Your massive ears are your pride and joy, and other goblins claim you can hear a flea scream as it falls off a goblin dog. While this might not quite be the case, you gain a +2 bonus on all Perception checks.",
                                             "",
                                             Helpers.GetIcon("f74c6bdf5c5f5374fb9302ecdc1f7d64"), // sf perception
-                                            FeatureGroup.None,
+                                            FeatureGroup.Trait,
                                             Helpers.CreateAddStatBonus(StatType.SkillPerception, 2, ModifierDescriptor.Trait),
                                             Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.goblin)
                                             );
@@ -1275,7 +1277,7 @@ namespace ZFavoredClass
                                                  + "You gain a +1 trait bonus on Intimidate checks and a +1 trait bonus on your CMB because of your great size.",
                                                  "",
                                                  Helpers.GetIcon("d76497bfc48516e45a0831628f767a0f"), // intimidating prowess
-                                                 FeatureGroup.None,
+                                                 FeatureGroup.Trait,
                                                  Helpers.CreateAddStatBonus(StatType.CheckIntimidate, 1, ModifierDescriptor.Trait),
                                                  Helpers.CreateAddStatBonus(StatType.AdditionalCMB, 1, ModifierDescriptor.Trait),
                                                  Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.human)
@@ -1287,7 +1289,7 @@ namespace ZFavoredClass
                                          + "Benefits: You gain a +1 trait bonus on intimidate checks, and Persuasion is always considered a class skill for you for purpose of intimidate checks.",
                                          "",
                                          Helpers.GetIcon("d76497bfc48516e45a0831628f767a0f"), // intimidating prowess
-                                         FeatureGroup.None,
+                                         FeatureGroup.Trait,
                                          Helpers.CreateAddStatBonus(StatType.CheckIntimidate, 1, ModifierDescriptor.Trait),
                                          Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckIntimidate; }),
                                          Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.half_orc)
@@ -1298,7 +1300,7 @@ namespace ZFavoredClass
                                                     "One of your parents was a member of a wild elven tribe, and you’ve inherited a portion of your elven parent’s quick reflexes.\nBenefit: You gain a +2 trait bonus on initiative checks.",
                                                     "",
                                                     Helpers.GetIcon("797f25d709f559546b29e7bcb181cc74"), // Improved Initiative
-                                                    FeatureGroup.None,
+                                                    FeatureGroup.Trait,
                                                     Helpers.CreateAddStatBonus(StatType.Initiative, 2, ModifierDescriptor.Trait),
                                                     Helpers.Create<NewMechanics.PrerequisiteRace>(p =>  p.race = Core.half_elf )
                                                     );
@@ -1308,7 +1310,7 @@ namespace ZFavoredClass
                                                     "As a child, you put in long hours on combat drills, and though time has made this training a dim memory, you still have a knack for quickly responding to trouble.\nBenefit: You gain a +2 trait bonus on initiative checks.",
                                                     "",
                                                     Helpers.GetIcon("797f25d709f559546b29e7bcb181cc74"), // Improved Initiative
-                                                    FeatureGroup.None,
+                                                    FeatureGroup.Trait,
                                                     Helpers.CreateAddStatBonus(StatType.Initiative, 2, ModifierDescriptor.Trait),
                                                     Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.elf)
                                                     );
@@ -1318,7 +1320,7 @@ namespace ZFavoredClass
                                              "Having lived outside of traditional elf society for much or all of your life, you know the world can be cruel, dangerous, and unforgiving of the weak.\nBenefit: You gain a +1 trait bonus on Fortitude saves.",
                                              "",
                                              Helpers.GetIcon("79042cb55f030614ea29956177977c52"), // Great Fortitude
-                                             FeatureGroup.None,
+                                             FeatureGroup.Trait,
                                              Helpers.CreateAddStatBonus(StatType.SaveFortitude, 1, ModifierDescriptor.Trait),
                                              Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.elf)
                                              );
@@ -1328,7 +1330,7 @@ namespace ZFavoredClass
                                                  "The power to affect the world with the mind is very much a reality in your distant homeland. Although you may not even have been born in Vudra, this power remains potent in your mind as well and protects you from mental assault.\nBenefit: You gain a +2 trait bonus on saves against mindaffecting effects.",
                                                  "",
                                                  Helpers.GetIcon("175d1577bb6c9a04baf88eec99c66334"), // Iron will
-                                                 FeatureGroup.None,
+                                                 FeatureGroup.Trait,
                                                  Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.ModifierDescriptor = ModifierDescriptor.Trait; s.Bonus = 2; s.SpellDescriptor = SpellDescriptor.MindAffecting; }),
                                                  Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.human)
                                                  );
@@ -1339,7 +1341,7 @@ namespace ZFavoredClass
                                          + "Benefits: You gain a +1 bonus on Lore Nature checks, and Lore Nature is always a class skill for you.",
                                          "",
                                          Helpers.GetIcon("6507d2da389ed55448e0e1e5b871c013"), // sf nature
-                                         FeatureGroup.None,
+                                         FeatureGroup.Trait,
                                          Helpers.CreateAddStatBonus(StatType.SkillLoreNature, 1, ModifierDescriptor.Trait),
                                          Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillLoreNature),
                                          Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.half_orc)
@@ -1351,7 +1353,7 @@ namespace ZFavoredClass
                                              + "Benefits: You gain a +1 trait bonus on attack rolls to confirm critical hits.",
                                              "",
                                              Helpers.GetIcon("8ac59959b1b23c347a0361dc97cc786d"), // critical focus
-                                             FeatureGroup.None,
+                                             FeatureGroup.Trait,
                                              Helpers.Create<CriticalConfirmationBonus>(c => { c.Bonus = 1; c.Value = 0; }),
                                              Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.dwarf)
                                              );
@@ -1373,7 +1375,7 @@ namespace ZFavoredClass
                                                      finish_the_fight_buff.Description,
                                                      "",
                                                      Helpers.GetIcon("8ac59959b1b23c347a0361dc97cc786d"), // critical focus
-                                                     FeatureGroup.None,
+                                                     FeatureGroup.Trait,
                                                      Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusAgainstFactsOwner>(a =>
                                                      {
                                                          a.Bonus = 1;
@@ -1394,7 +1396,7 @@ namespace ZFavoredClass
                                              + "Benefit: You gain a +2 trait bonus on concentration checks.",
                                              "",
                                              Helpers.GetIcon("06964d468fde1dc4aa71a92ea04d930d"), // combat casting
-                                             FeatureGroup.None,
+                                             FeatureGroup.Trait,
                                              Helpers.Create<ConcentrationBonus>(c => c.Value = 2),
                                              Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.half_orc)
                                              );
@@ -1405,7 +1407,7 @@ namespace ZFavoredClass
                                      "You bear the elaborate tattoos of your people, marking you as a free son or daughter of the road. \nBenefit: You gain a +1 trait bonus on saving throws against charm and compulsion effects. Additionally, you are proficient with starknives.",
                                      "",
                                      Helpers.GetIcon("175d1577bb6c9a04baf88eec99c66334"), // Iron will
-                                     FeatureGroup.None,
+                                     FeatureGroup.Trait,
                                      Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.ModifierDescriptor = ModifierDescriptor.Trait; s.Bonus = 2; s.SpellDescriptor = SpellDescriptor.Compulsion | SpellDescriptor.Charm; }),
                                      Common.createAddWeaponProficiencies(WeaponCategory.Starknife),
                                      Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.human)
@@ -1417,7 +1419,7 @@ namespace ZFavoredClass
                                        + "Benefits: When performing a shield bash, you deal 1 additional point of damage. Also, once per day on your turn as a free action, you may provide one adjacent ally a +2 trait bonus to his Armor Class. This bonus lasts for 1 round, so long as you and the target remain adjacent to one another. You can only use this ability if you are using a shield. You retain your shield bonus to your armor class when using this ability.",
                                        "",
                                        Helpers.GetIcon("121811173a614534e8720d7550aae253"), //shield bash
-                                       FeatureGroup.None,
+                                       FeatureGroup.Trait,
                                        Helpers.Create<CallOfTheWild.NewMechanics.ContextWeaponCategoryDamageBonus>(w => { w.Value = 1; w.categories = new WeaponCategory[] { WeaponCategory.SpikedHeavyShield, WeaponCategory.SpikedLightShield, WeaponCategory.WeaponHeavyShield, WeaponCategory.WeaponLightShield }; }),
                                        Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.human)
                                        );
@@ -1456,7 +1458,7 @@ namespace ZFavoredClass
                                     "You are well balanced, both physically and mentally.\nBenefit: You gain a +1 trait bonus on Mobility checks, and a +1 trait bonus on Reflex saves.",
                                     "",
                                     Helpers.GetIcon("15e7da6645a7f3d41bdad7c8c4b9de1e"), // Lightning Reflexes
-                                    FeatureGroup.None,
+                                    FeatureGroup.Trait,
                                     Helpers.CreateAddStatBonus(StatType.SaveReflex, 1, ModifierDescriptor.Trait),
                                     Helpers.CreateAddStatBonus(StatType.SkillMobility, 2, ModifierDescriptor.Trait),
                                     Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.dwarf)
@@ -1467,7 +1469,7 @@ namespace ZFavoredClass
                                                   "An instinct for dishonorable conduct serves you well when fighting opponents who are blind, oblivious, or blundering around in the dark.\nBenefit You gain a +2 trait bonus on melee weapon damage rolls made against foes that cannot see you.",
                                                   "",
                                                   Helpers.GetIcon("9f0187869dc23744292c0e5bb364464e"), // accomplished sneak attacker
-                                                  FeatureGroup.None,
+                                                  FeatureGroup.Trait,
                                                   Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.tiefling),
                                                   Helpers.Create<CallOfTheWild.NewMechanics.DamageBonusIfInvisibleToTarget>(d => d.Bonus = 2)
                                                  );
@@ -1504,7 +1506,7 @@ namespace ZFavoredClass
                                          + "Benefits: You gain a +1 bonus on Diplomacy checks, and consider Persutaion skill as class skill for the purpose of diplomacy checks.",
                                          "",
                                          Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // skill focus diplomacy
-                                         FeatureGroup.None,
+                                         FeatureGroup.Trait,
                                          Helpers.CreateAddStatBonus(StatType.CheckDiplomacy, 1, ModifierDescriptor.Trait),
                                          Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckDiplomacy; })
                                          );
@@ -1514,7 +1516,7 @@ namespace ZFavoredClass
                                             "Benefit: You gain a +1 trait bonus on attacks made while flanking an opponent.",
                                             "",
                                             Helpers.GetIcon("5662d1b793db90c4b9ba68037fd2a768"), // precise strike
-                                            FeatureGroup.None,
+                                            FeatureGroup.Trait,
                                             Helpers.Create<CallOfTheWild.NewMechanics.FlankingAttackBonus>(d => { d.Bonus = 1; d.Descriptor = ModifierDescriptor.Trait; })
                                             );
 
@@ -1524,7 +1526,7 @@ namespace ZFavoredClass
                                          + "Benefits: You gain a +1 trait bonus on Will saves.",
                                          "",
                                          Helpers.GetIcon("175d1577bb6c9a04baf88eec99c66334"), // iron will
-                                         FeatureGroup.None,
+                                         FeatureGroup.Trait,
                                          Helpers.CreateAddStatBonus(StatType.SaveWill, 1, ModifierDescriptor.Trait)
                                          );
 
@@ -1534,7 +1536,7 @@ namespace ZFavoredClass
                                                          + "Benefits: You gain a +1 trait bonus on intimidate checks, and Persuasion is always considered a class skill for you for purpose of intimidate checks.",
                                                          "",
                                                          Helpers.GetIcon("d76497bfc48516e45a0831628f767a0f"), // intimidating prowess
-                                                         FeatureGroup.None,
+                                                         FeatureGroup.Trait,
                                                          Helpers.CreateAddStatBonus(StatType.CheckIntimidate, 1, ModifierDescriptor.Trait),
                                                          Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckIntimidate; })
                                                          );
@@ -1545,7 +1547,7 @@ namespace ZFavoredClass
                                                          + "Benifit: You gain a +1 trait bonus on saves against mind-affecting effects, and on saves against drugs or poisons.",
                                                          "",
                                                          Helpers.GetIcon("79042cb55f030614ea29956177977c52"), // Great Fortitude
-                                                         FeatureGroup.None,
+                                                         FeatureGroup.Trait,
                                                          Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.ModifierDescriptor = ModifierDescriptor.Trait; s.Bonus = 1; s.SpellDescriptor = SpellDescriptor.MindAffecting; }),
                                                          Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.ModifierDescriptor = ModifierDescriptor.Trait; s.Bonus = 1; s.SpellDescriptor = SpellDescriptor.Poison; })
                                                          );
@@ -1556,7 +1558,7 @@ namespace ZFavoredClass
                                              + "Benifit: You receive a +1 trait bonus on saving throws against spells, spell-like abilities, and poison.",
                                              "",
                                              Helpers.GetIcon("f75d3b6110f04d1409564b9d7647db60"), // Great Fortitude
-                                             FeatureGroup.None,
+                                             FeatureGroup.Trait,
                                              Helpers.Create<SavingThrowBonusAgainstAbilityType>(s => { s.Bonus = 1; s.ModifierDescriptor = ModifierDescriptor.Trait; s.AbilityType = AbilityType.Spell; }),
                                              Helpers.Create<SavingThrowBonusAgainstAbilityType>(s => { s.Bonus = 1; s.ModifierDescriptor = ModifierDescriptor.Trait; s.AbilityType = AbilityType.SpellLike; }),
                                              Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.ModifierDescriptor = ModifierDescriptor.Trait; s.Bonus = 1; s.SpellDescriptor = SpellDescriptor.Poison; }),
@@ -1569,7 +1571,7 @@ namespace ZFavoredClass
                                          + "Benefits: You gain a +1 bonus on Lore Nature checks, and Lore Nature is always a class skill for you.",
                                          "",
                                          Helpers.GetIcon("6507d2da389ed55448e0e1e5b871c013"), // sf nature
-                                         FeatureGroup.None,
+                                         FeatureGroup.Trait,
                                          Helpers.CreateAddStatBonus(StatType.SkillLoreNature, 1, ModifierDescriptor.Trait),
                                          Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillLoreNature)
                                          );
@@ -1580,7 +1582,7 @@ namespace ZFavoredClass
                                              + "Benefits: You gain a +1 trait bonus on intimidate checks, and Persuasion is always considered a class skill for you for purpose of intimidate checks.",
                                              "",
                                              Helpers.GetIcon("d76497bfc48516e45a0831628f767a0f"), // intimidating prowess
-                                             FeatureGroup.None,
+                                             FeatureGroup.Trait,
                                              Helpers.CreateAddStatBonus(StatType.CheckIntimidate, 1, ModifierDescriptor.Trait),
                                              Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckIntimidate; })
                                              );
@@ -1591,7 +1593,7 @@ namespace ZFavoredClass
                                                + "Benefits: You gain a +1 trait bonus on damage rolls with a dagger and a +1 trait bonus on athletics checks. Athletics is always a class skill for you.",
                                                "",
                                                Helpers.GetIcon("9db907332bdaec1468cff3a99efef5b4"), //sf athletics
-                                               FeatureGroup.None,
+                                               FeatureGroup.Trait,
                                                Helpers.Create<CallOfTheWild.NewMechanics.ContextWeaponCategoryDamageBonus>(w => { w.Value = 1; w.categories = new WeaponCategory[] { WeaponCategory.Dagger, WeaponCategory.PunchingDagger}; }),
                                                Helpers.CreateAddStatBonus(StatType.SkillAthletics, 1, ModifierDescriptor.Trait),
                                                Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillAthletics)
@@ -1603,7 +1605,7 @@ namespace ZFavoredClass
                                    + "Benefits: You gain a +1 trait bonus on damage rolls when using unarmed strikes.",
                                    "",
                                    Helpers.GetIcon("c36562b8e7ae12d408487ba8b532d966"), //pummeling style
-                                   FeatureGroup.None,
+                                   FeatureGroup.Trait,
                                    Helpers.Create<CallOfTheWild.NewMechanics.ContextWeaponCategoryDamageBonus>(w => { w.Value = 1; w.categories = new WeaponCategory[] { WeaponCategory.UnarmedStrike}; })
                                    );
 
@@ -1612,10 +1614,10 @@ namespace ZFavoredClass
                                     "You served in the Sargavan Guard, either as a colonial sub-praetor or as a native Mwangi regular, and have grown accustomed to marching in hot temperatures while wearing armor. \nBenefit: When you wear armor of any sort, reduce that suit’s armor check penalty by 1, to a minimum check penalty of 0.",
                                     "",
                                     Helpers.GetIcon("3bc6e1d2b44b5bb4d92e6ba59577cf62"), // Armor Focus (light)
-                                    FeatureGroup.None,
-                                    Helpers.Create<ArmorCheckPenaltyIncrease>(a => { a.Bonus = 1; a.CheckCategory = true; a.Category = ArmorProficiencyGroup.Light; }),
-                                    Helpers.Create<ArmorCheckPenaltyIncrease>(a => { a.Bonus = 1; a.CheckCategory = true; a.Category = ArmorProficiencyGroup.Medium; }),
-                                    Helpers.Create<ArmorCheckPenaltyIncrease>(a => { a.Bonus = 1; a.CheckCategory = true; a.Category = ArmorProficiencyGroup.Heavy; })
+                                    FeatureGroup.Trait,
+                                    Helpers.Create<CallOfTheWild.NewMechanics.ArmorCheckPenaltyIncrease>(a => { a.Bonus = 1; a.CheckCategory = true; a.Category = ArmorProficiencyGroup.Light; }),
+                                    Helpers.Create<CallOfTheWild.NewMechanics.ArmorCheckPenaltyIncrease>(a => { a.Bonus = 1; a.CheckCategory = true; a.Category = ArmorProficiencyGroup.Medium; }),
+                                    Helpers.Create<CallOfTheWild.NewMechanics.ArmorCheckPenaltyIncrease>(a => { a.Bonus = 1; a.CheckCategory = true; a.Category = ArmorProficiencyGroup.Heavy; })
                                     );
 
             hermean_paragon = Helpers.CreateFeature("HermeanParagonTrait",
@@ -1623,7 +1625,7 @@ namespace ZFavoredClass
                                     "You are a product of Hermea’s breeding programs—either your parents were chosen to be citizens, or you were, but later failed to live up to the island’s high standards. Whatever the case, you are quicker than normal members of your race. \nBenefit: You gain a +2 trait bonus on initiative checks.",
                                     "",
                                     Helpers.GetIcon("797f25d709f559546b29e7bcb181cc74"), // Improved Initiative
-                                    FeatureGroup.None,
+                                    FeatureGroup.Trait,
                                     Helpers.CreateAddStatBonus(StatType.Initiative, 2, ModifierDescriptor.Trait)
                                     );
 
@@ -1637,7 +1639,7 @@ namespace ZFavoredClass
                                                      + "Benefits: You gain a +1 bonus on Perception checks, and Perception is always a class skill for you.",
                                                      "",
                                                      Helpers.GetIcon("f74c6bdf5c5f5374fb9302ecdc1f7d64"), // sf perception
-                                                     FeatureGroup.None,
+                                                     FeatureGroup.Trait,
                                                      Helpers.CreateAddStatBonus(StatType.SkillPerception, 1, ModifierDescriptor.Trait),
                                                      Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillPerception)
                                                      );
@@ -1648,7 +1650,7 @@ namespace ZFavoredClass
                                          + "Benefits: You gain a +1 trait bonus on Mobility checks, and Mobility becomes a class skill for you.",
                                          "",
                                          Helpers.GetIcon("52dd89af385466c499338b7297896ded"), // sf perception
-                                         FeatureGroup.None,
+                                         FeatureGroup.Trait,
                                          Helpers.CreateAddStatBonus(StatType.SkillMobility, 1, ModifierDescriptor.Trait),
                                          Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillMobility)
                                          );
@@ -1659,7 +1661,7 @@ namespace ZFavoredClass
                                                  + "Benifit: You gain a +2 trait bonus on saving throws against mind-affecting effects.",
                                                  "",
                                                  Helpers.GetIcon("175d1577bb6c9a04baf88eec99c66334"), // iron will
-                                                 FeatureGroup.None,
+                                                 FeatureGroup.Trait,
                                                  Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.ModifierDescriptor = ModifierDescriptor.Trait; s.Bonus = 2; s.SpellDescriptor = SpellDescriptor.MindAffecting; })
                                                  );
 
@@ -1669,7 +1671,7 @@ namespace ZFavoredClass
                                     + "Benifit: You gain a +1 trait bonus on Reflex saves.",
                                     "",
                                     Helpers.GetIcon("15e7da6645a7f3d41bdad7c8c4b9de1e"), // Lightning Reflexes
-                                    FeatureGroup.None,
+                                    FeatureGroup.Trait,
                                     Helpers.CreateAddStatBonus(StatType.SaveReflex, 1, ModifierDescriptor.Trait)
                                     );
 
@@ -1680,7 +1682,7 @@ namespace ZFavoredClass
                                                     + "Benifit: Horrif ic growths beneath your skin provide you a +1 natural armor bonus to AC, but your body does not work as a normal creature’s would. You become sickened for 1 round anytime you receive magical healing.",
                                                     "",
                                                     Helpers.GetIcon("4e42460798665fd4cb9173ffa7ada323"), // sickened
-                                                    FeatureGroup.None,
+                                                    FeatureGroup.Trait,
                                                     Helpers.CreateAddStatBonus(StatType.AC, 1, ModifierDescriptor.NaturalArmor),
                                                     Helpers.Create<CallOfTheWild.HealingMechanics.OnHealingReceivedActionTrigger>(o =>
                                                     {
@@ -1695,7 +1697,7 @@ namespace ZFavoredClass
                                                     + "Benifit: You gain a +2 trait bonus on all saves against fear.",
                                                     "",
                                                     Helpers.GetIcon("dd38f33c56ad00a4da386c1afaa49967"), // blessing of courage
-                                                    FeatureGroup.None,
+                                                    FeatureGroup.Trait,
                                                     Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.Bonus = 2; s.ModifierDescriptor = ModifierDescriptor.Trait; s.SpellDescriptor = SpellDescriptor.Fear | SpellDescriptor.Shaken; })
                                                     );
 
@@ -1713,7 +1715,7 @@ namespace ZFavoredClass
                                                         demon_bane_summoner_buff.Description,
                                                         "",
                                                         demon_bane_summoner_buff.Icon,
-                                                        FeatureGroup.None);
+                                                        FeatureGroup.Trait);
             demon_bane_summoner.AddComponent(Helpers.Create<OnSpawnBuff>(o =>
                                                                         {
                                                                             o.buff = demon_bane_summoner_buff;
@@ -1730,7 +1732,7 @@ namespace ZFavoredClass
                                                      + "Benefit: You modify your Diplomacy checks using your Wisdom modifier, not your Charisma modifier.",
                                                      "",
                                                      Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // sf diplomacy
-                                                     FeatureGroup.None,
+                                                     FeatureGroup.Trait,
                                                      Helpers.Create<CallOfTheWild.SkillMechanics.DependentAbilityScoreCheckStatReplacement>(s =>
                                                      {
                                                          s.stat = StatType.CheckDiplomacy;
@@ -1744,7 +1746,7 @@ namespace ZFavoredClass
                                             + "Benifit: You gain a +2 trait bonus against spells and effects with the fire descriptor.",
                                             "",
                                             Helpers.GetIcon("3f9605134d34e1243b096e1f6cb4c148"), // protection from fire
-                                            FeatureGroup.None,
+                                            FeatureGroup.Trait,
                                             Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.Bonus = 2; s.ModifierDescriptor = ModifierDescriptor.Trait; s.SpellDescriptor = SpellDescriptor.Fear | SpellDescriptor.Shaken; })
                                             );
 
@@ -1754,7 +1756,7 @@ namespace ZFavoredClass
                                          + "Benefits: You gain a +1 trait bonus on Bluff checks, and Persuasion is always considered a class skill for you for purpose of Bluff checks.",
                                          "",
                                          Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // skill focus diplomacy
-                                         FeatureGroup.None,
+                                         FeatureGroup.Trait,
                                          Helpers.CreateAddStatBonus(StatType.CheckBluff, 1, ModifierDescriptor.Trait),
                                          Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckBluff; })
                                          );
@@ -1765,7 +1767,7 @@ namespace ZFavoredClass
                                        + "Benefits: You gain a +1 trait bonus on attacks of opportunity when using a dagger or a sword.",
                                        "",
                                        Helpers.GetIcon("5bb6dc5ce00550441880a6ff8ad4c968"), //opportunist
-                                       FeatureGroup.None,
+                                       FeatureGroup.Trait,
                                        Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusOnAttacksOfOpportunity>(a =>
                                        {
                                            a.categories = new WeaponCategory[] { WeaponCategory.Rapier, WeaponCategory.Scimitar, WeaponCategory.Shortsword, WeaponCategory.Dagger };
