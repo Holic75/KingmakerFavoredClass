@@ -306,7 +306,13 @@ namespace ZFavoredClass
                                                "",
                                                wisdom_in_flesh.Icon,
                                                FeatureGroup.None,
-                                               Helpers.CreateAddStatBonus(s, 2, ModifierDescriptor.Trait),
+                                                 Helpers.Create<CallOfTheWild.StatReplacementMechanics.ReplaceBaseStatForStatTypeLogic>(r =>
+                                                 {
+                                                     r.StatTypeToReplaceBastStatFor = s;
+                                                     r.NewBaseStatType = StatType.Wisdom;
+                                                 }),
+                                                 Helpers.Create<RecalculateOnStatChange>(r => r.Stat = StatType.Wisdom),
+                                                 Helpers.Create<RecalculateOnStatChange>(r => r.Stat = StatType.Strength),
                                                Helpers.Create<AddClassSkill>(a => a.Skill = s)
                                                );
                 wisdom_in_flesh.AllFeatures = wisdom_in_flesh.AllFeatures.AddToArray(f);
