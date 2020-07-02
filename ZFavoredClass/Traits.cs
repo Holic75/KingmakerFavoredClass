@@ -230,9 +230,12 @@ namespace ZFavoredClass
                                                       Helpers.Create<CallOfTheWild.EvolutionMechanics.addSelection>(a => a.selection = traits_selection),
                                                       Helpers.Create<CallOfTheWild.EvolutionMechanics.addSelection>(a => a.selection = traits_selection2)
                                                       );
+            var animal_calss = ResourcesLibrary.TryGetBlueprint<BlueprintCharacterClass>("4cd1757a0eea7694ba5c933729a53920");
             additional_traits.AddComponent(Helpers.PrerequisiteNoFeature(additional_traits));
+            additional_traits.AddComponents(Helpers.Create<PrerequisiteNoClassLevel>(p => p.CharacterClass = animal_calss),
+                                            Helpers.Create<PrerequisiteNoClassLevel>(p => p.CharacterClass = Eidolon.eidolon_class));
 
-            
+
             if (enable)
             {
                 Main.logger.Log("Enabling Traits.");
@@ -1369,7 +1372,8 @@ namespace ZFavoredClass
                                                             null);
             finish_the_fight_buff.Stacking = StackingType.Stack;
 
-            var apply_finish_the_fight_buff = Common.createContextActionApplyBuff(finish_the_fight_buff, Helpers.CreateContextDuration(1, DurationRate.Days), dispellable: false);
+            var apply_finish_the_fight_buff = Helpers.CreateConditional(Common.createContextConditionHasBuffFromCaster(finish_the_fight_buff, not: true),
+                                                                        Common.createContextActionApplyBuff(finish_the_fight_buff, Helpers.CreateContextDuration(1, DurationRate.Days), dispellable: false));
             finish_the_fight = Helpers.CreateFeature("FinishTheFightTrait",
                                                      finish_the_fight_buff.Name,
                                                      finish_the_fight_buff.Description,
