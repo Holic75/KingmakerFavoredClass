@@ -859,7 +859,7 @@ namespace ZFavoredClass
                                                          );
 
             clever_wordplay = Helpers.CreateFeature("CleverWordpalyTrait",
-                                             "Clever Wordpaly",
+                                             "Clever Wordplay",
                                              "Your cunning and logic are more than a match for another’s confidence and poise.\n"
                                              + "Benefit: You may use your Intelligence modifier when making Bluff checks instead of your Charisma modifier. ",
                                              "",
@@ -941,7 +941,7 @@ namespace ZFavoredClass
             ease_of_faith = Helpers.CreateFeature("EaseOfFaithTrait",
                                              "Ease of Faith",
                                              "Your mentor, the person who invested your faith in you from an early age, took steps to ensure you understood that what powers your divine magic is no different from that which powers the magic of other religions. This philosophy makes it easier for you to interact with others who may not share your views.\n"
-                                             + "Benefits: You gain a +1 bonus on Diplomacy checks, and consider Persutaion skill as class skill for the purpose of diplomacy checks.",
+                                             + "Benefits: You gain a +1 bonus on Diplomacy checks, and consider Persuasion skill as class skill for the purpose of diplomacy checks.",
                                              "",
                                              Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // skill focus diplomacy
                                              FeatureGroup.Trait,
