@@ -66,7 +66,7 @@ namespace ZFavoredClass
         static public BlueprintFeature fencer;
         static public BlueprintFeature honored_fist_of_society;
         static public BlueprintFeature threatening_defender;
-        
+
 
 
         //FAITH TRAITS
@@ -149,6 +149,9 @@ namespace ZFavoredClass
         static public BlueprintFeature grounded;
         static public BlueprintFeature shadow_stabber;
         static public BlueprintFeature warrior_of_old;
+        static public BlueprintFeatureSelection intrepid_volunteer;
+        static public BlueprintFeature helpful;
+        static public BlueprintFeature well_informed;
 
         //REGIONAL TRAITS
         static public BlueprintFeature honeyed_tongue;
@@ -173,6 +176,7 @@ namespace ZFavoredClass
         static public BlueprintFeature demon_bane_summoner;
         //elemental_pupil;
         static public BlueprintFeature empathic_diplomat;
+        static public BlueprintFeature cunning_liar;
         static public BlueprintFeature flotsam;
         static public BlueprintFeature minkai_advocate;
         static public BlueprintFeature pirate_duelist;
@@ -188,7 +192,7 @@ namespace ZFavoredClass
         static public BlueprintFeatureSelection religion_traits;
         static public BlueprintFeatureSelection social_traits;
         static public BlueprintFeatureSelection racial_traits;
-        static public BlueprintFeatureSelection traits_selection;
+        static public BlueprintFeatureSelection traits_selection, traits_selection2;
         static public BlueprintFeatureSelection regional_traits;
 
         static public BlueprintFeature additional_traits;
@@ -220,7 +224,7 @@ namespace ZFavoredClass
             adopted.IgnorePrerequisites = true;
 
             social_traits.AllFeatures = social_traits.AllFeatures.AddToArray(adopted);
-            var traits_selection2 = library.CopyAndAdd(traits_selection, "TraitSelection2Feature", "");
+            traits_selection2 = library.CopyAndAdd(traits_selection, "TraitSelection2Feature", "");
             additional_traits = Helpers.CreateFeature("AdditionalTraitsFeature",
                                                       "Additional Traits",
                                                       "You gain two character traits of your choice. These traits must be chosen from different lists, and cannot be chosen from lists from which you have already selected a character trait. You must meet any additional qualifications for the character traits you choose — this feat cannot enable you to select a dwarf character trait if you are an elf, for example.",
@@ -242,10 +246,43 @@ namespace ZFavoredClass
                 var basic_feats_progression = library.Get<BlueprintProgression>("5b72dd2ca2cb73b49903806ee8986325"); //basic feats
                 basic_feats_progression.LevelEntries[0].Features = new BlueprintFeatureBase[] { traits_selection, traits_selection2 }.AddToArray(basic_feats_progression.LevelEntries[0].Features).ToList();
                 library.AddFeats(additional_traits);
+
+                addTraitsToCompanions();
             }
 
 
 
+        }
+
+        static void addTraitsToCompanions()
+        {
+            var valerie_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("912444657701e2d4ab2634c3d1e130ad");
+            var amiri1_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("df943986ee329e84a94360f2398ae6e6");
+            var tristian_companion = ResourcesLibrary.TryGetBlueprint<BlueprintUnit>("f6c23e93512e1b54dba11560446a9e02");
+            var harrim_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("8910febae2a7b9f4ba5eca4dde1e9649");
+            var linzi_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("920cb420385dbb34681b620b6c1b59e9");
+            var ekun_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("0bc6dc9b6648a744899752508addae8c");
+            var jaethal_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("34280596dd550074ca55bd15285451b3");
+            var jubilost_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("c9618e3c61e65114b994f3fabcae1d97");
+            var nok_nok_companion = ResourcesLibrary.TryGetBlueprint<BlueprintUnit>("f9417988783876044b76f918f8636455");
+            var kanerah_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("ccb52e235941e0442be0cb0ee5570f07");
+            var kalikke_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("385e8d69b89992844b0992caf666a5fd");
+            var octavia_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("200151a5a5c78a4439d0f6e9fb26620a");
+            var regongar_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("12ee53c9e546719408db257f489ec366");
+            var varn_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("2babd2d4687b5ee428966322eccfe4b6");
+            var cephal_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("d152b07305353474ba15d750015d99ee");
+
+            //linzi - reactionary and helpful
+            Common.addFeatureSelectionToAcl(linzi_feature.GetComponent<AddClassLevels>(), traits_selection, combat_traits);
+            Common.addFeatureSelectionToAcl(linzi_feature.GetComponent<AddClassLevels>(), combat_traits, reactionary);
+            Common.addFeatureSelectionToAcl(linzi_feature.GetComponent<AddClassLevels>(), traits_selection2, racial_traits);
+            Common.addFeatureSelectionToAcl(linzi_feature.GetComponent<AddClassLevels>(), racial_traits, helpful);
+
+            //jaethal - reactionary and helpful
+            Common.addFeatureSelectionToAcl(jaethal_feature.GetComponent<AddClassLevels>(), traits_selection, combat_traits);
+            Common.addFeatureSelectionToAcl(jaethal_feature.GetComponent<AddClassLevels>(), combat_traits, deft_dodger);
+            Common.addFeatureSelectionToAcl(jaethal_feature.GetComponent<AddClassLevels>(), traits_selection2, racial_traits);
+            Common.addFeatureSelectionToAcl(jaethal_feature.GetComponent<AddClassLevels>(), racial_traits, warrior_of_old);
         }
 
 
@@ -315,7 +352,7 @@ namespace ZFavoredClass
                                                      r.NewBaseStatType = StatType.Wisdom;
                                                  }),
                                                  Helpers.Create<RecalculateOnStatChange>(r => r.Stat = StatType.Wisdom),
-                                                 Helpers.Create<RecalculateOnStatChange>(r => r.Stat = StatType.Strength),
+                                                 Helpers.Create<RecalculateOnStatChange>(r => r.Stat = (s == StatType.SkillAthletics) ? StatType.Strength : StatType.Dexterity),
                                                Helpers.Create<AddClassSkill>(a => a.Skill = s)
                                                );
                 wisdom_in_flesh.AllFeatures = wisdom_in_flesh.AllFeatures.AddToArray(f);
@@ -341,7 +378,7 @@ namespace ZFavoredClass
             erastils_speaker = Helpers.CreateFeature("ErastilsSpeakerTrait",
                                                      "Erastil's Speaker",
                                                      "You understand the importance of keeping the peace in your community, and you have learned how to speak to the faithful in ways that they understand.\n"
-                                                     + "Benefits: You gain a +1 bonus on Diplomacy checks, and consider Persutaion skill as class skill for the purpose of diplomacy checks.",
+                                                     + "Benefits: You gain a +1 bonus on Diplomacy checks, and consider Persuasion skill as class skill for the purpose of diplomacy checks.",
                                                      "",
                                                      Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // skill focus diplomacy
                                                      FeatureGroup.Trait,
@@ -428,7 +465,7 @@ namespace ZFavoredClass
             illuminator = Helpers.CreateFeature("IlluminatorTrait",
                                                 "Illuminator",
                                                 "When you are filled with the light of Sarenrae, your speech takes on a fiery eloquence.\n"
-                                                + "Benefits: You gain a +2 bonus on Diplomacy checks, and consider Persutaion skill as class skill for the purpose of diplomacy checks.",
+                                                + "Benefits: You gain a +2 bonus on Diplomacy checks, and consider Persuasion skill as class skill for the purpose of diplomacy checks.",
                                                 "",
                                                 Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // skill focus diplomacy
                                                 FeatureGroup.Trait,
@@ -1330,7 +1367,7 @@ namespace ZFavoredClass
 
             latent_psion = Helpers.CreateFeature("LatentPsionTrait",
                                                  "Latent Psion",
-                                                 "The power to affect the world with the mind is very much a reality in your distant homeland. Although you may not even have been born in Vudra, this power remains potent in your mind as well and protects you from mental assault.\nBenefit: You gain a +2 trait bonus on saves against mindaffecting effects.",
+                                                 "The power to affect the world with the mind is very much a reality in your distant homeland. Although you may not even have been born in Vudra, this power remains potent in your mind as well and protects you from mental assault.\nBenefit: You gain a +2 trait bonus on saves against mind-affecting effects.",
                                                  "",
                                                  Helpers.GetIcon("175d1577bb6c9a04baf88eec99c66334"), // Iron will
                                                  FeatureGroup.Trait,
@@ -1479,6 +1516,90 @@ namespace ZFavoredClass
                                                  );
 
 
+            well_informed = Helpers.CreateFeature("WellInformedTrait",
+                             "Well-Informed",
+                             "You make it a point to know everyone and to be connected to everything around you. You frequent the best taverns, attend all of the right events, and graciously help anyone who needs it.\n"
+                             + "Benefits: You gain a +1 bonus on Diplomacy checks, and consider Persuasion skill as class skill for the purpose of diplomacy checks.",
+                             "",
+                             Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // skill focus diplomacy
+                             FeatureGroup.Trait,
+                             Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.halfling),
+                             Helpers.CreateAddStatBonus(StatType.CheckDiplomacy, 1, ModifierDescriptor.Trait),
+                             Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckDiplomacy; })
+                             );
+
+
+            helpful = Helpers.CreateFeature("HelpfulTrait",
+                             "Helpful",
+                             "You see nothing wrong with letting others achieve greatness so long as the job gets done.\n"
+                             + "Benefits: Whenever you successfully perform an aid another action, you grant your ally a +4 bonus instead of the normal +2.",
+                             "",
+                             Helpers.GetIcon("55a037e514c0ee14a8e3ed14b47061de"), // remove fear
+                             FeatureGroup.Trait,
+                             Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.halfling)
+                             );
+
+            Helpers.SetField(Rebalance.aid_another_config, "m_FeatureList",
+                 Helpers.GetField<BlueprintFeature[]>(Rebalance.aid_another_config, "m_FeatureList").AddToArray(helpful, helpful));
+
+
+            intrepid_volunteer = Helpers.CreateFeatureSelection("IntrepidVolunteerFeatureSelection",
+                                                                "Intrepid Volunteer",
+                                                                "Like many free halflings, you volunteered readily for military service or an adventuring career and met other half lings who showed you how to make up for your small size. Choose one Strengthbased skill or one combat maneuver. You can use your Dexterity modifier in place of your Strength modifier to calculate your total modifier for that skill check or combat maneuver check.",
+                                                                "",
+                                                                null,
+                                                                FeatureGroup.Trait,
+                                                                Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.halfling)
+                                                                );
+
+            var intrepid_volunteer_athletics = Helpers.CreateFeature("IntrepidVolunteerAthleticsFeatureSelection",
+                                                    "Intrepid Volunteer (Athletics)",
+                                                    intrepid_volunteer.Description,
+                                                    "",
+                                                    Helpers.GetIcon("9db907332bdaec1468cff3a99efef5b4"), //sf athletics
+                                                    FeatureGroup.Trait,
+                                                    Helpers.Create<CallOfTheWild.StatReplacementMechanics.ReplaceBaseStatForStatTypeLogic>(r =>
+                                                    {
+                                                        r.StatTypeToReplaceBastStatFor = StatType.SkillAthletics;
+                                                        r.NewBaseStatType = StatType.Dexterity;
+                                                    }),
+                                                     Helpers.Create<RecalculateOnStatChange>(r => r.Stat = StatType.Strength),
+                                                     Helpers.Create<RecalculateOnStatChange>(r => r.Stat = StatType.Dexterity)
+                                                    );
+
+            intrepid_volunteer.AllFeatures = new BlueprintFeature[] { intrepid_volunteer_athletics };
+            var maneuvers = new CombatManeuver[][] { new CombatManeuver[] { CombatManeuver.BullRush },
+                                                     new CombatManeuver[] {CombatManeuver.Disarm },
+                                                     new CombatManeuver[] {CombatManeuver.Trip },
+                                                     new CombatManeuver[] {CombatManeuver.SunderArmor },
+                                                     new CombatManeuver[] {CombatManeuver.DirtyTrickBlind, CombatManeuver.DirtyTrickEntangle, CombatManeuver.DirtyTrickSickened }
+                                                   };
+
+            var names = new string[] { "Bull Rush", "Disarm", "Trip", "Sunder", "Dirty Trick" };
+            var icons = new UnityEngine.Sprite[]
+            {
+                library.Get<BlueprintFeature>("b3614622866fe7046b787a548bbd7f59").Icon,
+                library.Get<BlueprintFeature>("25bc9c439ac44fd44ac3b1e58890916f").Icon,
+                library.Get<BlueprintFeature>("0f15c6f70d8fb2b49aa6cc24239cc5fa").Icon,
+                library.Get<BlueprintFeature>("9719015edcbf142409592e2cbaab7fe1").Icon,
+                library.Get<BlueprintFeature>("ed699d64870044b43bb5a7fbe3f29494").Icon,
+            };
+
+            for (int i = 0; i < maneuvers.Length; i++)
+            {
+                var feat = Helpers.CreateFeature("MagusManeuverMastery" + maneuvers[i][0].ToString() + "Feature",
+                                                 intrepid_volunteer.Name + " (" + names[i] + ")",
+                                                 intrepid_volunteer.Description,
+                                                 "",
+                                                 icons[i],
+                                                 FeatureGroup.Trait,
+                                                 Helpers.Create<CallOfTheWild.CombatManeuverMechanics.ReplaceCombatManeuverStatForSpecificManeuver>(c => { c.StatType = StatType.Dexterity; c.maneuvers = maneuvers[i]; })
+                                                 );
+
+                intrepid_volunteer.AllFeatures = intrepid_volunteer.AllFeatures.AddToArray(feat);
+            }
+
+
             racial_traits = createTraitSelction("RacialTrait",
                                     "Race Trait",
                                     "Race traits are keyed to specific races or ethnicities. In order to select a race trait, your character must be of the trait’s race or ethnicity. If your race or ethnicity changes at some later point (as could be possible due to the result of polymorph magic or a reincarnation spell), the benefits gained by your racial trait persist— only if your mind and memories change as well do you lose the benefits of a race trait. Of course, in such an event, you’re also likely to lose skills, feats, and a whole lot more!",
@@ -1497,7 +1618,10 @@ namespace ZFavoredClass
                                     shield_bearer,
                                     grounded,
                                     shadow_stabber,
-                                    warrior_of_old
+                                    warrior_of_old,
+                                    well_informed,
+                                    helpful,
+                                    intrepid_volunteer
                                     );
         }
 
@@ -1505,9 +1629,9 @@ namespace ZFavoredClass
         static void createRegionalTraits()
         {
             honeyed_tongue = Helpers.CreateFeature("HoneyedTonguTrait",
-                                         "Hineyed Tongue",
+                                         "Honeyed Tongue",
                                          "Having matured in the melting pot of New Oppara, you know the customs of the Tian- Shus as well as those of the Taldans, and you utilize this knowledge to create peace between rival groups. \n"
-                                         + "Benefits: You gain a +1 bonus on Diplomacy checks, and consider Persutaion skill as class skill for the purpose of diplomacy checks.",
+                                         + "Benefits: You gain a +1 bonus on Diplomacy checks, and consider Persuasion skill as class skill for the purpose of diplomacy checks.",
                                          "",
                                          Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // skill focus diplomacy
                                          FeatureGroup.Trait,
@@ -1744,6 +1868,22 @@ namespace ZFavoredClass
                                                          s.new_stat = StatType.Wisdom;
                                                      })
                                                      );
+
+            cunning_liar = Helpers.CreateFeature("CunningLiarTrait",
+                                         "Cunning Liar",
+                                         "You were forced into hiding or willingly went on the run at a young age, and learned to reading others’ interests to inform your lies.\n"
+                                         + "Benefit: You modify your Bluff checks using your Wisdom modifier, not your Charisma modifier.",
+                                         "",
+                                         Helpers.GetIcon("1621be43793c5bb43be55493e9c45924"), // sf diplomacy
+                                         FeatureGroup.Trait,
+                                         Helpers.Create<CallOfTheWild.SkillMechanics.DependentAbilityScoreCheckStatReplacement>(s =>
+                                         {
+                                             s.stat = StatType.CheckBluff;
+                                             s.old_stat = StatType.Charisma;
+                                             s.new_stat = StatType.Wisdom;
+                                         })
+                                         );
+
             flotsam = Helpers.CreateFeature("FlotsamTrait",
                                             "Flotsam",
                                             "You were one of only a few that survived the destruction of the merchant vessel Vantage. Your crew was more than able to hold off the blundering pirate attackers, but their red dragon ally proved too much for your defenses. As you watched the sharks and eels feast on the bodies of your fallen comrades, you vowed to see Aashaq slain. \n"
@@ -1794,6 +1934,7 @@ namespace ZFavoredClass
                                                 militia,
                                                 freed_slave,
                                                 aspiring_hellknight,
+                                                cunning_liar,
                                                 secret_revolutionary,
                                                 glory_of_old,
                                                 spiritual_forester,

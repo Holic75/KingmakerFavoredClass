@@ -33,7 +33,7 @@ namespace ZFavoredClass
                         deity_for_everyone = (bool)jo["deity_for_everyone"];
                         enable_traits = (bool)jo["enable_traits"];
                 }
-                }
+            }
         }
 
         static internal Settings settings = new Settings();

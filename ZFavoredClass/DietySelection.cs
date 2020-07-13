@@ -17,7 +17,7 @@ namespace ZFavoredClass
         internal static void run()
         {
             addDietySelectionToEveryone();
-            //fixCompanions();
+            fixCompanions();
         }
 
 

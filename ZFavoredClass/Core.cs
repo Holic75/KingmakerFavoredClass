@@ -1367,6 +1367,5 @@ namespace ZFavoredClass
             }
 
         }
-
     }
 }
