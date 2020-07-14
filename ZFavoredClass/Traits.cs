@@ -93,6 +93,7 @@ namespace ZFavoredClass
         static public BlueprintFeature bruising_intellect;
         static public BlueprintFeature clever_wordplay;
         static public BlueprintFeature child_of_streets;
+        static public BlueprintFeature seeker;
 
         //MAGIC TRAITS
         static public BlueprintFeature classically_schooled;
@@ -154,6 +155,7 @@ namespace ZFavoredClass
         static public BlueprintFeature well_informed;
 
         //REGIONAL TRAITS
+        static public BlueprintFeature chilled_by_brutality;
         static public BlueprintFeature honeyed_tongue;
         static public BlueprintFeature militia;
         static public BlueprintFeature freed_slave;
@@ -278,11 +280,35 @@ namespace ZFavoredClass
             Common.addFeatureSelectionToAcl(linzi_feature.GetComponent<AddClassLevels>(), traits_selection2, racial_traits);
             Common.addFeatureSelectionToAcl(linzi_feature.GetComponent<AddClassLevels>(), racial_traits, helpful);
 
-            //jaethal - reactionary and helpful
+            //jaethal - deft dodger and warrior of old
             Common.addFeatureSelectionToAcl(jaethal_feature.GetComponent<AddClassLevels>(), traits_selection, combat_traits);
             Common.addFeatureSelectionToAcl(jaethal_feature.GetComponent<AddClassLevels>(), combat_traits, deft_dodger);
             Common.addFeatureSelectionToAcl(jaethal_feature.GetComponent<AddClassLevels>(), traits_selection2, racial_traits);
             Common.addFeatureSelectionToAcl(jaethal_feature.GetComponent<AddClassLevels>(), racial_traits, warrior_of_old);
+
+            //harrim - glory of old and fate favored
+            Common.addFeatureSelectionToAcl(harrim_feature.GetComponent<AddClassLevels>(), traits_selection, faith_traits);
+            Common.addFeatureSelectionToAcl(harrim_feature.GetComponent<AddClassLevels>(), faith_traits, fates_favored);
+            Common.addFeatureSelectionToAcl(harrim_feature.GetComponent<AddClassLevels>(), traits_selection2, regional_traits);
+            Common.addFeatureSelectionToAcl(harrim_feature.GetComponent<AddClassLevels>(), regional_traits, glory_of_old);
+
+            //valerie - threatening defender, fate's favored
+            Common.addFeatureSelectionToAcl(valerie_feature.GetComponent<AddClassLevels>(), traits_selection, faith_traits);
+            Common.addFeatureSelectionToAcl(valerie_feature.GetComponent<AddClassLevels>(), faith_traits, fates_favored);
+            Common.addFeatureSelectionToAcl(valerie_feature.GetComponent<AddClassLevels>(), traits_selection2, combat_traits);
+            Common.addFeatureSelectionToAcl(valerie_feature.GetComponent<AddClassLevels>(), combat_traits, threatening_defender);
+
+            //amiri - chilled by brutality, bully
+            Common.addFeatureSelectionToAcl(amiri1_feature.GetComponent<AddClassLevels>(), traits_selection, racial_traits);
+            Common.addFeatureSelectionToAcl(amiri1_feature.GetComponent<AddClassLevels>(), racial_traits, bred_for_war);
+            Common.addFeatureSelectionToAcl(amiri1_feature.GetComponent<AddClassLevels>(), traits_selection2, regional_traits);
+            Common.addFeatureSelectionToAcl(amiri1_feature.GetComponent<AddClassLevels>(), regional_traits, chilled_by_brutality);
+
+            //tristian - seeker, exalted
+            Common.addFeatureSelectionToAcl(tristian_companion.GetComponent<AddClassLevels>(), traits_selection, social_traits);
+            Common.addFeatureSelectionToAcl(tristian_companion.GetComponent<AddClassLevels>(), social_traits, seeker);
+            Common.addFeatureSelectionToAcl(tristian_companion.GetComponent<AddClassLevels>(), traits_selection2, faith_traits);
+            Common.addFeatureSelectionToAcl(tristian_companion.GetComponent<AddClassLevels>(), faith_traits, exalted_of_the_society);
         }
 
 
@@ -922,6 +948,17 @@ namespace ZFavoredClass
                                          Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillThievery)
                                          );
 
+            seeker = Helpers.CreateFeature("SeekerTrait",
+                                         "Seeker",
+                                         "You are always on the lookout for reward and danger.\n"
+                                         + "Benefits: You gain a +1 trait bonus on Perception checks, and Perception is always a class skill for you.",
+                                         "",
+                                         Helpers.GetIcon("f74c6bdf5c5f5374fb9302ecdc1f7d64"), // sf perception
+                                         FeatureGroup.Trait,
+                                         Helpers.CreateAddStatBonus(StatType.SkillPerception, 1, ModifierDescriptor.Trait),
+                                         Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillPerception)
+                                         );
+
             social_traits = createTraitSelction("SocialTrait",
                                                 "Social Trait",
                                                 "Social Traits are a sort of catch-all category—these traits reflect the social upbringing of your character, your background with high society or lack thereof, and your history with parents, siblings, friends, competitors, and enemies.",
@@ -932,7 +969,8 @@ namespace ZFavoredClass
                                                 student_of_philosophy,
                                                 bruising_intellect,
                                                 clever_wordplay,
-                                                child_of_streets
+                                                child_of_streets,
+                                                seeker
                                                 );
         }
 
@@ -1047,7 +1085,8 @@ namespace ZFavoredClass
 
             fates_favored =  Helpers.CreateFeature("FatesFavoredTrait",
                                                   "Fate's Favored",
-                                                  "Whenever you are under the effect of a luck bonus of any kind, that bonus increases by 1.",
+                                                  "The fates watch over you.\n"
+                                                  + "Benifit: Whenever you are under the effect of a luck bonus of any kind, that bonus increases by 1.",
                                                   "",
                                                   Helpers.GetIcon("9a7e3cd1323dfe347a6dcce357844769"), // blessing luck & resolve
                                                   FeatureGroup.Trait,
@@ -1233,7 +1272,7 @@ namespace ZFavoredClass
                                                    FeatureGroup.Trait,
                                                    Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusOnAttacksOfOpportunity>(a =>
                                                    {
-                                                       a.categories = new WeaponCategory[] { WeaponCategory.BastardSword, WeaponCategory.DuelingSword, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.Longsword, WeaponCategory.Greatsword };
+                                                       a.categories = new WeaponCategory[] { WeaponCategory.Rapier, WeaponCategory.BastardSword, WeaponCategory.DuelingSword, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.Longsword, WeaponCategory.Greatsword };
                                                        a.Value = 1;
                                                        a.Descriptor = ModifierDescriptor.Trait;
                                                    }
@@ -1628,6 +1667,7 @@ namespace ZFavoredClass
 
         static void createRegionalTraits()
         {
+
             honeyed_tongue = Helpers.CreateFeature("HoneyedTonguTrait",
                                          "Honeyed Tongue",
                                          "Having matured in the melting pot of New Oppara, you know the customs of the Tian- Shus as well as those of the Taldans, and you utilize this knowledge to create peace between rival groups. \n"
@@ -1829,6 +1869,17 @@ namespace ZFavoredClass
                                                     Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.Bonus = 2; s.ModifierDescriptor = ModifierDescriptor.Trait; s.SpellDescriptor = SpellDescriptor.Fear | SpellDescriptor.Shaken; })
                                                     );
 
+            chilled_by_brutality = Helpers.CreateFeature("ChilledByBrutalityTrait",
+                                        "Chilled by Brutality",
+                                        "You were part of a group that was mercilessly attacked by giants of the tundra, who may have gone so far as to eat the dead and dying. After that, little can faze you, but you strongly prefer to finish fights with giants quickly to prevent anything like that from happening again.\n"
+                                        + "Benifit: You gain a +2 trait bonus on attack rolls to confirm critical hits against giants and on saving throws against fear effects.",
+                                        "",
+                                        Helpers.GetIcon("2a6a2f8e492ab174eb3f01acf5b7c90a"), // defensive stance
+                                        FeatureGroup.Trait,
+                                        Helpers.Create<AttackBonusAgainstFactOwner>(a => { a.AttackBonus = 0; a.Bonus = 2; a.Descriptor = ModifierDescriptor.Trait; a.CheckedFact = Common.giant_humanoid; }),
+                                        Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.Bonus = 2; s.ModifierDescriptor = ModifierDescriptor.Trait; s.SpellDescriptor = SpellDescriptor.Fear | SpellDescriptor.Shaken; })
+                                        );
+
             var demon_bane_summoner_buff = Helpers.CreateBuff("DemonbaneSummonerBuff",
                                                                "Demonbane Summoner",
                                                                "Your line is derived directly from the god callers of Sarkoris. You adamantly oppose the demonic forces of the Worldwound in hopes of reclaiming your lost lands.\n"
@@ -1891,7 +1942,7 @@ namespace ZFavoredClass
                                             "",
                                             Helpers.GetIcon("3f9605134d34e1243b096e1f6cb4c148"), // protection from fire
                                             FeatureGroup.Trait,
-                                            Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.Bonus = 2; s.ModifierDescriptor = ModifierDescriptor.Trait; s.SpellDescriptor = SpellDescriptor.Fear | SpellDescriptor.Shaken; })
+                                            Helpers.Create<SavingThrowBonusAgainstDescriptor>(s => { s.Bonus = 2; s.ModifierDescriptor = ModifierDescriptor.Trait; s.SpellDescriptor = SpellDescriptor.Fire; })
                                             );
 
             minkai_advocate = Helpers.CreateFeature("MinkaiAdvocateTrait",
@@ -1930,6 +1981,7 @@ namespace ZFavoredClass
             regional_traits = createTraitSelction("RegionalTrait",
                                                 "Regional Trait",
                                                 "Regional traits are keyed to specific regions, be they large (such as a nation or geographic region) or small (such as a city or a specific mountain). In order to select a regional trait, your PC must have spent at least a year living in that region. At first level, you can only select one regional trait (typically the one tied to your character’s place of birth or homeland), despite the number of regions you might wish to write into your character’s background.",
+                                                chilled_by_brutality,
                                                 honeyed_tongue,
                                                 militia,
                                                 freed_slave,
