@@ -768,7 +768,7 @@ namespace ZFavoredClass
 
             addFavoredClassToCompanion(favored_hp, valerie_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_skill, amiri1_feature.GetComponent<AddClassLevels>());
-            addFavoredClassToCompanion(favored_hp, tristian_companion.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_skill, tristian_companion.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, harrim_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, linzi_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, ekun_feature.GetComponent<AddClassLevels>());
@@ -778,7 +778,7 @@ namespace ZFavoredClass
             addFavoredClassToCompanion(wild_talent, kanerah_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, kalikke_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, octavia_feature.GetComponent<AddClassLevels>());
-            addFavoredClassToCompanion(favored_hp, regongar_feature.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_skill, regongar_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(rogue_talent, varn_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, cephal_feature.GetComponent<AddClassLevels>());
         }

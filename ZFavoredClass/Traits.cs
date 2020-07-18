@@ -298,7 +298,7 @@ namespace ZFavoredClass
             Common.addFeatureSelectionToAcl(valerie_feature.GetComponent<AddClassLevels>(), traits_selection2, combat_traits);
             Common.addFeatureSelectionToAcl(valerie_feature.GetComponent<AddClassLevels>(), combat_traits, threatening_defender);
 
-            //amiri - chilled by brutality, bully
+            //amiri - chilled by brutality, bred for war
             Common.addFeatureSelectionToAcl(amiri1_feature.GetComponent<AddClassLevels>(), traits_selection, racial_traits);
             Common.addFeatureSelectionToAcl(amiri1_feature.GetComponent<AddClassLevels>(), racial_traits, bred_for_war);
             Common.addFeatureSelectionToAcl(amiri1_feature.GetComponent<AddClassLevels>(), traits_selection2, regional_traits);
@@ -309,6 +309,19 @@ namespace ZFavoredClass
             Common.addFeatureSelectionToAcl(tristian_companion.GetComponent<AddClassLevels>(), social_traits, seeker);
             Common.addFeatureSelectionToAcl(tristian_companion.GetComponent<AddClassLevels>(), traits_selection2, faith_traits);
             Common.addFeatureSelectionToAcl(tristian_companion.GetComponent<AddClassLevels>(), faith_traits, exalted_of_the_society);
+
+            //regongar - finish the fight, reactionary
+            Common.addFeatureSelectionToAcl(regongar_feature.GetComponent<AddClassLevels>(), traits_selection, racial_traits);
+            Common.addFeatureSelectionToAcl(regongar_feature.GetComponent<AddClassLevels>(), racial_traits, finish_the_fight);
+            Common.addFeatureSelectionToAcl(regongar_feature.GetComponent<AddClassLevels>(), traits_selection2, combat_traits);
+            Common.addFeatureSelectionToAcl(regongar_feature.GetComponent<AddClassLevels>(), combat_traits, reactionary);
+
+            //octavia - clever wordplay, magical lineage(battering blast)
+            Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), traits_selection, racial_traits);
+            Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), racial_traits, elven_reflexes);
+            Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), traits_selection2, magic_traits);
+            Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), magic_traits, magical_lineage);
+            Common.addParametrizedFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), magical_lineage, library.Get<BlueprintAbility>("0a2f7c6aa81bc6548ac7780d8b70bcbc"));
         }
 
 
@@ -354,7 +367,7 @@ namespace ZFavoredClass
             wisdom_in_flesh = Helpers.CreateFeatureSelection("WisdomInFleshTraitSelection",
                                                              "Wisdom in Flesh",
                                                              "Your hours of meditation on inner perfection and the nature of strength and speed allow you to focus your thoughts to achieve things your body might not normally be able to do on its own.\n"
-                                                             + "Benifits: Select any Strength-, Constitution-, or Dexterity-based skill. You may make checks with that skill using your Wisdom modifier instead of the skill’s normal ability score. That skill is always a class skill for you.",
+                                                             + "Benefits: Select any Strength-, Constitution-, or Dexterity-based skill. You may make checks with that skill using your Wisdom modifier instead of the skill’s normal ability score. That skill is always a class skill for you.",
                                                              "",
                                                              Helpers.GetIcon("35f3724d4e8877845af488d167cb8a89"), //mind blank
                                                              FeatureGroup.Trait,
@@ -393,7 +406,7 @@ namespace ZFavoredClass
                                                    FeatureGroup.Trait,
                                                    Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusOnAttacksOfOpportunity>(a =>
                                                    {
-                                                       a.categories = new WeaponCategory[] { WeaponCategory.BastardSword, WeaponCategory.DuelingSword, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.Longsword, WeaponCategory.Greatsword };
+                                                       a.categories = new WeaponCategory[] { WeaponCategory.Rapier, WeaponCategory.BastardSword, WeaponCategory.DuelingSword, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.Longsword, WeaponCategory.Greatsword };
                                                        a.Value = 1;
                                                        a.Descriptor = ModifierDescriptor.Trait;
                                                    }
@@ -555,7 +568,7 @@ namespace ZFavoredClass
             good_natured = Helpers.CreateFeature("GoodNaturedTrait",
                                                     "Good Natured",
                                                     "You have an unusually sunny spirit, and it takes serious doing to dampen your mood.\n"
-                                                    + "Benifit: you gain a +2 trait bonus on all saves against fear.",
+                                                    + "Benefit: you gain a +2 trait bonus on all saves against fear.",
                                                     "",
                                                     Helpers.GetIcon("dd38f33c56ad00a4da386c1afaa49967"), // blessing of courage
                                                     FeatureGroup.Trait,
@@ -589,7 +602,7 @@ namespace ZFavoredClass
             stoic_optimism = Helpers.CreateFeature("StoicOptimismTrait",
                                         "Stoic Optimism",
                                         "You realize that accepting the pain in life accentuates its joys by contrast, and so your hope sustains you where others despair.\n"
-                                        + "Benifit: you gain a +2 trait bonus on all saves against fear.",
+                                        + "Benefit: you gain a +2 trait bonus on all saves against fear.",
                                         "",
                                         Helpers.GetIcon("dd38f33c56ad00a4da386c1afaa49967"), // blessing of courage
                                         FeatureGroup.Trait,
@@ -799,7 +812,7 @@ namespace ZFavoredClass
             magical_knack = Helpers.CreateFeatureSelection("MagicalKnackraitSelection",
                                                          "Magical Knack",
                                                          "You were raised, either wholly or in part, by a magical creature, either after it found you abandoned in the woods or because your parents often left you in the care of a magical minion. This constant exposure to magic has made its mysteries easy for you to understand, even when you turn your mind to other devotions and tasks.\n"
-                                                         + "Benifit: Pick a class when you gain this trait—your caster level in that class gains a +2 trait bonus as long as this bonus doesn’t raise your caster level above your current Hit Dice.",
+                                                         + "Benefit: Pick a class when you gain this trait—your caster level in that class gains a +2 trait bonus as long as this bonus doesn’t raise your caster level above your current Hit Dice.",
                                                          "",
                                                          Helpers.GetIcon("55edf82380a1c8540af6c6037d34f322"), //elven magic
                                                          FeatureGroup.Trait
@@ -1086,7 +1099,7 @@ namespace ZFavoredClass
             fates_favored =  Helpers.CreateFeature("FatesFavoredTrait",
                                                   "Fate's Favored",
                                                   "The fates watch over you.\n"
-                                                  + "Benifit: Whenever you are under the effect of a luck bonus of any kind, that bonus increases by 1.",
+                                                  + "Benefit: Whenever you are under the effect of a luck bonus of any kind, that bonus increases by 1.",
                                                   "",
                                                   Helpers.GetIcon("9a7e3cd1323dfe347a6dcce357844769"), // blessing luck & resolve
                                                   FeatureGroup.Trait,
@@ -1096,7 +1109,7 @@ namespace ZFavoredClass
             reincarnated = Helpers.CreateFeature("ReincarnatedTrait",
                                         "Reincarnated",
                                         "You lived a previous life as someone—or something— else. For you, life and death are a cycle, and you have no fear of death.\n"
-                                        + "Benifit: You gain a +2 trait bonus on saving throws against fear and death effects.",
+                                        + "Benefit: You gain a +2 trait bonus on saving throws against fear and death effects.",
                                         "",
                                         Helpers.GetIcon("0413915f355a38146bc6ad40cdf27b3f"), // death ward
                                         FeatureGroup.Trait,
@@ -1712,7 +1725,7 @@ namespace ZFavoredClass
             secret_revolutionary = Helpers.CreateFeature("SecretRevolutionaryTrait",
                                                          "Secret Revolutionary",
                                                          "You seek to return Cheliax to its heyday before the rise of the House of the Thrune. You have trained yourself to resist any questioning or torture should you ever be caught.\n"
-                                                         + "Benifit: You gain a +1 trait bonus on saves against mind-affecting effects, and on saves against drugs or poisons.",
+                                                         + "Benefit: You gain a +1 trait bonus on saves against mind-affecting effects, and on saves against drugs or poisons.",
                                                          "",
                                                          Helpers.GetIcon("79042cb55f030614ea29956177977c52"), // Great Fortitude
                                                          FeatureGroup.Trait,
@@ -1723,7 +1736,7 @@ namespace ZFavoredClass
             glory_of_old = Helpers.CreateFeature("GloryOfOldTrait",
                                              "Glory of Old",
                                              "In your veins flows the blood of dwarven heroes from Tar Taargadth. \n"
-                                             + "Benifit: You receive a +1 trait bonus on saving throws against spells, spell-like abilities, and poison.",
+                                             + "Benefit: You receive a +1 trait bonus on saving throws against spells, spell-like abilities, and poison.",
                                              "",
                                              Helpers.GetIcon("f75d3b6110f04d1409564b9d7647db60"), // Great Fortitude
                                              FeatureGroup.Trait,
@@ -1799,7 +1812,7 @@ namespace ZFavoredClass
 
             wayang_spellhunter = library.CopyAndAdd(magical_lineage, "WayangSpellhunterTrait", "");
             wayang_spellhunter.SetNameDescription("Wayang Spellhunter",
-                                                  "You grew up on one of the wayang-populated islands of Minata, and your use of magic while hunting has been a boon to you.\nBenifit: Select a spell of 3rd level or below. When you use this spell with a metamagic feat, it uses up a spell slot one level lower than it normally would.");
+                                                  "You grew up on one of the wayang-populated islands of Minata, and your use of magic while hunting has been a boon to you.\nBenefit: Select a spell of 3rd level or below. When you use this spell with a metamagic feat, it uses up a spell slot one level lower than it normally would.");
 
             valashmai_veteran = Helpers.CreateFeature("ValashmaiVeteranTrait",
                                                      "Valashmai Veteran",
@@ -1826,7 +1839,7 @@ namespace ZFavoredClass
             sound_of_mind = Helpers.CreateFeature("SoundOfMindTrait",
                                                  "Sound of Mind",
                                                  "You have lived in the mountains of Zi Ha and found utter tranquility among the samsarans of the region.\n"
-                                                 + "Benifit: You gain a +2 trait bonus on saving throws against mind-affecting effects.",
+                                                 + "Benefit: You gain a +2 trait bonus on saving throws against mind-affecting effects.",
                                                  "",
                                                  Helpers.GetIcon("175d1577bb6c9a04baf88eec99c66334"), // iron will
                                                  FeatureGroup.Trait,
@@ -1836,7 +1849,7 @@ namespace ZFavoredClass
             xa_hoi_soldier = Helpers.CreateFeature("XaHoiSoldierTrait",
                                     "Xa Hoi Soldier",
                                     "You were a soldier in one of Xa Hoi’s extensive armies, trained under the oversight of one of Pham Duc Quan’s draconic brethren.\n"
-                                    + "Benifit: You gain a +1 trait bonus on Reflex saves.",
+                                    + "Benefit: You gain a +1 trait bonus on Reflex saves.",
                                     "",
                                     Helpers.GetIcon("15e7da6645a7f3d41bdad7c8c4b9de1e"), // Lightning Reflexes
                                     FeatureGroup.Trait,
@@ -1847,7 +1860,7 @@ namespace ZFavoredClass
             blighted_physiology = Helpers.CreateFeature("BlightedPhysiologyTrait",
                                                     "Blighted Physiology",
                                                     "Exposure to the corruption that seeps through every drop of water and grain of dirt in Numeria has altered your body.\n"
-                                                    + "Benifit: Horrif ic growths beneath your skin provide you a +1 natural armor bonus to AC, but your body does not work as a normal creature’s would. You become sickened for 1 round anytime you receive magical healing.",
+                                                    + "Benefit: Horrif ic growths beneath your skin provide you a +1 natural armor bonus to AC, but your body does not work as a normal creature’s would. You become sickened for 1 round anytime you receive magical healing.",
                                                     "",
                                                     Helpers.GetIcon("4e42460798665fd4cb9173ffa7ada323"), // sickened
                                                     FeatureGroup.Trait,
@@ -1862,7 +1875,7 @@ namespace ZFavoredClass
             child_of_crusades = Helpers.CreateFeature("ChildOfCrusadesTrait",
                                                     "Child of Crusades",
                                                     "Your parents stood strong against the demons of the Worldwound, facing down the worst of this world and the Great Beyond. You have inherited their indomitable spirit.\n"
-                                                    + "Benifit: You gain a +2 trait bonus on all saves against fear.",
+                                                    + "Benefit: You gain a +2 trait bonus on all saves against fear.",
                                                     "",
                                                     Helpers.GetIcon("dd38f33c56ad00a4da386c1afaa49967"), // blessing of courage
                                                     FeatureGroup.Trait,
@@ -1872,7 +1885,7 @@ namespace ZFavoredClass
             chilled_by_brutality = Helpers.CreateFeature("ChilledByBrutalityTrait",
                                         "Chilled by Brutality",
                                         "You were part of a group that was mercilessly attacked by giants of the tundra, who may have gone so far as to eat the dead and dying. After that, little can faze you, but you strongly prefer to finish fights with giants quickly to prevent anything like that from happening again.\n"
-                                        + "Benifit: You gain a +2 trait bonus on attack rolls to confirm critical hits against giants and on saving throws against fear effects.",
+                                        + "Benefit: You gain a +2 trait bonus on attack rolls to confirm critical hits against giants and on saving throws against fear effects.",
                                         "",
                                         Helpers.GetIcon("2a6a2f8e492ab174eb3f01acf5b7c90a"), // defensive stance
                                         FeatureGroup.Trait,
@@ -1883,7 +1896,7 @@ namespace ZFavoredClass
             var demon_bane_summoner_buff = Helpers.CreateBuff("DemonbaneSummonerBuff",
                                                                "Demonbane Summoner",
                                                                "Your line is derived directly from the god callers of Sarkoris. You adamantly oppose the demonic forces of the Worldwound in hopes of reclaiming your lost lands.\n"
-                                                               + "Benifit: The attacks of creatures you summon are treated as cold iron for the purpose of overcoming damage reduction.",
+                                                               + "Benefit: The attacks of creatures you summon are treated as cold iron for the purpose of overcoming damage reduction.",
                                                                "",
                                                                Helpers.GetIcon("ce0ece459ebed9941bb096f559f36fa8"),
                                                                null,
@@ -1938,7 +1951,7 @@ namespace ZFavoredClass
             flotsam = Helpers.CreateFeature("FlotsamTrait",
                                             "Flotsam",
                                             "You were one of only a few that survived the destruction of the merchant vessel Vantage. Your crew was more than able to hold off the blundering pirate attackers, but their red dragon ally proved too much for your defenses. As you watched the sharks and eels feast on the bodies of your fallen comrades, you vowed to see Aashaq slain. \n"
-                                            + "Benifit: You gain a +2 trait bonus against spells and effects with the fire descriptor.",
+                                            + "Benefit: You gain a +2 trait bonus against spells and effects with the fire descriptor.",
                                             "",
                                             Helpers.GetIcon("3f9605134d34e1243b096e1f6cb4c148"), // protection from fire
                                             FeatureGroup.Trait,
@@ -1975,7 +1988,7 @@ namespace ZFavoredClass
             secret_of_the_impossible_kingdom = library.CopyAndAdd(gifted_adept, "SecretOfTheImpossibleKingdomTrait", "");
             secret_of_the_impossible_kingdom.SetNameDescription("Secret of the Impossible Kingdom",
                                                                 "You have studied the ancient lore of Vudra at a monastery in Jalmeray, and have learned a mystical secret that empowers your spellcasting.\n"
-                                                                + "Benifit: Pick one spell when you choose this trait—from this point on, whenever you cast that spell, you do so at +1 caster level."
+                                                                + "Benefit: Pick one spell when you choose this trait—from this point on, whenever you cast that spell, you do so at +1 caster level."
                                                                 );
 
             regional_traits = createTraitSelction("RegionalTrait",
