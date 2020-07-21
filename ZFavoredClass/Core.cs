@@ -35,11 +35,13 @@ namespace ZFavoredClass
         {
             public BlueprintFeature partial;
             public BlueprintFeature full;
+            public int divisor;
 
-            public FavoredClassFeature(BlueprintFeature partial_feature, BlueprintFeature full_feature)  
+            public FavoredClassFeature(BlueprintFeature partial_feature, BlueprintFeature full_feature, int fcb_divisor)  
             {
                 partial = partial_feature;
                 full = full_feature;
+                divisor = fcb_divisor;
             }
         }
         const String eldritchScionClassId = "f5b8c63b141b2f44cbb8c2d7579c34f5";
@@ -91,6 +93,7 @@ namespace ZFavoredClass
         static internal BlueprintCharacterClass slayer = library.Get<BlueprintCharacterClass>("c75e0971973957d4dbad24bc7957e4fb");
         static internal BlueprintCharacterClass monk = library.Get<BlueprintCharacterClass>("e8f21e5b58e0569468e420ebea456124");
         static internal BlueprintCharacterClass animal = library.Get<BlueprintCharacterClass>("4cd1757a0eea7694ba5c933729a53920");
+        static internal BlueprintFeatureSelection multi_talented;
 
         static internal FavoredClassFeature rogue_talent;
         static internal FavoredClassFeature wild_talent;
@@ -153,6 +156,8 @@ namespace ZFavoredClass
                                                                                    FeatureGroup.AasimarHeritage);
                 class_guid_bonus_selection_map.Add(c.AssetGuid, bonus_selection);
                 bonus_selection.Mode = SelectionMode.Default;
+                bonus_selection.HideInCharacterSheetAndLevelUp = true;
+                bonus_selection.HideInUI = true;
 
                 var entries = new List<LevelEntry>();
                 int max_lvl = c.PrestigeClass ? 10 : 20;
@@ -231,10 +236,23 @@ namespace ZFavoredClass
             addStatBonus();
             addFavoredEnemyBonuses();
             addSlayerAcBonus();
+            createMultiTalented();
+
             fixCompanions();
-          
+
+
             loadCustomFavoredClassBonuses();
             createPrestigiousSpellcaster();
+        }
+
+
+        static void createMultiTalented()
+        {
+            multi_talented = library.CopyAndAdd(favored_class_selection, "HalfElfmultiTalentedFeatureSelection", "e6a72a23e75545bc9a57a6b94ffc8b69");
+            multi_talented.SetNameDescription("Multitalented",
+                                              "Half-elves choose two favored classes at first level and gain +1 hit point or +1 skill point whenever they take a level in either one of those classes.");
+            multi_talented.Groups = new FeatureGroup[] { FeatureGroup.Racial };
+            half_elf.Features = half_elf.Features.AddToArray(multi_talented);
         }
 
 
@@ -778,39 +796,51 @@ namespace ZFavoredClass
             addFavoredClassToCompanion(wild_talent, kanerah_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, kalikke_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, octavia_feature.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_hp, octavia_feature.GetComponent<AddClassLevels>(), multi_talented, 0, custom_class: rogue);
+            var octavia_acls = octavia_feature.GetComponents<AddClassLevels>().ToArray();
+            if (octavia_acls.Length > 1)
+            {
+                addFavoredClassToCompanion(favored_hp, octavia_acls[1], skip_class_selection: true);
+            }
             addFavoredClassToCompanion(favored_skill, regongar_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(rogue_talent, varn_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, cephal_feature.GetComponent<AddClassLevels>());
         }
 
 
-        static void addFavoredClassToCompanion(FavoredClassFeature favored_feature, AddClassLevels add_classLevels)
+        static void addFavoredClassToCompanion(FavoredClassFeature favored_feature, AddClassLevels add_classLevels, BlueprintFeatureSelection custom_selection = null, int custom_level = -1, bool skip_class_selection = false, BlueprintCharacterClass custom_class = null)
         {
-            var @class = add_classLevels.CharacterClass;
-            var level = add_classLevels.Levels;
+            var @class = custom_class ?? add_classLevels.CharacterClass;
+            var level = custom_level != -1 ? custom_level : add_classLevels.Levels;
             var fc_selection = new SelectionEntry();
-            fc_selection.Selection = favored_class_selection;
+            fc_selection.Selection = custom_selection ?? favored_class_selection;
             fc_selection.Features = new BlueprintFeature[] { class_guid_progression_map[@class.AssetGuid] };
        
             var fc_bonus_selection = new SelectionEntry();
             fc_bonus_selection.Selection = class_guid_bonus_selection_map[@class.AssetGuid];
 
             fc_bonus_selection.Features = new BlueprintFeature[0];
-            for (int i = 0; i < level;)
+            for (int i = 0; i < level; i++)
             {
-                if (favored_feature.partial != null)
+                if (favored_feature.partial != null && ((i + 1) % favored_feature.divisor) == 0)
                 {
-                    i += 2;
-                    fc_bonus_selection.Features = fc_bonus_selection.Features.AddToArray(new BlueprintFeature[] { favored_feature.partial, favored_feature.full });
+                    fc_bonus_selection.Features = fc_bonus_selection.Features.AddToArray(new BlueprintFeature[] {favored_feature.full });
                 }
                 else
                 {
-                    i += 1;
-                    fc_bonus_selection.Features = fc_bonus_selection.Features.AddToArray(new BlueprintFeature[] { favored_feature.full });
+                    fc_bonus_selection.Features = fc_bonus_selection.Features.AddToArray(new BlueprintFeature[] { favored_feature.partial });
                 }
             }
 
-            add_classLevels.Selections = add_classLevels.Selections.AddToArray(fc_selection, fc_bonus_selection);
+            if (skip_class_selection)
+            {
+                add_classLevels.Selections = add_classLevels.Selections.AddToArray(fc_bonus_selection);
+            }
+            else
+            {
+                add_classLevels.Selections = add_classLevels.Selections.AddToArray(fc_selection, fc_bonus_selection);
+            }
+           
         }
 
         static public FavoredClassFeature addFavoredClassBonus(BlueprintFeature feature, BlueprintFeature partial_feature, BlueprintCharacterClass[] classes, int divisor, params BlueprintRace[] races)
@@ -886,7 +916,7 @@ namespace ZFavoredClass
                 }
             }
 
-            return new FavoredClassFeature(partial_feature, feature);
+            return new FavoredClassFeature(partial_feature, feature, divisor);
         }
 
         static public FavoredClassFeature addFavoredClassBonus(BlueprintFeature feature, BlueprintFeature partial_feature, BlueprintCharacterClass @class, int divisor, params BlueprintRace[] races)

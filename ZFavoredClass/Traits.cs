@@ -153,6 +153,7 @@ namespace ZFavoredClass
         static public BlueprintFeatureSelection intrepid_volunteer;
         static public BlueprintFeature helpful;
         static public BlueprintFeature well_informed;
+        static public BlueprintFeatureSelection eclectic;
 
         //REGIONAL TRAITS
         static public BlueprintFeature chilled_by_brutality;
@@ -1651,6 +1652,13 @@ namespace ZFavoredClass
                 intrepid_volunteer.AllFeatures = intrepid_volunteer.AllFeatures.AddToArray(feat);
             }
 
+            eclectic = library.CopyAndAdd(Core.favored_class_selection, "EclecticTraitSelection", "a331e9bb4906406da1888b4d4e6a2254");
+            eclectic.SetNameDescription("Eclectic",
+                                              "You have a talent for picking up different vocations.\n"
+                                              + "Benefit: Choose an additional favored class and gain either +1 hit point or +1 skill point whenever you take a level in that class.");
+            eclectic.Groups = new FeatureGroup[] { FeatureGroup.Trait };
+            eclectic.AddComponent(Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.human));
+
 
             racial_traits = createTraitSelction("RacialTrait",
                                     "Race Trait",
@@ -1673,7 +1681,8 @@ namespace ZFavoredClass
                                     warrior_of_old,
                                     well_informed,
                                     helpful,
-                                    intrepid_volunteer
+                                    intrepid_volunteer,
+                                    eclectic
                                     );
         }
 
