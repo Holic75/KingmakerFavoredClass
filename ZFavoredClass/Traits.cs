@@ -1681,8 +1681,8 @@ namespace ZFavoredClass
                                     warrior_of_old,
                                     well_informed,
                                     helpful,
-                                    intrepid_volunteer,
-                                    eclectic
+                                    intrepid_volunteer
+                                    //eclectic
                                     );
         }
 
