@@ -1,4 +1,5 @@
 ﻿using CallOfTheWild;
+using Kingmaker;
 using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Area;
 using Kingmaker.Blueprints.Classes;
@@ -7,6 +8,9 @@ using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.Blueprints.Classes.Spells;
 using Kingmaker.Blueprints.Facts;
 using Kingmaker.Blueprints.Items.Armors;
+using Kingmaker.Blueprints.Items.Ecnchantments;
+using Kingmaker.Blueprints.Items.Weapons;
+using Kingmaker.Blueprints.Root;
 using Kingmaker.Designers;
 using Kingmaker.Designers.EventConditionActionSystem.Actions;
 using Kingmaker.Designers.Mechanics.Buffs;
@@ -185,7 +189,8 @@ namespace ZFavoredClass
         static public BlueprintFeature pirate_duelist;
         static public BlueprintParametrizedFeature secret_of_the_impossible_kingdom;
 
-
+        //EQUIPMENT TRAITS
+        static public Dictionary<WeaponCategory, BlueprintFeatureSelection> heirloom_weapon = new Dictionary<WeaponCategory, BlueprintFeatureSelection>();
 
 
 
@@ -197,6 +202,7 @@ namespace ZFavoredClass
         static public BlueprintFeatureSelection racial_traits;
         static public BlueprintFeatureSelection traits_selection, traits_selection2;
         static public BlueprintFeatureSelection regional_traits;
+        static public BlueprintFeatureSelection equipment_traits;
 
         static public BlueprintFeature additional_traits;
 
@@ -209,6 +215,7 @@ namespace ZFavoredClass
             createSocialTraits();
             createRacialTraits();
             createRegionalTraits();
+            createEquipmentTraits();
 
             traits_selection = Helpers.CreateFeatureSelection("TraitsSelection",
                                                              "Trait",
@@ -217,7 +224,7 @@ namespace ZFavoredClass
                                                              null,
                                                              FeatureGroup.None
                                                              );
-            traits_selection.AllFeatures = new BlueprintFeature[] { combat_traits, faith_traits, magic_traits, religion_traits, social_traits, racial_traits, regional_traits };
+            traits_selection.AllFeatures = new BlueprintFeature[] { combat_traits, faith_traits, magic_traits, religion_traits, social_traits, racial_traits, regional_traits, equipment_traits};
             traits_selection.HideInCharacterSheetAndLevelUp = true;
 
             adopted = library.CopyAndAdd(racial_traits, "AdoptedTraitSelection", "");
@@ -2032,6 +2039,107 @@ namespace ZFavoredClass
                                                 secret_of_the_impossible_kingdom
                                                 );
 
+        }
+
+
+        static void createEquipmentTraits()
+        {
+            var martial_weapons = library.Get<BlueprintFeature>("203992ef5b35c864390b4e4a1e200629").GetComponent<AddProficiencies>().WeaponProficiencies;
+            var simple_weapons = library.Get<BlueprintFeature>("e70ecf1ed95ca2f40b754f1adb22bbdd").GetComponent<AddProficiencies>().WeaponProficiencies;
+
+            var all_proficiencies = martial_weapons.AddToArray(simple_weapons).Distinct().Where(wp => wp != WeaponCategory.SpikedHeavyShield 
+                                                                                                      && wp != WeaponCategory.WeaponLightShield
+                                                                                                      && wp != WeaponCategory.SpikedLightShield
+                                                                                                      && wp != WeaponCategory.WeaponHeavyShield).ToArray();
+            var description = "You carry a non-masterwork simple or martial weapon that has been passed down from generation to generation in your family (pay the standard gp cost for the weapon).\n"
+                + "When you select this trait, choose one of the following benefits: proficiency with that specific weapon, a +1 trait bonus on attacks of opportunity with that specific weapon, or a +2 trait bonus on all combat maneuvers when using that specific weapon.";
+
+            var masterwork_enchant = library.Get<BlueprintWeaponEnchantment>("6b38844e2bffbac48b63036b66e735be");
+            var masterwork_weapons = library.GetAllBlueprints().OfType<BlueprintItemWeapon>().Where(w => w.Enchantments.Count == 1 && w.Enchantments[0] == masterwork_enchant && w.Icon != null);
+
+            
+            foreach (var wp in all_proficiencies)
+            {
+                var mw_weapon = masterwork_weapons.Where(w => w.Category == wp).FirstOrDefault();
+
+
+                if (mw_weapon == null)
+                {
+                    continue;
+                }
+
+                var feature_selection = Helpers.CreateFeatureSelection(wp.ToString() + "HeirloomWeaponTraitSelection",
+                                                                       "Heirloom Weapon: " + LocalizedTexts.Instance.Stats.GetText(wp),
+                                                                       description,
+                                                                       "",
+                                                                       mw_weapon.Icon,
+                                                                       FeatureGroup.Trait,
+                                                                       Helpers.Create<AddStartingEquipment>(a => a.BasicItems = new Kingmaker.Blueprints.Items.BlueprintItem[] {mw_weapon })
+                                                                       );
+                //feature_selection.HideInUI = true;
+                feature_selection.HideInCharacterSheetAndLevelUp = true;
+
+                var proficiency = Helpers.CreateFeature(wp.ToString() + "HeirloomWeaponTraitProficiency",
+                                                        "Heirloom Weapon: " + LocalizedTexts.Instance.Stats.GetText(wp) + " (Proficiency)",
+                                                        description,
+                                                        "",
+                                                        mw_weapon.Icon,
+                                                        FeatureGroup.Trait,
+                                                        Helpers.Create<PrerequisiteNotProficient>(p => p.WeaponProficiencies = new WeaponCategory[] { wp }),
+                                                        Common.createAddWeaponProficiencies(wp)
+                                                        );
+
+                var attack_bonus = Helpers.CreateFeature(wp.ToString() + "HeirloomWeaponTraitAooBonus",
+                                        "Heirloom Weapon: " + LocalizedTexts.Instance.Stats.GetText(wp) + " (AOO Bonus)",
+                                        description,
+                                        "",
+                                        mw_weapon.Icon,
+                                        FeatureGroup.Trait,
+                                        Helpers.Create<PrerequisiteProficiency>(p => p.WeaponProficiencies = new WeaponCategory[] { wp }),
+                                        Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusOnAttacksOfOpportunity>(a =>
+                                        {
+                                            a.categories = new WeaponCategory[] { wp };
+                                            a.Value = 1;
+                                            a.Descriptor = ModifierDescriptor.Trait;
+                                        }
+                                        )
+                                        );
+
+                var heirloom_weapon_cmb_bonus = Helpers.CreateFeature(wp.ToString() + "HeirloomWeaponTraitCMBBonusFeature",
+                                                                      "Heirloom Weapon: " + LocalizedTexts.Instance.Stats.GetText(wp) + " (CMB Bonus)",
+                                                                      "",
+                                                                      "",
+                                                                      null,
+                                                                      FeatureGroup.None,
+                                                                      Helpers.CreateAddStatBonus(StatType.AdditionalCMB, 2, ModifierDescriptor.Trait)
+                                                                      );
+                heirloom_weapon_cmb_bonus.HideInCharacterSheetAndLevelUp = true;
+
+
+                var cmb_bonus = Helpers.CreateFeature(wp.ToString() + "HeirloomWeaponTraitCMBBonus",
+                                                        "Heirloom Weapon: " + LocalizedTexts.Instance.Stats.GetText(wp) + " (CMB Bonus)",
+                                                        description,
+                                                        "",
+                                                        mw_weapon.Icon,
+                                                        FeatureGroup.Trait,
+                                                        Helpers.Create<PrerequisiteProficiency>(p => p.WeaponProficiencies = new WeaponCategory[] { wp }),
+                                                        Helpers.Create<CallOfTheWild.WeaponTrainingMechanics.AddFeatureOnWeaponCategory>(a =>
+                                                        {
+                                                            a.feature = heirloom_weapon_cmb_bonus;
+                                                            a.required_categories = new WeaponCategory[] { wp };
+                                                        }
+                                                        )
+                                                        );
+
+                feature_selection.AllFeatures = new BlueprintFeature[] { proficiency, attack_bonus, cmb_bonus };
+                heirloom_weapon.Add(wp, feature_selection);
+            }
+
+            equipment_traits = createTraitSelction("EquipmentTrait",
+                                    "Equipment Trait",
+                                    "Many adventurers come to rely on certain gear to the extent that the equipment and the adventurer each become something more when the other is present. The symbiosis between adventurers and their gear is varied and complex.",
+                                    heirloom_weapon.Values.ToArray()
+                                    );
         }
     }
 }
