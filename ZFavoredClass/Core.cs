@@ -822,13 +822,13 @@ namespace ZFavoredClass
             fc_bonus_selection.Features = new BlueprintFeature[0];
             for (int i = 0; i < level; i++)
             {
-                if (favored_feature.partial != null && ((i + 1) % favored_feature.divisor) == 0)
+                if (favored_feature.partial != null && ((i + 1) % favored_feature.divisor) != 0)
                 {
-                    fc_bonus_selection.Features = fc_bonus_selection.Features.AddToArray(new BlueprintFeature[] {favored_feature.full });
+                    fc_bonus_selection.Features = fc_bonus_selection.Features.AddToArray(new BlueprintFeature[] {favored_feature.partial });
                 }
                 else
                 {
-                    fc_bonus_selection.Features = fc_bonus_selection.Features.AddToArray(new BlueprintFeature[] { favored_feature.partial });
+                    fc_bonus_selection.Features = fc_bonus_selection.Features.AddToArray(new BlueprintFeature[] { favored_feature.full });
                 }
             }
 
