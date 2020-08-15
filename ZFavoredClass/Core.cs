@@ -613,10 +613,14 @@ namespace ZFavoredClass
             var concentration_bloodrager = createFeatureCopy(concentration_bonus, concentration_bonus.Description, prefix: "Bloodrager");
             concentration_bloodrager.ReplaceComponent<ContextRankConfig>(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: concentration_bloodrager));
 
+            var concentration_psychic = createFeatureCopy(concentration_bonus, concentration_bonus.Description, prefix: "Psychic");
+            concentration_psychic.ReplaceComponent<ContextRankConfig>(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: concentration_psychic));
+
             addFavoredClassBonus(concentration_bonus, null, new BlueprintCharacterClass[] { paladin, VindicativeBastard.vindicative_bastard_class }, 1, dwarf);
             addFavoredClassBonus(concentration_arcanist, null, new BlueprintCharacterClass[] { Arcanist.arcanist_class }, 1, half_orc);
             addFavoredClassBonus(concentration_inquisitor, null, new BlueprintCharacterClass[] { inquistor }, 1, hobgoblin);
-            addFavoredClassBonus(concentration_inquisitor, null, new BlueprintCharacterClass[] { Bloodrager.bloodrager_class }, 1, drow);
+            addFavoredClassBonus(concentration_bloodrager, null, new BlueprintCharacterClass[] { Bloodrager.bloodrager_class }, 1, drow);
+            addFavoredClassBonus(concentration_psychic, null, new BlueprintCharacterClass[] { Psychic.psychic_class }, 1, half_orc);
         }
 
 
@@ -868,7 +872,7 @@ namespace ZFavoredClass
                                                                                                                     }
                                                                                                                     )
                                             );
-                partial_feature.Ranks = max_rank * divisor;
+                partial_feature.Ranks = max_rank * (divisor - 1);
 
                 foreach (var race in races)
                 {
@@ -882,10 +886,10 @@ namespace ZFavoredClass
                                                                                                             {
                                                                                                                 p.divisor = divisor;
                                                                                                                 p.Feature = partial_feature;
+                                                                                                                p.checked_feature = feature;
                                                                                                                 p.not = false;
                                                                                                             }
-                                                                                                            ),
-                                       CallOfTheWild.Helpers.Create<AddFeatureOnApply>(a => a.Feature = partial_feature)
+                                                                                                            )
                                       );
 
                 if (races.Count(r => r != null) > 0 || races.Count() == 0)
@@ -972,6 +976,8 @@ namespace ZFavoredClass
 
             var extra_teamwork_feat = createFeatureCopy(library.Get<BlueprintFeatureSelection>("d87e2f6a9278ac04caeb0f93eff95fcb"), "Gain 1/6 of a new teamwork feat.", 3);     
             addFavoredClassBonus(extra_teamwork_feat, null, inquistor, 6, drow);
+
+            addFavoredClassBonus(createFeatureCopy(Psychic.phrenic_amplification, "Gain 1/6 of a new phrenic amplification.", 3), null, Psychic.psychic_class, 6, half_elf, drow);
         }
 
 
@@ -1101,7 +1107,11 @@ namespace ZFavoredClass
                                                 Helpers.GetIcon("981def910b98200499c0c8f85a78bde8"),
                                                 library.Get<BlueprintAbilityResource>("394088e9e54ccd64698c7bd87534027f"));
 
-
+            var extra_phrenic_pool = createResourceBonusFeature("FavoredClassExtraPhrenicPoolFeature",
+                                                                "Bonus Phrenic Pool",
+                                                                "Increase the total number of points in the psychic’s phrenic pool by 1/3 point.",
+                                                                Psychic.phrenic_pool.Icon,
+                                                                Psychic.phrenic_pool_resource);
 
             addFavoredClassBonus(extra_bloodrage, null, Bloodrager.bloodrager_class, 1, dwarf, half_orc, human, half_elf, aasimar, tiefling);
             addFavoredClassBonus(extra_rage, null, barbarian, 1, dwarf, half_orc);
@@ -1117,6 +1127,7 @@ namespace ZFavoredClass
             addFavoredClassBonus(extra_arcane_reservoir, null, Arcanist.arcanist_class, 6, gnome);
             addFavoredClassBonus(extra_inspiration, null, Investigator.investigator_class, 3, elf, half_elf, ganzi);
             addFavoredClassBonus(extra_judgment, null, inquistor, 6, duergar);
+            addFavoredClassBonus(extra_phrenic_pool, null, Psychic.psychic_class, 6, elf, gnome, half_elf);
         }
 
 
@@ -1213,6 +1224,8 @@ namespace ZFavoredClass
             var psychic_detective_spells = CreateExtraSpellSelection(CallOfTheWild.Investigator.psychic_detective.ReplaceSpellbook, CallOfTheWild.Investigator.investigator_class, 5);
             psychic_detective_spells.AddComponent(Common.createPrerequisiteArchetypeLevel(Investigator.investigator_class, CallOfTheWild.Investigator.psychic_detective, 1));
             addFavoredClassBonus(psychic_detective_spells, null, Investigator.investigator_class, 2, human, halfling, gnome, half_elf, half_orc, aasimar, tiefling);
+
+            addFavoredClassBonus(CreateExtraSpellSelection(Psychic.psychic_class.Spellbook, Psychic.psychic_class, 8), null, Psychic.psychic_class, 2, human, half_elf, half_orc, aasimar, tiefling);
         }
 
 

@@ -326,8 +326,10 @@ namespace ZFavoredClass
 
             //octavia - magical knack (wizard), elven reflexes
             Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), traits_selection, magic_traits);
-            Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), magic_traits, magical_knack);
-            Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), magical_knack, library.Get<BlueprintFeature>("5ae9ff4d428647de9bec2d076ebd9f0e")); //wizard
+            Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), magic_traits, pragmatic_activator);
+            //Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), traits_selection, magic_traits);
+            //Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), magic_traits, magical_knack);
+            //Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), magical_knack, library.Get<BlueprintFeature>("5ae9ff4d428647de9bec2d076ebd9f0e")); //wizard
             Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), traits_selection2, racial_traits);
             Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), racial_traits, elven_reflexes);
         }
@@ -437,7 +439,7 @@ namespace ZFavoredClass
             child_of_nature = Helpers.CreateFeature("ChildOfNatureTrait",
                                                      "Child of Nature",
                                                      "The wild places are your home, and provide everything you need to be happy.\n"
-                                                     + "Benefits: You gain a +2 bonus on Lore Nature checks, and Lore Nature is always a class skill for you.",
+                                                     + "Benefits: You gain a +2 bonus on Lore (Nature) checks, and Lore (Nature) is always a class skill for you.",
                                                      "",
                                                      Helpers.GetIcon("6507d2da389ed55448e0e1e5b871c013"), // sf nature
                                                      FeatureGroup.Trait,
@@ -499,7 +501,7 @@ namespace ZFavoredClass
 
             spirit_guide = Helpers.CreateFeature("SpiritGuideTrait",
                                              "Spirit Guide",
-                                             "As someone who has performed or observed funeral rites for a wide variety of people, you have a basic understanding of many different religions.\nBenefits: You gain a +2 trait bonus on Lore Religion checks, and Lore Religion is always a class skill for you.",
+                                             "As someone who has performed or observed funeral rites for a wide variety of people, you have a basic understanding of many different religions.\nBenefits: You gain a +2 trait bonus on Lore (Religion) checks, and Lore (Religion) is always a class skill for you.",
                                              "",
                                              Helpers.GetIcon("f6f95242abdfac346befd6f4f6222140"), // remove sickness
                                              FeatureGroup.Trait,
@@ -677,7 +679,7 @@ namespace ZFavoredClass
             classically_schooled = Helpers.CreateFeature("ClassicallySchooledTrait",
                                          "Classically Schooled",
                                          "Your apprenticeship or early education was particularly focused on the direct application of magic.\n"
-                                         + "Benefits: You gain a +1 trait bonus on Knowledge Arcana checks, and Knowledge Arcana is always a class skill for you.",
+                                         + "Benefits: You gain a +1 trait bonus on Knowledge (Arcana) checks, and Knowledge (Arcana) is always a class skill for you.",
                                          "",
                                          Helpers.GetIcon("cad1b9175e8c0e64583432a22134d33c"), // sf arcana
                                          FeatureGroup.Trait,
@@ -903,7 +905,7 @@ namespace ZFavoredClass
             poverty_stricken = Helpers.CreateFeature("PovertyStrickenTrait",
                                                      "Poverty Stricken",
                                                      "Your childhood was tough, and your parents always had to make every copper piece count. Hunger was your constant companion, and you often had to live off the land or sleep in the wild.\n"
-                                                     + "Benefits: You gain a +1 bonus on Lore Nature checks, and Lore Nature is always a class skill for you.",
+                                                     + "Benefits: You gain a +1 bonus on Lore (Nature) checks, and Lore (Nature) is always a class skill for you.",
                                                      "",
                                                      Helpers.GetIcon("6507d2da389ed55448e0e1e5b871c013"), // sf nature
                                                      FeatureGroup.Trait,
@@ -1014,7 +1016,7 @@ namespace ZFavoredClass
             caretaker = Helpers.CreateFeature("CaretakerTrait",
                                              "Caretaker",
                                              "Your faith in the natural world or one of the gods of nature makes it easy for you to pick up on related concepts.\n"
-                                             + "Benefits: You gain a +1 trait bonus on Lore Nature checks, and Lore Nature is always a class skill for you.",
+                                             + "Benefits: You gain a +1 trait bonus on Lore (Nature) checks, and Lore (Nature) is always a class skill for you.",
                                              "",
                                              Helpers.GetIcon("6507d2da389ed55448e0e1e5b871c013"), // lore nature
                                              FeatureGroup.Trait,
@@ -1025,7 +1027,7 @@ namespace ZFavoredClass
 
             devotee_of_the_green = Helpers.CreateFeature("DevoteeOfTheGreenTrait",
                                                          "Devotee of the Green",
-                                                         "As the child of an herbalist or an assistant in a temple infirmary, you often had to assist in tending to the sick and wounded.\nBenefits: You gain a +1 trait bonus on Lore Religion checks, and Lore Religion is always a class skill for you.",
+                                                         "As the child of an herbalist or an assistant in a temple infirmary, you often had to assist in tending to the sick and wounded.\nBenefits: You gain a +1 trait bonus on Lore (Religion) checks, and Lore (Religion) is always a class skill for you.",
                                                          "",
                                                          Helpers.GetIcon("f6f95242abdfac346befd6f4f6222140"), // remove sickness
                                                          FeatureGroup.Trait,
@@ -1073,7 +1075,7 @@ namespace ZFavoredClass
             scholar_of_the_greate_beyond = Helpers.CreateFeature("ScholarOfTheGreatBeyondTrait",
                                                                  "Scholar of the Great Beyond",
                                                                  "Your greatest interests as a child did not lie with current events or the mundane—you have always felt out of place, as if you were born in the wrong era. You take to philosophical discussions of the Great Beyond and of historical events with ease.\n"
-                                                                 + "You gain a +1 trait bonus on Knowledge World checks, and Knowledge World is always a class skill for you.",
+                                                                 + "You gain a +1 trait bonus on Knowledge (World) checks, and Knowledge (World) is always a class skill for you.",
                                                                  "",
                                                                  Helpers.GetIcon("611e863120c0f9a4cab2d099f1eb20b4"), // sf world
                                                                  FeatureGroup.Trait,
@@ -1438,7 +1440,7 @@ namespace ZFavoredClass
             outcast = Helpers.CreateFeature("OutcastTrait",
                                          "Outcast",
                                          "Driven from town after town because of your heritage, you have become adept at living apart from others.\n"
-                                         + "Benefits: You gain a +1 bonus on Lore Nature checks, and Lore Nature is always a class skill for you.",
+                                         + "Benefits: You gain a +1 bonus on Lore (Nature) checks, and Lore (Nature) is always a class skill for you.",
                                          "",
                                          Helpers.GetIcon("6507d2da389ed55448e0e1e5b871c013"), // sf nature
                                          FeatureGroup.Trait,
@@ -1765,7 +1767,7 @@ namespace ZFavoredClass
             spiritual_forester = Helpers.CreateFeature("SpiritualForesterrait",
                                          "Spiritual Forester",
                                          "You grew up in a small settlement along the outskirts of the Forest of Spirits, and have learned much about the woods as well as about their supernatural inhabitants.\n"
-                                         + "Benefits: You gain a +1 bonus on Lore Nature checks, and Lore Nature is always a class skill for you.",
+                                         + "Benefits: You gain a +1 bonus on Lore (Nature) checks, and Lore (Nature) is always a class skill for you.",
                                          "",
                                          Helpers.GetIcon("6507d2da389ed55448e0e1e5b871c013"), // sf nature
                                          FeatureGroup.Trait,
@@ -1876,7 +1878,7 @@ namespace ZFavoredClass
             blighted_physiology = Helpers.CreateFeature("BlightedPhysiologyTrait",
                                                     "Blighted Physiology",
                                                     "Exposure to the corruption that seeps through every drop of water and grain of dirt in Numeria has altered your body.\n"
-                                                    + "Benefit: Horrif ic growths beneath your skin provide you a +1 natural armor bonus to AC, but your body does not work as a normal creature’s would. You become sickened for 1 round anytime you receive magical healing.",
+                                                    + "Benefit: Horrific growths beneath your skin provide you a +1 natural armor bonus to AC, but your body does not work as a normal creature’s would. You become sickened for 1 round anytime you receive magical healing.",
                                                     "",
                                                     Helpers.GetIcon("4e42460798665fd4cb9173ffa7ada323"), // sickened
                                                     FeatureGroup.Trait,
