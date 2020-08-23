@@ -73,7 +73,7 @@ namespace ZFavoredClass
             var forbidden_classes = new BlueprintCharacterClass[]
             {
                 Main.library.Get<BlueprintCharacterClass>("f5b8c63b141b2f44cbb8c2d7579c34f5"), //eldritch scion
-                Main.library.Get<BlueprintCharacterClass>("4cd1757a0eea7694ba5c933729a53920"),
+                Main.library.Get<BlueprintCharacterClass>("4cd1757a0eea7694ba5c933729a53920"), //animal
                 CallOfTheWild.Eidolon.eidolon_class
             };
 
@@ -82,7 +82,10 @@ namespace ZFavoredClass
             {
                 if (hasDietySelection(c.Progression.LevelEntries))
                 {//already has diety
-                    atheism.AddComponent(Helpers.Create<PrerequisiteNoClassLevel>(p => p.CharacterClass = c));
+                    if (c != Psychic.psychic_class)
+                    {
+                        atheism.AddComponent(Helpers.Create<PrerequisiteNoClassLevel>(p => p.CharacterClass = c));
+                    }
                     continue;
                 }
 

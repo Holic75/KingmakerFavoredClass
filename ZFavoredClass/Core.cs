@@ -1127,7 +1127,7 @@ namespace ZFavoredClass
             addFavoredClassBonus(extra_arcane_reservoir, null, Arcanist.arcanist_class, 6, gnome);
             addFavoredClassBonus(extra_inspiration, null, Investigator.investigator_class, 3, elf, half_elf, ganzi);
             addFavoredClassBonus(extra_judgment, null, inquistor, 6, duergar);
-            addFavoredClassBonus(extra_phrenic_pool, null, Psychic.psychic_class, 6, elf, gnome, half_elf);
+            addFavoredClassBonus(extra_phrenic_pool, null, Psychic.psychic_class, 3, elf, gnome, half_elf);
         }
 
 
