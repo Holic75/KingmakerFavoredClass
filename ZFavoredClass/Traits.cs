@@ -530,7 +530,7 @@ namespace ZFavoredClass
                                                         "",
                                                         Helpers.GetIcon("ac57069b6bf8c904086171683992a92a"), // shield focus
                                                         FeatureGroup.Trait,
-                                                        Helpers.Create<CallOfTheWild.InitiativeMechanics.CanActInSurpriseRoundLogic>(),
+                                                        Helpers.Create<CallOfTheWild.FlatFootedMechanics.NotFlatFootedBeforeInitiative>(),
                                                         Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("d2d5c5a58885a6b489727467e13c3337")) //torag
                                                         );
 
@@ -963,7 +963,7 @@ namespace ZFavoredClass
             child_of_streets = Helpers.CreateFeature("ChildOfStreetsTrait",
                                          "Child of Streets",
                                          "You grew up on the streets of a large city, and as a result you have developed a knack for picking pockets and hiding small objects on your person.\n"
-                                         + "Benefits: You gain a +1 trait bonus on Trickery checks, and Trckery is always a class skill for you.",
+                                         + "Benefits: You gain a +1 trait bonus on Trickery checks, and Trickery is always a class skill for you.",
                                          "",
                                          Helpers.GetIcon("7feda1b98f0c169418aa9af78a85953b"), // sf nature
                                          FeatureGroup.Trait,
