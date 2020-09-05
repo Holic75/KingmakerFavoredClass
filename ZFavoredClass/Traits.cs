@@ -2052,7 +2052,21 @@ namespace ZFavoredClass
             var all_proficiencies = martial_weapons.AddToArray(simple_weapons).Distinct().Where(wp => wp != WeaponCategory.SpikedHeavyShield 
                                                                                                       && wp != WeaponCategory.WeaponLightShield
                                                                                                       && wp != WeaponCategory.SpikedLightShield
-                                                                                                      && wp != WeaponCategory.WeaponHeavyShield).ToArray();
+                                                                                                      && wp != WeaponCategory.WeaponHeavyShield
+                                                                                                      ).ToArray();
+
+            var racial_weapons = new Dictionary<WeaponCategory, BlueprintRace>
+            {
+                {WeaponCategory.ElvenCurvedBlade, Core.elf},
+                //{WeaponCategory.DwarvenWaraxe, Core.dwarf}, //martial for everyone else
+                {WeaponCategory.Urgrosh, Core.dwarf},
+                {WeaponCategory.HookedHammer, Core.gnome},
+                {WeaponCategory.DoubleAxe, Core.half_orc},
+                {WeaponCategory.SlingStaff, Core.halfling}
+            };
+
+            all_proficiencies = all_proficiencies.AddToArray(WeaponCategory.DuelingSword, WeaponCategory.ElvenCurvedBlade, WeaponCategory.Urgrosh, WeaponCategory.HookedHammer, WeaponCategory.DoubleAxe, WeaponCategory.SlingStaff);
+            all_proficiencies = all_proficiencies.Distinct().ToArray();
             var description = "You carry a non-masterwork simple or martial weapon that has been passed down from generation to generation in your family (pay the standard gp cost for the weapon).\n"
                 + "When you select this trait, choose one of the following benefits: proficiency with that specific weapon, a +1 trait bonus on attacks of opportunity with that specific weapon, or a +2 trait bonus on all combat maneuvers when using that specific weapon.";
 
@@ -2078,6 +2092,7 @@ namespace ZFavoredClass
                                                                        FeatureGroup.Trait,
                                                                        Helpers.Create<AddStartingEquipment>(a => a.BasicItems = new Kingmaker.Blueprints.Items.BlueprintItem[] {mw_weapon })
                                                                        );
+
                 //feature_selection.HideInUI = true;
                 feature_selection.HideInCharacterSheetAndLevelUp = true;
 
@@ -2135,6 +2150,22 @@ namespace ZFavoredClass
 
                 feature_selection.AllFeatures = new BlueprintFeature[] { proficiency, attack_bonus, cmb_bonus };
                 heirloom_weapon.Add(wp, feature_selection);
+
+                if (racial_weapons.ContainsKey(wp))
+                {
+                    var race = racial_weapons[wp];
+                    feature_selection.AddComponent(Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = race));
+                }
+
+                if (wp == WeaponCategory.DwarvenWaraxe)
+                {
+                    proficiency.AddComponent(Helpers.Create<AddProficiencies>(a =>
+                    {
+                        a.WeaponProficiencies = new WeaponCategory[] { WeaponCategory.DwarvenWaraxe };
+                        a.RaceRestriction = Core.dwarf;
+                        a.ArmorProficiencies = new ArmorProficiencyGroup[0];
+                    }));
+                }
             }
 
             equipment_traits = createTraitSelction("EquipmentTrait",
