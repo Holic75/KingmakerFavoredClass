@@ -55,7 +55,7 @@ namespace ZFavoredClass
             var combined_archetype = Helpers.Create<BlueprintArchetype>(a =>
             {
                 a.name = archetype1.name + archetype2.name;
-                a.LocalizedName = Helpers.CreateString($"{a.name}.Name", $"{archetype1.Name}/{archetype2.Name}");
+                a.LocalizedName = Helpers.CreateString($"{a.name}.Name", $"{archetype1.Name} / {archetype2.Name}");
                 a.LocalizedDescription = Helpers.CreateString($"{a.name}.Description", $"This archetype represents a combination of {archetype1.Name} and {archetype2.Name} archetypes.\n{archetype1.Name}: {archetype1.Description}\n{archetype2.Name}: {archetype2.Description}");
             });
             Helpers.SetField(combined_archetype, "m_ParentClass", parent_class);
@@ -69,7 +69,7 @@ namespace ZFavoredClass
 
             combined_archetype.IsArcaneCaster = archetype1.IsArcaneCaster || archetype2.IsArcaneCaster;
             combined_archetype.IsDivineCaster = archetype1.IsDivineCaster || archetype2.IsDivineCaster;
-
+            combined_archetype.ChangeCasterType = archetype1.ChangeCasterType || archetype2.ChangeCasterType;
             combined_archetype.AddComponent(Helpers.Create<CombineArchetypes>(c => c.archetypes = new BlueprintArchetype[] { archetype1, archetype2 }));
             combined_archetypes[archetype1.name + archetype2.name] = combined_archetype;
             return combined_archetype;
@@ -80,7 +80,13 @@ namespace ZFavoredClass
 
         static bool canCombineArchetypes(BlueprintArchetype archetype1, BlueprintArchetype archetype2)
         {
-            Main.logger.Log($"Checking {archetype1.Name} and {archetype2.Name} Stacking");
+            Main.logger.Log($"Checking {archetype1.Name} and {archetype2.Name} stacking");
+
+            if (archetype1 == CallOfTheWild.Archetypes.Seeker.archetype || archetype2 == CallOfTheWild.Archetypes.Seeker.archetype)
+            {
+                Main.logger.Log("Seeker");
+                return false;
+            }
             if ((archetype1.ReplaceSpellbook != null || archetype1.RemoveSpellbook) && (archetype2.ReplaceSpellbook != null || archetype2.RemoveSpellbook))
             {
                 Main.logger.Log("Spellbook Failure");
@@ -138,6 +144,7 @@ namespace ZFavoredClass
                     }
                 }
             }
+            Main.logger.Log("Passed");
             return true;
         }
 
@@ -166,7 +173,6 @@ namespace ZFavoredClass
         public class CombineArchetypes : OwnedGameLogicComponent<UnitDescriptor>
         {
             public BlueprintArchetype[] archetypes = new BlueprintArchetype[0];
-
         }
     }
 }
