@@ -1,6 +1,6 @@
 # Favored Class
 
-This is a mod for Pathfinder:Kingmaker that adds favored class mechanics and traits.
+This is a mod for Pathfinder:Kingmaker that adds favored class mechanics and traits and archetype stacking.
 
 It is not compatible with favored class from Eldritch Arcana mod.
 
@@ -49,7 +49,8 @@ It adds the following options for favored class bonuses:
  
 Other features:
 - Everyone can select a Deity (optional),
-- Everyone can select 2 traits at character creation (optional).
+- Everyone can select 2 traits at character creation (optional),
+- It is possible to stack up to 2 compatible archetypes.
  
  
 It also add following feats:
