@@ -2151,22 +2151,18 @@ namespace ZFavoredClass
                 feature_selection.AllFeatures = new BlueprintFeature[] { proficiency, attack_bonus, cmb_bonus };
                 heirloom_weapon.Add(wp, feature_selection);
 
+                if (wp == WeaponCategory.DwarvenWaraxe)
+                {
+                    proficiency.ComponentsArray = library.Get<BlueprintFeature>("bd0d7feca087d2247b12965c1467790c").ComponentsArray; //from dwarven war axe proficiency
+                }
+
                 if (racial_weapons.ContainsKey(wp))
                 {
                     var race = racial_weapons[wp];
                     feature_selection.AddComponent(Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = race));
                 }
-
-                if (wp == WeaponCategory.DwarvenWaraxe)
-                {
-                    proficiency.AddComponent(Helpers.Create<AddProficiencies>(a =>
-                    {
-                        a.WeaponProficiencies = new WeaponCategory[] { WeaponCategory.DwarvenWaraxe };
-                        a.RaceRestriction = Core.dwarf;
-                        a.ArmorProficiencies = new ArmorProficiencyGroup[0];
-                    }));
-                }
             }
+
 
             equipment_traits = createTraitSelction("EquipmentTrait",
                                     "Equipment Trait",
