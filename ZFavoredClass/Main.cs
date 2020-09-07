@@ -103,7 +103,7 @@ namespace ZFavoredClass
 
                     AlternativeRacialTraits.load();
                     Traits.load(settings.enable_traits);
-
+                    StackingArchetypes.load();
 
 #if DEBUG
                     string guid_file_name = @"C:\Repositories\KingmakerFavoredClass\ZFavoredClass\blueprints.txt";

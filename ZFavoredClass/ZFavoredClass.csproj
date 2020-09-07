@@ -138,6 +138,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="StackingArchetypes.cs" />
     <Compile Include="Traits.cs" />
   </ItemGroup>
   <ItemGroup>
