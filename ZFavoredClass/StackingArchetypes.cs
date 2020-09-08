@@ -2,7 +2,9 @@
 using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Classes.Selection;
+using Kingmaker.EntitySystem.Stats;
 using Kingmaker.UnitLogic;
+using Kingmaker.UnitLogic.Class.LevelUp.Actions;
 using Kingmaker.Utility;
 using System;
 using System.Collections.Generic;
@@ -67,6 +69,20 @@ namespace ZFavoredClass
                                                                   };
             parent_class.Archetypes = parent_class.Archetypes.AddToArray(combined_archetype);
 
+            combined_archetype.ReplaceClassSkills = archetype1.ReplaceClassSkills || archetype2.ReplaceClassSkills;
+            var missing_skills = parent_class.ClassSkills.Except(archetype1.ClassSkills).ToList();
+            missing_skills.AddRange(parent_class.ClassSkills.Except(archetype2.ClassSkills));
+            missing_skills = missing_skills.Distinct().ToList();
+
+            var extra_skills = archetype1.ClassSkills.Except(parent_class.ClassSkills).ToList();
+            extra_skills.AddRange(archetype2.ClassSkills.Except(parent_class.ClassSkills));
+            extra_skills = extra_skills.Distinct().ToList();
+
+            combined_archetype.ClassSkills = parent_class.ClassSkills.AddToArray(extra_skills).Except(missing_skills).ToArray();
+
+
+
+
             combined_archetype.IsArcaneCaster = archetype1.IsArcaneCaster || archetype2.IsArcaneCaster;
             combined_archetype.IsDivineCaster = archetype1.IsDivineCaster || archetype2.IsDivineCaster;
             combined_archetype.ChangeCasterType = archetype1.ChangeCasterType || archetype2.ChangeCasterType;
@@ -93,10 +109,18 @@ namespace ZFavoredClass
                 return false;
             }
 
-            if ((!archetype1.ClassSkills.Empty()) && (!archetype2.ClassSkills.Empty()))
+            if (archetype1.ReplaceClassSkills && archetype2.ReplaceClassSkills)
             {
-                Main.logger.Log("Skills Failure");
-                return false;
+                var parent_class_skills = archetype1.GetParentClass().ClassSkills;
+                var missing_skills1 = parent_class_skills.Except(archetype1.ClassSkills);
+                var missing_skills2 = parent_class_skills.Except(archetype2.ClassSkills);
+
+                if (missing_skills1.Intersect(missing_skills2).Any())
+                {
+                    //both skills are removed
+                    Main.logger.Log("Skills Failure");
+                    return false;
+                }
             }
 
 
@@ -173,6 +197,28 @@ namespace ZFavoredClass
         public class CombineArchetypes : OwnedGameLogicComponent<UnitDescriptor>
         {
             public BlueprintArchetype[] archetypes = new BlueprintArchetype[0];
+        }
+
+
+        [Harmony12.HarmonyPatch(typeof(ApplyClassMechanics))]
+        [Harmony12.HarmonyPatch("ApplyClassSkills", Harmony12.MethodType.Normal)]
+        class ApplyClassMechanics__ApplyClassSkills__Patch
+        {
+            static bool Prefix(ApplyClassMechanics __instance, ClassData classData, UnitDescriptor unit)
+            {
+                List<StatType> class_skills = new List<StatType>();
+                var combined_archetype = classData.Archetypes.Where(a => a.GetComponent<CombineArchetypes>() != null && a.ReplaceClassSkills).FirstOrDefault();
+                if (combined_archetype == null)
+                {
+                    return true;
+                }
+                
+                foreach (var s in combined_archetype.ClassSkills)
+                {
+                    unit.Stats.AddClassSkill(s);
+                }
+                return false;
+            }
         }
     }
 }

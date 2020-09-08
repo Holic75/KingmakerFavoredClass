@@ -2153,7 +2153,9 @@ namespace ZFavoredClass
 
                 if (wp == WeaponCategory.DwarvenWaraxe)
                 {
-                    proficiency.ComponentsArray = library.Get<BlueprintFeature>("bd0d7feca087d2247b12965c1467790c").ComponentsArray; //from dwarven war axe proficiency
+                    //we need to add full proficiency for dwarves
+                    proficiency.AddComponents(Helpers.Create<ExoticWeapons.FullProficiency>(fp => { fp.category = WeaponCategory.DwarvenWaraxe; fp.race = Core.dwarf; }),
+                                              Helpers.Create<CallOfTheWild.HoldingItemsMechanics.CanHoldIn1Hand>(c => { c.category = WeaponCategory.DwarvenWaraxe; c.require_full_proficiency = true; }));
                 }
 
                 if (racial_weapons.ContainsKey(wp))
