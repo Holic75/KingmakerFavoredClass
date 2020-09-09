@@ -287,7 +287,7 @@ namespace ZFavoredClass
 
             var favored_enemy = library.Get<BlueprintFeatureSelection>("16cc2c937ea8d714193017780e7d4fc6");
             var favored_enemy_attack_bonus = Helpers.CreateFeatureSelection("FavoredEnemyAttackBonusFCBFeatureSelection",
-                                                                            "Favored Enemy Attack Bonus",
+                                                                            "Favored Enemy Bonus",
                                                                             "Add +1/4 to a single existing favored enemy bonus (maximum bonus +1 per favored enemy).",
                                                                             "",
                                                                             Helpers.GetIcon("1e1f627d26ad36f43bbd26cc2bf8ac7e"),
@@ -303,12 +303,18 @@ namespace ZFavoredClass
                                                     Helpers.MergeIds(fe.AssetGuid, "3eb3fba584b8425b95fc4b643f5c1cd0"),
                                                     fe.Icon,
                                                     FeatureGroup.None,
-                                                    Helpers.Create<AttackBonusAgainstFactOwner>(a => { a.AttackBonus = 1; a.Bonus = 0; a.CheckedFact = enemy_type; }),
-                                                    Helpers.PrerequisiteFeature(fe)
+                                                    Helpers.Create<AttackBonusAgainstFactOwner>(a => { a.AttackBonus = 1; a.Bonus = 0; a.CheckedFact = enemy_type; a.Descriptor = ModifierDescriptor.Other; }),
+                                                    Helpers.Create<DamageBonusAgainstFactOwner>(a => { a.DamageBonus = 1; a.Bonus = 0; a.CheckedFact = enemy_type; a.Descriptor = ModifierDescriptor.Other; }),
+                                                    Helpers.PrerequisiteFeature(fe, any: true),
+                                                    Common.createPrerequisiteArchetypeLevel(CallOfTheWild.Archetypes.Bloodhunter.archetype, 1,
+                                                                                            any: true)
                                                     );
                 favored_enemy_attack_bonus.AllFeatures = favored_enemy_attack_bonus.AllFeatures.AddToArray(feature);
             }
-          
+            var instant_enemy = library.Get<BlueprintBuff>("82574f7d14a28e64fab8867fbaa17715");
+            favored_enemy_attack_bonus.AddComponents(Helpers.Create<AttackBonusAgainstFactOwner>(a => { a.AttackBonus = 1; a.Bonus = 0; a.CheckedFact = instant_enemy; a.Descriptor = ModifierDescriptor.Other; }),
+                                                    Helpers.Create<DamageBonusAgainstFactOwner>(a => { a.DamageBonus = 1; a.Bonus = 0; a.CheckedFact = instant_enemy; a.Descriptor = ModifierDescriptor.Other; }));
+
             var ff = addFavoredClassBonus(favored_enemy_attack_bonus, null, new BlueprintCharacterClass[] { ranger }, 4, hobgoblin);
             ff.partial.Ranks = 20;
         }

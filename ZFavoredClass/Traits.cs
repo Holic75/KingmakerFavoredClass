@@ -2065,9 +2065,9 @@ namespace ZFavoredClass
                 {WeaponCategory.SlingStaff, Core.halfling}
             };
 
-            all_proficiencies = all_proficiencies.AddToArray(WeaponCategory.DuelingSword, WeaponCategory.ElvenCurvedBlade, WeaponCategory.Urgrosh, WeaponCategory.HookedHammer, WeaponCategory.DoubleAxe, WeaponCategory.SlingStaff);
+            all_proficiencies = all_proficiencies.AddToArray(WeaponCategory.DuelingSword, WeaponCategory.ElvenCurvedBlade, WeaponCategory.Urgrosh, WeaponCategory.HookedHammer, WeaponCategory.DoubleAxe, WeaponCategory.SlingStaff, WeaponCategory.Estoc);
             all_proficiencies = all_proficiencies.Distinct().ToArray();
-            var description = "You carry a non-masterwork simple or martial weapon that has been passed down from generation to generation in your family (pay the standard gp cost for the weapon).\n"
+            var description = "You carry a masterwork simple or martial weapon that has been passed down from generation to generation in your family (pay the standard gp cost for the weapon).\n"
                 + "When you select this trait, choose one of the following benefits: proficiency with that specific weapon, a +1 trait bonus on attacks of opportunity with that specific weapon, or a +2 trait bonus on all combat maneuvers when using that specific weapon.";
 
             var masterwork_enchant = library.Get<BlueprintWeaponEnchantment>("6b38844e2bffbac48b63036b66e735be");

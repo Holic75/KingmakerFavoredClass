@@ -46,7 +46,10 @@ namespace ZFavoredClass
 
             //fix some abilities
             //fix nature mystery animal companion to avoid double scaling with sacred huntsmaster and mystery level
-            library.Get<BlueprintFeatureSelection>("c5e2d914e4174aadb3e3fcec72008711").AddComponent(Common.prerequisiteNoArchetype(combined_archetypes["SacredHuntsmasterArchetypeRavenerHunterArchetype"]));
+            if (combined_archetypes.ContainsKey("SacredHuntsmasterArchetypeRavenerHunterArchetype"))
+            {
+                library.Get<BlueprintFeatureSelection>("c5e2d914e4174aadb3e3fcec72008711").AddComponent(Common.prerequisiteNoArchetype(combined_archetypes["SacredHuntsmasterArchetypeRavenerHunterArchetype"]));
+            }
         }
 
 
@@ -69,16 +72,21 @@ namespace ZFavoredClass
                                                                   };
             parent_class.Archetypes = parent_class.Archetypes.AddToArray(combined_archetype);
 
+            var skills1 = archetype1.ReplaceClassSkills ? archetype1.ClassSkills : parent_class.ClassSkills;
+            var skills2 = archetype2.ReplaceClassSkills ? archetype2.ClassSkills : parent_class.ClassSkills;
             combined_archetype.ReplaceClassSkills = archetype1.ReplaceClassSkills || archetype2.ReplaceClassSkills;
-            var missing_skills = parent_class.ClassSkills.Except(archetype1.ClassSkills).ToList();
-            missing_skills.AddRange(parent_class.ClassSkills.Except(archetype2.ClassSkills));
+            var missing_skills = parent_class.ClassSkills.Except(skills1).ToList();
+            missing_skills.AddRange(parent_class.ClassSkills.Except(skills2));
             missing_skills = missing_skills.Distinct().ToList();
 
-            var extra_skills = archetype1.ClassSkills.Except(parent_class.ClassSkills).ToList();
-            extra_skills.AddRange(archetype2.ClassSkills.Except(parent_class.ClassSkills));
+            var extra_skills = skills1.Except(parent_class.ClassSkills).ToList();
+            extra_skills.AddRange(skills2.Except(parent_class.ClassSkills));
             extra_skills = extra_skills.Distinct().ToList();
 
-            combined_archetype.ClassSkills = parent_class.ClassSkills.AddToArray(extra_skills).Except(missing_skills).ToArray();
+            if (combined_archetype.ReplaceClassSkills)
+            {
+                combined_archetype.ClassSkills = parent_class.ClassSkills.AddToArray(extra_skills).Except(missing_skills).ToArray();
+            }
 
 
 
