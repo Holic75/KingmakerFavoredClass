@@ -7,6 +7,7 @@ using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.Blueprints.Classes.Spells;
 using Kingmaker.Blueprints.Facts;
 using Kingmaker.Blueprints.Items.Armors;
+using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.Designers;
 using Kingmaker.Designers.EventConditionActionSystem.Actions;
 using Kingmaker.Designers.Mechanics.Buffs;
@@ -52,6 +53,45 @@ namespace ZFavoredClass
         static internal void load()
         {
             createHalfElfAdaptability();
+            createHalfOrcAlternativeRacialFeatures();
+        }
+
+
+        static void createHalfOrcAlternativeRacialFeatures()
+        {
+            var ferocity = library.Get<BlueprintFeature>("c99f3405d1ef79049bd90678a666e1d7");
+
+            var toothy = Helpers.CreateFeature("ToothyHalfOrcRacialFeature",
+                                               "Toothy",
+                                               "Some half-orcs’ tusks are large and sharp, granting a bite attack. This is a primary natural attack that deals 1d4 points of piercing damage. This racial trait replaces orc ferocity.",
+                                               "",
+                                               NewSpells.savage_maw.Icon,
+                                               FeatureGroup.Racial,
+                                               CallOfTheWild.Common.createAddAdditionalLimb(library.Get<BlueprintItemWeapon>("35dfad6517f401145af54111be04d6cf")),
+                                               Common.createRemoveFeatureOnApply(ferocity)
+                                               );
+
+            var sacred_tattoo = Helpers.CreateFeature("SacredHalfOrcRacialFeature",
+                                   "Sacred Tattoo",
+                                   "Many half-orcs decorate themselves with tattoos, piercings, and ritual scarification, which they consider sacred markings. Half-orcs with this racial trait gain a +1 luck bonus on all saving throws. This racial trait replaces orc ferocity.",
+                                   "",
+                                   NewFeats.mages_tattoo.Icon,
+                                   FeatureGroup.Racial,
+                                   Helpers.Create<BuffAllSavesBonus>(b => { b.Descriptor = ModifierDescriptor.Luck; b.Value = 1; }),
+                                   Common.createRemoveFeatureOnApply(ferocity)
+                                   );
+
+            var alternative_racial_trait = Helpers.CreateFeatureSelection("HalfOrcAlternativeRacialTraitsSelection",
+                                                                 "Alternate Racial Traits",
+                                                                 "Aternate racial traits may be selected in place of one or more of the standard racial traits.",
+                                                                 "",
+                                                                 null,
+                                                                 FeatureGroup.Racial);
+            alternative_racial_trait.Obligatory = false;
+            alternative_racial_trait.HideInCharacterSheetAndLevelUp = true;
+            alternative_racial_trait.HideInUI = true;
+            alternative_racial_trait.AllFeatures = new BlueprintFeature[] { toothy, sacred_tattoo };
+            Core.half_orc.Features = Core.half_orc.Features.AddToArray(alternative_racial_trait);
         }
 
 

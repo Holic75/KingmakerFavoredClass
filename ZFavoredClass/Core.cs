@@ -973,10 +973,16 @@ namespace ZFavoredClass
             addFavoredClassBonus(metahealer_talent_fcb, null, kineticist, 6, human, half_elf, half_orc, aasimar, tiefling);
 
             var magus_arcana = createFeatureCopy(library.Get<BlueprintFeatureSelection>("e9dc4dfc73eaaf94aae27e0ed6cc9ada"), "Gain 1/6 of a new magus arcana.", 3);
-            magus_arcana.AddComponent(Common.prerequisiteNoArchetype(magus, eldritch_scion));
+            magus_arcana.AddComponents(Common.prerequisiteNoArchetype(magus, eldritch_scion), Common.prerequisiteNoArchetype(magus, Bloodrager.eldritch_scion_bloodrager));
 
             var eldritch_arcana = createFeatureCopy(library.Get<BlueprintFeatureSelection>("d4b54d9db4932454ab2899f931c2042c"), "Gain 1/6 of a new magus arcana.", 3);
-            eldritch_arcana.AddComponent(Common.createPrerequisiteArchetypeLevel(magus, eldritch_scion, 1));
+            eldritch_arcana.AddComponent(Helpers.Create<CallOfTheWild.PrerequisiteMechanics.PrerequsiteOrAlternative>(p =>
+                                            {
+                                                p.base_prerequsite = Common.createPrerequisiteArchetypeLevel(magus, eldritch_scion, 1);
+                                                p.alternative_prerequsite = Common.createPrerequisiteArchetypeLevel(magus, Bloodrager.eldritch_scion_bloodrager, 1);
+                                            }
+                                            )
+                                            );
             addFavoredClassBonus(magus_arcana, null, magus, 6, elf, halfling, half_elf);
             addFavoredClassBonus(eldritch_arcana, null, magus, 6, elf, halfling, half_elf);
 
@@ -1061,7 +1067,7 @@ namespace ZFavoredClass
                                                                 "Add +1/4 point to the magus’ arcane pool.",
                                                                 pool_icon,
                                                                 arcane_pool_resource);
-            extra_arcane_pool.AddComponent(Common.prerequisiteNoArchetype(magus, eldritch_scion));
+            extra_arcane_pool.AddComponents(Common.prerequisiteNoArchetype(magus, eldritch_scion), Common.prerequisiteNoArchetype(magus, Bloodrager.eldritch_scion_bloodrager));
             extra_arcane_pool.AddComponent(Common.prerequisiteNoArchetype(magus, CallOfTheWild.Archetypes.NatureBondedMagus.archetype));
 
             var extra_eldritch_pool = createResourceBonusFeature("FavoredClassExtraArcaneEldritchpoolFeature",
@@ -1069,7 +1075,13 @@ namespace ZFavoredClass
                                                                 "Add +1/4 point to the magus’ eldritch pool.",
                                                                 pool_icon,
                                                                 eldritch_pool_resource);
-            extra_eldritch_pool.AddComponent(Common.createPrerequisiteArchetypeLevel(magus, eldritch_scion, 1));
+            extra_eldritch_pool.AddComponents(Helpers.Create<CallOfTheWild.PrerequisiteMechanics.PrerequsiteOrAlternative>(p =>
+                                            {
+                                                p.base_prerequsite = Common.createPrerequisiteArchetypeLevel(magus, eldritch_scion, 1);
+                                                p.alternative_prerequsite = Common.createPrerequisiteArchetypeLevel(magus, Bloodrager.eldritch_scion_bloodrager, 1);
+                                            }
+                                            )
+                                            );
 
 
             var extra_internal_buffer = createResourceBonusFeature("FavoredClassExtraInternalBufferFeature",

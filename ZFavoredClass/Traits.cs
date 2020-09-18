@@ -288,9 +288,9 @@ namespace ZFavoredClass
             Common.addFeatureSelectionToAcl(linzi_feature.GetComponent<AddClassLevels>(), traits_selection2, racial_traits);
             Common.addFeatureSelectionToAcl(linzi_feature.GetComponent<AddClassLevels>(), racial_traits, helpful);
 
-            //jaethal - deft dodger and warrior of old
+            //jaethal - anatomist, and warrior of old
             Common.addFeatureSelectionToAcl(jaethal_feature.GetComponent<AddClassLevels>(), traits_selection, combat_traits);
-            Common.addFeatureSelectionToAcl(jaethal_feature.GetComponent<AddClassLevels>(), combat_traits, deft_dodger);
+            Common.addFeatureSelectionToAcl(jaethal_feature.GetComponent<AddClassLevels>(), combat_traits, anatomist);
             Common.addFeatureSelectionToAcl(jaethal_feature.GetComponent<AddClassLevels>(), traits_selection2, racial_traits);
             Common.addFeatureSelectionToAcl(jaethal_feature.GetComponent<AddClassLevels>(), racial_traits, warrior_of_old);
 
@@ -322,7 +322,7 @@ namespace ZFavoredClass
             Common.addFeatureSelectionToAcl(regongar_feature.GetComponent<AddClassLevels>(), traits_selection, racial_traits);
             Common.addFeatureSelectionToAcl(regongar_feature.GetComponent<AddClassLevels>(), racial_traits, finish_the_fight);
             Common.addFeatureSelectionToAcl(regongar_feature.GetComponent<AddClassLevels>(), traits_selection2, combat_traits);
-            Common.addFeatureSelectionToAcl(regongar_feature.GetComponent<AddClassLevels>(), combat_traits, reactionary);
+            Common.addFeatureSelectionToAcl(regongar_feature.GetComponent<AddClassLevels>(), combat_traits, deft_dodger);
 
             //octavia - magical knack (wizard), elven reflexes
             Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), traits_selection, magic_traits);
@@ -416,7 +416,7 @@ namespace ZFavoredClass
                                                    FeatureGroup.Trait,
                                                    Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusOnAttacksOfOpportunity>(a =>
                                                    {
-                                                       a.categories = new WeaponCategory[] { WeaponCategory.Rapier, WeaponCategory.BastardSword, WeaponCategory.DuelingSword, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.Longsword, WeaponCategory.Greatsword };
+                                                       a.categories = new WeaponCategory[] { WeaponCategory.Rapier, WeaponCategory.Scimitar, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.Kukri, WeaponCategory.PunchingDagger, WeaponCategory.Longsword, WeaponCategory.BastardSword, WeaponCategory.Falchion, WeaponCategory.Greatsword, WeaponCategory.DuelingSword };
                                                        a.Value = 1;
                                                        a.Descriptor = ModifierDescriptor.Trait;
                                                    }
@@ -1295,7 +1295,7 @@ namespace ZFavoredClass
                                                    FeatureGroup.Trait,
                                                    Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusOnAttacksOfOpportunity>(a =>
                                                    {
-                                                       a.categories = new WeaponCategory[] { WeaponCategory.Rapier, WeaponCategory.BastardSword, WeaponCategory.DuelingSword, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.Longsword, WeaponCategory.Greatsword };
+                                                       a.categories = new WeaponCategory[] { WeaponCategory.Rapier, WeaponCategory.Scimitar, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.Kukri, WeaponCategory.PunchingDagger, WeaponCategory.Longsword, WeaponCategory.BastardSword, WeaponCategory.Falchion, WeaponCategory.Greatsword, WeaponCategory.DuelingSword };
                                                        a.Value = 1;
                                                        a.Descriptor = ModifierDescriptor.Trait;
                                                    }
@@ -1793,7 +1793,7 @@ namespace ZFavoredClass
                                                "",
                                                Helpers.GetIcon("9db907332bdaec1468cff3a99efef5b4"), //sf athletics
                                                FeatureGroup.Trait,
-                                               Helpers.Create<CallOfTheWild.NewMechanics.ContextWeaponCategoryDamageBonus>(w => { w.Value = 1; w.categories = new WeaponCategory[] { WeaponCategory.Dagger, WeaponCategory.PunchingDagger}; }),
+                                               Helpers.Create<CallOfTheWild.NewMechanics.ContextWeaponCategoryDamageBonus>(w => { w.Value = 1; w.categories = new WeaponCategory[] { WeaponCategory.Dagger, WeaponCategory.PunchingDagger, WeaponCategory.Kukri, WeaponCategory.Sai}; }),
                                                Helpers.CreateAddStatBonus(StatType.SkillAthletics, 1, ModifierDescriptor.Trait),
                                                Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillAthletics)
                                                );
@@ -1996,7 +1996,7 @@ namespace ZFavoredClass
                                        FeatureGroup.Trait,
                                        Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusOnAttacksOfOpportunity>(a =>
                                        {
-                                           a.categories = new WeaponCategory[] { WeaponCategory.Rapier, WeaponCategory.Scimitar, WeaponCategory.Shortsword, WeaponCategory.Dagger };
+                                           a.categories = new WeaponCategory[] { WeaponCategory.Rapier, WeaponCategory.Scimitar, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.Kukri, WeaponCategory.PunchingDagger, WeaponCategory.Longsword, WeaponCategory.BastardSword, WeaponCategory.Falchion, WeaponCategory.Greatsword, WeaponCategory.DuelingSword };
                                            a.Value = 1;
                                            a.Descriptor = ModifierDescriptor.Trait;
                                        }
@@ -2154,7 +2154,7 @@ namespace ZFavoredClass
                 if (wp == WeaponCategory.DwarvenWaraxe)
                 {
                     //we need to add full proficiency for dwarves
-                    proficiency.AddComponents(Helpers.Create<ExoticWeapons.FullProficiency>(fp => { fp.category = WeaponCategory.DwarvenWaraxe; fp.race = Core.dwarf; }),
+                    proficiency.AddComponents(Helpers.Create<WeaponsFix.FullProficiency>(fp => { fp.category = WeaponCategory.DwarvenWaraxe; fp.race = Core.dwarf; }),
                                               Helpers.Create<CallOfTheWild.HoldingItemsMechanics.CanHoldIn1Hand>(c => { c.category = WeaponCategory.DwarvenWaraxe; c.require_full_proficiency = true; }));
                 }
 

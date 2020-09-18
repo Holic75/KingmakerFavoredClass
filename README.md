@@ -46,12 +46,17 @@ It adds the following options for favored class bonuses:
  - +1 to dodge bonus against favored enemies/4 levels for halfling rangers,
  - +1 to dodge bonus against studied targets/4 levels for halfling and fetchling slayers,
  - +1 to attack bonus against one favored enemy/4 levels for hobgoblin rangers.
+
+Alternate Racial Traits:
+- Half-elf: ancestral arms,
+- Half-orc: toothy, sacred tattoo.
  
 Other features:
 - Everyone can select a Deity (optional),
 - Everyone can select 2 traits at character creation (optional),
 - It is possible to stack up to 2 compatible archetypes.
- 
+
+
  
 It also add following feats:
 - Additional Traits (if traits are enabled),

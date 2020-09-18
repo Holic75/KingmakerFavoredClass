@@ -104,16 +104,16 @@ namespace ZFavoredClass
 
         static bool canCombineArchetypes(BlueprintArchetype archetype1, BlueprintArchetype archetype2)
         {
-            Main.logger.Log($"Checking {archetype1.Name} and {archetype2.Name} stacking");
+            //Main.logger.Log($"Checking {archetype1.Name} and {archetype2.Name} stacking");
 
             if (archetype1 == CallOfTheWild.Archetypes.Seeker.archetype || archetype2 == CallOfTheWild.Archetypes.Seeker.archetype)
             {
-                Main.logger.Log("Seeker");
+                //Main.logger.Log("Seeker");
                 return false;
             }
             if ((archetype1.ReplaceSpellbook != null || archetype1.RemoveSpellbook) && (archetype2.ReplaceSpellbook != null || archetype2.RemoveSpellbook))
             {
-                Main.logger.Log("Spellbook Failure");
+               //Main.logger.Log("Spellbook Failure");
                 return false;
             }
 
@@ -126,7 +126,7 @@ namespace ZFavoredClass
                 if (missing_skills1.Intersect(missing_skills2).Any())
                 {
                     //both skills are removed
-                    Main.logger.Log("Skills Failure");
+                    //Main.logger.Log("Skills Failure");
                     return false;
                 }
             }
@@ -134,32 +134,32 @@ namespace ZFavoredClass
 
             if ((archetype1.BaseAttackBonus != null) && (archetype2.BaseAttackBonus != null) && archetype1.BaseAttackBonus != archetype2.BaseAttackBonus)
             {
-                Main.logger.Log("Base Attack Bonus Failure");
+                //Main.logger.Log("Base Attack Bonus Failure");
                 return false;
             }
 
             if ((archetype1.WillSave != null) && (archetype2.WillSave != null) && archetype1.BaseAttackBonus != archetype2.WillSave)
             {
-                Main.logger.Log("Will Save Failure");
+                //Main.logger.Log("Will Save Failure");
                 return false;
             }
 
             if ((archetype1.ReflexSave != null) && (archetype2.ReflexSave != null) && archetype1.BaseAttackBonus != archetype2.ReflexSave)
             {
-                Main.logger.Log("Reflex Save Failure");
+                //Main.logger.Log("Reflex Save Failure");
                 return false;
             }
 
 
             if ((archetype1.FortitudeSave != null) && (archetype2.FortitudeSave != null) && archetype1.BaseAttackBonus != archetype2.FortitudeSave)
             {
-                Main.logger.Log("Fort Save Failure");
+                //Main.logger.Log("Fort Save Failure");
                 return false;
             }
 
             if ((archetype1.IsDivineCaster && archetype1.IsArcaneCaster) || (archetype1.IsArcaneCaster && archetype1.IsDivineCaster))
             {
-                Main.logger.Log("Caster type Failure");
+                //Main.logger.Log("Caster type Failure");
                 return false;
             }
 
@@ -171,12 +171,12 @@ namespace ZFavoredClass
                     BlueprintFeatureBase feature = feature1;
                     if (removeFeature.Features.Count((f => f == feature)) !=0 && level_entry2.Features.Count((f => f == feature)) != 0)
                     {
-                        Main.logger.Log($"{feature.name} Failure");
+                        //Main.logger.Log($"{feature.name} Failure");
                         return false;
                     }
                 }
             }
-            Main.logger.Log("Passed");
+            //Main.logger.Log("Passed");
             return true;
         }
 
