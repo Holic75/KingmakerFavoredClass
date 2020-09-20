@@ -416,7 +416,7 @@ namespace ZFavoredClass
                                                    FeatureGroup.Trait,
                                                    Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusOnAttacksOfOpportunity>(a =>
                                                    {
-                                                       a.categories = new WeaponCategory[] { WeaponCategory.Rapier, WeaponCategory.Scimitar, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.Kukri, WeaponCategory.PunchingDagger, WeaponCategory.Longsword, WeaponCategory.BastardSword, WeaponCategory.Falchion, WeaponCategory.Greatsword, WeaponCategory.DuelingSword };
+                                                       a.categories = new WeaponCategory[] { WeaponCategory.Estoc, WeaponCategory.Rapier, WeaponCategory.Scimitar, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.Kukri, WeaponCategory.PunchingDagger, WeaponCategory.Longsword, WeaponCategory.BastardSword, WeaponCategory.Falchion, WeaponCategory.Greatsword, WeaponCategory.DuelingSword };
                                                        a.Value = 1;
                                                        a.Descriptor = ModifierDescriptor.Trait;
                                                    }
@@ -1295,7 +1295,7 @@ namespace ZFavoredClass
                                                    FeatureGroup.Trait,
                                                    Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusOnAttacksOfOpportunity>(a =>
                                                    {
-                                                       a.categories = new WeaponCategory[] { WeaponCategory.Rapier, WeaponCategory.Scimitar, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.Kukri, WeaponCategory.PunchingDagger, WeaponCategory.Longsword, WeaponCategory.BastardSword, WeaponCategory.Falchion, WeaponCategory.Greatsword, WeaponCategory.DuelingSword };
+                                                       a.categories = new WeaponCategory[] { WeaponCategory.Estoc, WeaponCategory.Rapier, WeaponCategory.Scimitar, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.Kukri, WeaponCategory.PunchingDagger, WeaponCategory.Longsword, WeaponCategory.BastardSword, WeaponCategory.Falchion, WeaponCategory.Greatsword, WeaponCategory.DuelingSword };
                                                        a.Value = 1;
                                                        a.Descriptor = ModifierDescriptor.Trait;
                                                    }
@@ -1996,7 +1996,7 @@ namespace ZFavoredClass
                                        FeatureGroup.Trait,
                                        Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusOnAttacksOfOpportunity>(a =>
                                        {
-                                           a.categories = new WeaponCategory[] { WeaponCategory.Rapier, WeaponCategory.Scimitar, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.Kukri, WeaponCategory.PunchingDagger, WeaponCategory.Longsword, WeaponCategory.BastardSword, WeaponCategory.Falchion, WeaponCategory.Greatsword, WeaponCategory.DuelingSword };
+                                           a.categories = new WeaponCategory[] { WeaponCategory.Estoc, WeaponCategory.Rapier, WeaponCategory.Scimitar, WeaponCategory.Shortsword, WeaponCategory.Dagger, WeaponCategory.Kukri, WeaponCategory.PunchingDagger, WeaponCategory.Longsword, WeaponCategory.BastardSword, WeaponCategory.Falchion, WeaponCategory.Greatsword, WeaponCategory.DuelingSword };
                                            a.Value = 1;
                                            a.Descriptor = ModifierDescriptor.Trait;
                                        }
@@ -2071,7 +2071,7 @@ namespace ZFavoredClass
                 + "When you select this trait, choose one of the following benefits: proficiency with that specific weapon, a +1 trait bonus on attacks of opportunity with that specific weapon, or a +2 trait bonus on all combat maneuvers when using that specific weapon.";
 
             var masterwork_enchant = library.Get<BlueprintWeaponEnchantment>("6b38844e2bffbac48b63036b66e735be");
-            var masterwork_weapons = library.GetAllBlueprints().OfType<BlueprintItemWeapon>().Where(w => w.Enchantments.Count == 1 && w.Enchantments[0] == masterwork_enchant && w.Icon != null);
+            var masterwork_weapons = library.GetAllBlueprints().OfType<BlueprintItemWeapon>().Where(w => w.IsOnlyMasterwork && w.Icon != null);
 
             
             foreach (var wp in all_proficiencies)

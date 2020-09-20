@@ -50,10 +50,21 @@ namespace ZFavoredClass
     class AlternativeRacialTraits
     {
         static LibraryScriptableObject library => Main.library;
+        static public BlueprintFeature skip_feature;
         static internal void load()
         {
+            skip_feature = Helpers.CreateFeature("SkipAlternateRacialFeature",
+                       "No Alternate Racial Traits",
+                       "Keep original racial traits.",
+                       "",
+                       null,
+                       FeatureGroup.Racial
+                       );
+            skip_feature.HideInCharacterSheetAndLevelUp = true;
+
             createHalfElfAdaptability();
             createHalfOrcAlternativeRacialFeatures();
+
         }
 
 
@@ -90,7 +101,7 @@ namespace ZFavoredClass
             alternative_racial_trait.Obligatory = false;
             alternative_racial_trait.HideInCharacterSheetAndLevelUp = true;
             alternative_racial_trait.HideInUI = true;
-            alternative_racial_trait.AllFeatures = new BlueprintFeature[] { toothy, sacred_tattoo };
+            alternative_racial_trait.AllFeatures = new BlueprintFeature[] { toothy, sacred_tattoo, skip_feature };
             Core.half_orc.Features = Core.half_orc.Features.AddToArray(alternative_racial_trait);
         }
 
