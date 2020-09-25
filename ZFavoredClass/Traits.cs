@@ -327,11 +327,14 @@ namespace ZFavoredClass
             //octavia - magical knack (wizard), elven reflexes
             Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), traits_selection, magic_traits);
             Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), magic_traits, pragmatic_activator);
-            //Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), traits_selection, magic_traits);
-            //Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), magic_traits, magical_knack);
-            //Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), magical_knack, library.Get<BlueprintFeature>("5ae9ff4d428647de9bec2d076ebd9f0e")); //wizard
             Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), traits_selection2, racial_traits);
             Common.addFeatureSelectionToAcl(octavia_feature.GetComponent<AddClassLevels>(), racial_traits, elven_reflexes);
+
+            //kalikke - reactionary, indomitable faith
+            Common.addFeatureSelectionToAcl(kalikke_feature.GetComponent<AddClassLevels>(), traits_selection, faith_traits);
+            Common.addFeatureSelectionToAcl(kalikke_feature.GetComponent<AddClassLevels>(), faith_traits, indomitable_faith);
+            Common.addFeatureSelectionToAcl(kalikke_feature.GetComponent<AddClassLevels>(), traits_selection2, combat_traits);
+            Common.addFeatureSelectionToAcl(kalikke_feature.GetComponent<AddClassLevels>(), combat_traits, reactionary);
         }
 
 
