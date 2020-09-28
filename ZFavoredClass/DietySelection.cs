@@ -45,8 +45,8 @@ namespace ZFavoredClass
             //addDeityToCompanion(kalikke_feature.GetComponent<AddClassLevels>(), ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("6262cfce7c31626458325ca0909de997"));//nethys
             addDeityToCompanion(octavia_feature.GetComponent<AddClassLevels>(), ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("c7531715a3f046d4da129619be63f44c"));//calistria
             addDeityToCompanion(regongar_feature.GetComponent<AddClassLevels>(), ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("c7531715a3f046d4da129619be63f44c"));//calistria
-            //nok-nok should have lamashtu
-            //jubilost
+            addDeityToCompanion(nok_nok_companion.GetComponent<AddClassLevels>(), CallOfTheWild.Deities.lamashtu);
+            //jubilost ?
             //jaethal - uragathoa
             //varn ?
             addDeityToCompanion(ekun_feature.GetComponent<AddClassLevels>(), ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("d2d5c5a58885a6b489727467e13c3337"));//torag

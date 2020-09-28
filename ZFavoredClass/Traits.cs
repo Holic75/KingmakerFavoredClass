@@ -135,6 +135,7 @@ namespace ZFavoredClass
         static public BlueprintFeature stoic_optimism;
         static public BlueprintFeature strong_willed;
         static public BlueprintFeature unswaying_love;
+        static public BlueprintFeature mothers_teeth;
 
 
         //RACE TRAITS
@@ -158,6 +159,7 @@ namespace ZFavoredClass
         static public BlueprintFeature helpful;
         static public BlueprintFeature well_informed;
         static public BlueprintFeatureSelection eclectic;
+        static public BlueprintFeature goblin_foolhardiness;
 
         //REGIONAL TRAITS
         static public BlueprintFeature chilled_by_brutality;
@@ -335,6 +337,31 @@ namespace ZFavoredClass
             Common.addFeatureSelectionToAcl(kalikke_feature.GetComponent<AddClassLevels>(), faith_traits, indomitable_faith);
             Common.addFeatureSelectionToAcl(kalikke_feature.GetComponent<AddClassLevels>(), traits_selection2, combat_traits);
             Common.addFeatureSelectionToAcl(kalikke_feature.GetComponent<AddClassLevels>(), combat_traits, reactionary);
+
+            //kanerah - pragmatic activator, indomitable faith
+            Common.addFeatureSelectionToAcl(kanerah_feature.GetComponent<AddClassLevels>(), traits_selection, faith_traits);
+            Common.addFeatureSelectionToAcl(kanerah_feature.GetComponent<AddClassLevels>(), faith_traits, indomitable_faith);
+            Common.addFeatureSelectionToAcl(kanerah_feature.GetComponent<AddClassLevels>(), traits_selection2, magic_traits);
+            Common.addFeatureSelectionToAcl(kanerah_feature.GetComponent<AddClassLevels>(), magic_traits, pragmatic_activator);
+
+            //jubilost - bruising intellect, indomitable faith
+            Common.addFeatureSelectionToAcl(jubilost_feature.GetComponent<AddClassLevels>(), traits_selection, social_traits);
+            Common.addFeatureSelectionToAcl(jubilost_feature.GetComponent<AddClassLevels>(), social_traits, bruising_intellect);
+            Common.addFeatureSelectionToAcl(jubilost_feature.GetComponent<AddClassLevels>(), traits_selection2, magic_traits);
+            Common.addFeatureSelectionToAcl(jubilost_feature.GetComponent<AddClassLevels>(), magic_traits, pragmatic_activator);
+
+            //ekun defensive strategist and magical knack ranger
+            Common.addFeatureSelectionToAcl(ekun_feature.GetComponent<AddClassLevels>(), traits_selection, magic_traits);
+            Common.addFeatureSelectionToAcl(ekun_feature.GetComponent<AddClassLevels>(), magic_traits, magical_knack);
+            Common.addFeatureSelectionToAcl(ekun_feature.GetComponent<AddClassLevels>(), magical_knack, library.Get<BlueprintFeature>("9625361668bf4c1c9c5d9962274b6f78"));//ranger
+            Common.addFeatureSelectionToAcl(ekun_feature.GetComponent<AddClassLevels>(), traits_selection2, religion_traits);
+            Common.addFeatureSelectionToAcl(ekun_feature.GetComponent<AddClassLevels>(), religion_traits, defensive_strategist);
+
+            //nok-nok - mothers teeth, goblin foolhardiness
+            Common.addFeatureSelectionToAcl(nok_nok_companion.GetComponent<AddClassLevels>(), traits_selection, racial_traits);
+            Common.addFeatureSelectionToAcl(nok_nok_companion.GetComponent<AddClassLevels>(), racial_traits, goblin_foolhardiness);
+            Common.addFeatureSelectionToAcl(nok_nok_companion.GetComponent<AddClassLevels>(), traits_selection2, religion_traits);
+            Common.addFeatureSelectionToAcl(nok_nok_companion.GetComponent<AddClassLevels>(), religion_traits, mothers_teeth);
         }
 
 
@@ -643,6 +670,19 @@ namespace ZFavoredClass
                                                  Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("b382afa31e4287644b77a8b30ed4aa0b"))//shelyn
                                                  );
 
+
+            mothers_teeth = Helpers.CreateFeature("MothersTeethTrait",
+                                                 "Mother's Teeth",
+                                                 "Your teeth are more jagged and pointed than normal.\n"
+                                                 +"Benefit: You can make a bite attack for 1d3 points of damage as a secondary attack.",
+                                                 "",
+                                                 CallOfTheWild.NewSpells.savage_maw.Icon, 
+                                                 FeatureGroup.Trait,
+                                                 Common.createAddSecondaryAttacks(library.Get<BlueprintItemWeapon>("35dfad6517f401145af54111be04d6cf")),
+                                                 Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.goblin),
+                                                 Helpers.PrerequisiteFeature(CallOfTheWild.Deities.lamashtu)
+                                                 );
+
             religion_traits = createTraitSelction("ReligionTrait",
                                                 "Religion Trait",
                                                 "Religion traits indicate that your character has an established faith in a specific deity; you need not be a member of a class that can wield divine magic to pick a religion trait, but you do have to have a patron deity and have some amount of religion in your background to justify this trait.",
@@ -666,7 +706,8 @@ namespace ZFavoredClass
                                                 regal_presence,
                                                 stoic_optimism,
                                                 strong_willed,
-                                                unswaying_love
+                                                unswaying_love,
+                                                mothers_teeth
                                                 );
 
             var deadeye_bowman = library.TryGet<BlueprintFeature>("98656c735106478c9944316c2b62fa54");
@@ -830,7 +871,7 @@ namespace ZFavoredClass
                                                          Helpers.GetIcon("55edf82380a1c8540af6c6037d34f322"), //elven magic
                                                          FeatureGroup.Trait
                                                          );
-
+            magical_knack.HideInCharacterSheetAndLevelUp = true;
             var classes = library.Root.Progression.CharacterClasses.Where(c => !c.HideIfRestricted && !c.PrestigeClass && c.Spellbook != null).ToList();
             foreach (var cls in classes)
             {
@@ -1672,6 +1713,25 @@ namespace ZFavoredClass
             eclectic.AddComponent(Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.human));
 
 
+            goblin_foolhardiness = Helpers.CreateFeature("GoblinFoolhardiness",
+                                             "Goblin Foolhardiness",
+                                             "You have a tendency toward gross overconfidence in combat.\n"
+                                             + "Benefit: When facing an enemy that’s larger than you are, if you have no allies in any adjacent squares, your posturing, bravado, and cussing grant you a +1 trait bonus on attack rolls with non-reach melee weapons.",
+                                             "",
+                                             Helpers.GetIcon("97b991256e43bb140b263c326f690ce2"), // rage
+                                             FeatureGroup.Trait,
+                                             Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusIfAloneAgainstBiggerSize>(a =>
+                                             {
+                                                 a.Bonus = 1;
+                                                 a.Descriptor = ModifierDescriptor.Trait;
+                                                 a.only_melee = true;
+                                                 a.only_non_reach = true;
+                                                 a.only_if_smaller = true;
+                                                 a.only_alone = true;
+                                             }),
+                                             Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.goblin)
+                                             );
+
             racial_traits = createTraitSelction("RacialTrait",
                                     "Race Trait",
                                     "Race traits are keyed to specific races or ethnicities. In order to select a race trait, your character must be of the trait’s race or ethnicity. If your race or ethnicity changes at some later point (as could be possible due to the result of polymorph magic or a reincarnation spell), the benefits gained by your racial trait persist— only if your mind and memories change as well do you lose the benefits of a race trait. Of course, in such an event, you’re also likely to lose skills, feats, and a whole lot more!",
@@ -1693,7 +1753,8 @@ namespace ZFavoredClass
                                     warrior_of_old,
                                     well_informed,
                                     helpful,
-                                    intrepid_volunteer
+                                    intrepid_volunteer,
+                                    goblin_foolhardiness
                                     //eclectic
                                     );
         }
