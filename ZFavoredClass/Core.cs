@@ -143,7 +143,7 @@ namespace ZFavoredClass
                     favored_prestige_class_selection.AllFeatures = favored_prestige_class_selection.AllFeatures.AddToArray(progression);
                     progression.AddComponent(Helpers.Create<PrerequisiteNoClassLevel>(p => p.CharacterClass = c));
                 }
-                else if (c != animal && c != CallOfTheWild.Eidolon.eidolon_class)
+                else if (c != animal && c != CallOfTheWild.Eidolon.eidolon_class && c != CallOfTheWild.Phantom.phantom_class)
                 {
                     favored_class_selection.AllFeatures = favored_class_selection.AllFeatures.AddToArray(progression);
                 }
