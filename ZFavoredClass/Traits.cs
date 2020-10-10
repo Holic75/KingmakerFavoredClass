@@ -1157,9 +1157,9 @@ namespace ZFavoredClass
                                                   "",
                                                   Helpers.GetIcon("9a7e3cd1323dfe347a6dcce357844769"), // blessing luck & resolve
                                                   FeatureGroup.Trait,
-                                                  Helpers.Create<CallOfTheWild.SpellManipulationMechanics.TargetDescriptorModifierBonus>(t => { t.descriptor = ModifierDescriptor.Luck; t.bonus = 1; })
+                                                  Helpers.Create<CallOfTheWild.SpellManipulationMechanics.TargetDescriptorModifierBonus>(t => { t.descriptor = ModifierDescriptor.Luck; t.bonus = 1;})
                                                   );
-
+            AlternativeRacialTraits.sacred_tattoo.AddComponent(Helpers.Create<RecalculateOnFactsChange>(r => r.CheckedFacts = new BlueprintUnitFact[] { fates_favored }));
             reincarnated = Helpers.CreateFeature("ReincarnatedTrait",
                                         "Reincarnated",
                                         "You lived a previous life as someone—or something— else. For you, life and death are a cycle, and you have no fear of death.\n"

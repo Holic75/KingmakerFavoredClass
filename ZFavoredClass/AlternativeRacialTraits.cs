@@ -51,6 +51,9 @@ namespace ZFavoredClass
     {
         static LibraryScriptableObject library => Main.library;
         static public BlueprintFeature skip_feature;
+
+
+        static public BlueprintFeature sacred_tattoo;
         static internal void load()
         {
             skip_feature = Helpers.CreateFeature("SkipAlternateRacialFeature",
@@ -82,7 +85,7 @@ namespace ZFavoredClass
                                                Common.createRemoveFeatureOnApply(ferocity)
                                                );
 
-            var sacred_tattoo = Helpers.CreateFeature("SacredHalfOrcRacialFeature",
+           sacred_tattoo = Helpers.CreateFeature("SacredHalfOrcRacialFeature",
                                    "Sacred Tattoo",
                                    "Many half-orcs decorate themselves with tattoos, piercings, and ritual scarification, which they consider sacred markings. Half-orcs with this racial trait gain a +1 luck bonus on all saving throws. This racial trait replaces orc ferocity.",
                                    "",
