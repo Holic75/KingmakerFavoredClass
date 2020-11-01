@@ -1651,7 +1651,7 @@ namespace ZFavoredClass
 
             intrepid_volunteer = Helpers.CreateFeatureSelection("IntrepidVolunteerFeatureSelection",
                                                                 "Intrepid Volunteer",
-                                                                "Like many free halflings, you volunteered readily for military service or an adventuring career and met other half lings who showed you how to make up for your small size. Choose one Strengthbased skill or one combat maneuver. You can use your Dexterity modifier in place of your Strength modifier to calculate your total modifier for that skill check or combat maneuver check.",
+                                                                "Like many free halflings, you volunteered readily for military service or an adventuring career and met other halflings who showed you how to make up for your small size. Choose one Strength-based skill or one combat maneuver. You can use your Dexterity modifier in place of your Strength modifier to calculate your total modifier for that skill check or combat maneuver check.",
                                                                 "",
                                                                 null,
                                                                 FeatureGroup.Trait,
