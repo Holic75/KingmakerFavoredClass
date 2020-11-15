@@ -803,7 +803,7 @@ namespace ZFavoredClass
             addFavoredClassToCompanion(favored_hp, jaethal_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_bombs, jubilost_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_skill, nok_nok_companion.GetComponent<AddClassLevels>());
-            addFavoredClassToCompanion(wild_talent, kanerah_feature.GetComponent<AddClassLevels>());
+            addFavoredClassToCompanion(favored_hp, kanerah_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, kalikke_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, octavia_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, octavia_feature.GetComponent<AddClassLevels>(), multi_talented, 0, custom_class: rogue);
