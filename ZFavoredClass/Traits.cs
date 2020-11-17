@@ -110,6 +110,8 @@ namespace ZFavoredClass
         static public BlueprintFeature transmuter_of_korada;
         static public BlueprintFeature strength_of_the_land;
         static public BlueprintFeature trickster;
+        static public BlueprintFeature aeromantic_affinity;
+        //stabbing spell
 
         //RELIGION TRAITS
         //deadeye bowman - done in proper flanking 2
@@ -136,6 +138,7 @@ namespace ZFavoredClass
         static public BlueprintFeature strong_willed;
         static public BlueprintFeature unswaying_love;
         static public BlueprintFeature mothers_teeth;
+        static public BlueprintFeature mothers_rage;
 
 
         //RACE TRAITS
@@ -160,6 +163,8 @@ namespace ZFavoredClass
         static public BlueprintFeature well_informed;
         static public BlueprintFeatureSelection eclectic;
         static public BlueprintFeature goblin_foolhardiness;
+        static public BlueprintFeature celestial_contact;
+        static public BlueprintFeature harrows_chosen;
 
         //REGIONAL TRAITS
         static public BlueprintFeature chilled_by_brutality;
@@ -683,6 +688,18 @@ namespace ZFavoredClass
                                                  Helpers.PrerequisiteFeature(CallOfTheWild.Deities.lamashtu)
                                                  );
 
+            mothers_rage = Helpers.CreateFeature("MothersRageTrait",
+                                                 "Mother's Teeth",
+                                                 "The blood of the beast runs thick in your veins, and your appearance is bestial.\n"
+                                                 + "Benefit: You receive a +1 trait bonus on Lore (Nature), and you treat your caster level as +1 higher when summoning creatures.",
+                                                 "",
+                                                 Helpers.GetIcon("38155ca9e4055bb48a89240a2055dcc3"),
+                                                 FeatureGroup.Trait,
+                                                 Helpers.CreateAddStatBonus(StatType.SkillLoreNature, 1, ModifierDescriptor.Trait),
+                                                 Helpers.Create<IncreaseSpellDescriptorCasterLevel>(i => { i.Descriptor = SpellDescriptor.Summoning; i.BonusCasterLevel = 1; }),
+                                                 Helpers.PrerequisiteFeature(CallOfTheWild.Deities.lamashtu)
+                                                 );
+
             religion_traits = createTraitSelction("ReligionTrait",
                                                 "Religion Trait",
                                                 "Religion traits indicate that your character has an established faith in a specific deity; you need not be a member of a class that can wield divine magic to pick a religion trait, but you do have to have a patron deity and have some amount of religion in your background to justify this trait.",
@@ -707,7 +724,8 @@ namespace ZFavoredClass
                                                 stoic_optimism,
                                                 strong_willed,
                                                 unswaying_love,
-                                                mothers_teeth
+                                                mothers_teeth,
+                                                mothers_rage
                                                 );
 
             var deadeye_bowman = library.TryGet<BlueprintFeature>("98656c735106478c9944316c2b62fa54");
@@ -849,7 +867,7 @@ namespace ZFavoredClass
                                                          FeatureGroup.Trait,
                                                          Helpers.Create<SpellPenetrationBonus>(s => s.Value = 1),
                                                          Helpers.Create<DispelCasterLevelCheckBonus>(d => d.Value = 1),
-                                                         Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = library.Get<BlueprintRace>("c4faf439f0e70bd40b5e36ee80d06be7"))//dwarf
+                                                         Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.dwarf)//dwarf
                                                          );
 
             trickster = Helpers.CreateFeature("TricksterTrait",
@@ -857,10 +875,10 @@ namespace ZFavoredClass
                                              "You are particularly adept with your racial spell-like abilities, and as child you quickly learned how dancing lights and ghost sound could be used to amuse your friends and fool your elders. This natural talent for illusion continued as you grew older, and before long you were being offered training in more advanced figments and glamers.\n"
                                              + "Benefit: Whenever you cast a spell from the illusion school, its effects manifest at +1 caster level. ",
                                              "",
-                                             Helpers.GetIcon("24d5402c0c1de48468b563f6174c6256"), // transmutation
+                                             Helpers.GetIcon("24d5402c0c1de48468b563f6174c6256"), 
                                              FeatureGroup.Trait,
                                              Helpers.Create<IncreaseSpellSchoolCasterLevel>(i => { i.BonusLevel = 1; i.School = SpellSchool.Illusion; }),
-                                             Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = library.Get<BlueprintRace>("ef35a22c9a27da345a4528f0d5889157"))//gnome
+                                             Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.gnome)//gnome
                                              );
 
             magical_knack = Helpers.CreateFeatureSelection("MagicalKnackraitSelection",
@@ -892,6 +910,16 @@ namespace ZFavoredClass
                 magical_knack.AllFeatures = magical_knack.AllFeatures.AddToArray(f);
             }
 
+            aeromantic_affinity = Helpers.CreateFeature("AeromanticAffinityTrait",
+                                                         "Aeromantic Affinity",
+                                                         "One of your distant ancestors was either a powerful aeromancer or a creature of elemental air, granting you greater skill with air magic.\n"
+                                                         + "Benefit: You treat your caster level as 1 higher when casting spells with the air or electricity descriptor.",
+                                                         "",
+                                                         Helpers.GetIcon("9fbc4fe045472984aa4a2d15d88bdaf9"), //cyclone
+                                                         FeatureGroup.Trait,
+                                                         Helpers.Create<IncreaseSpellDescriptorCasterLevel>(i => { i.BonusCasterLevel = 1; i.Descriptor = SpellDescriptor.Electricity | (SpellDescriptor)CallOfTheWild.AdditionalSpellDescriptors.ExtraSpellDescriptor.Air; })
+                                                         );
+
             magic_traits = createTraitSelction("MagicTrait",
                                                 "Magic Trait",
                                                 "Magic traits are associated with magic, and focus on spellcasting and manipulating magic. You need not be a spellcaster to take a Magic Trait (although several of these traits aren’t as useful to non-spellcasters). Magic Traits can represent a character’s early exposure to magical effects or childhood studies of magic.",
@@ -904,7 +932,8 @@ namespace ZFavoredClass
                                                 pragmatic_activator,
                                                 transmuter_of_korada,
                                                 strength_of_the_land,
-                                                trickster
+                                                trickster,
+                                                aeromantic_affinity
                                                 );
         }
 
@@ -1448,7 +1477,7 @@ namespace ZFavoredClass
                                                     Helpers.GetIcon("797f25d709f559546b29e7bcb181cc74"), // Improved Initiative
                                                     FeatureGroup.Trait,
                                                     Helpers.CreateAddStatBonus(StatType.Initiative, 2, ModifierDescriptor.Trait),
-                                                    Helpers.Create<NewMechanics.PrerequisiteRace>(p =>  p.race = Core.half_elf )
+                                                    Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.half_elf)
                                                     );
 
             warrior_of_old = Helpers.CreateFeature("WarriorOfOldTrait",
@@ -1732,6 +1761,28 @@ namespace ZFavoredClass
                                              Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.goblin)
                                              );
 
+            celestial_contact = Helpers.CreateFeature("CelestialContactTrait",
+                                                        "Celestial Contact",
+                                                        "Witnessing a celestial intervention by your ancestor or a similar being inspired you with the power of good.\n"
+                                                        + "Benefit: Treat your caster level as 1 higher when you cast spells with the good descriptor.",
+                                                        "",
+                                                        Helpers.GetIcon("b1c7576bd06812b42bda3f09ab202f14"), //angelic aspect greater
+                                                        FeatureGroup.Trait,
+                                                        Helpers.Create<IncreaseSpellDescriptorCasterLevel>(i => { i.Descriptor = SpellDescriptor.Good; i.BonusCasterLevel = 1; }),
+                                                        Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.aasimar)
+                                                        );
+
+            harrows_chosen = Helpers.CreateFeature("HarrowChoosenTrait",
+                                            "Harrow Chosen",
+                                            "All your life you’ve been drawn to the mysteries surrounding your family’s harrow deck.\n"
+                                            + "Benefit: When you cast a divination spell, your caster level is treated as being 2 levels higher.",
+                                            "",
+                                            Helpers.GetIcon("d7d18ce5c24bd324d96173fdc3309646"), //divination
+                                            FeatureGroup.Trait,
+                                            Helpers.Create<IncreaseSpellSchoolCasterLevel>(i => { i.School = SpellSchool.Divination; i.BonusLevel = 2; }),
+                                            Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.human)
+                                            );
+
             racial_traits = createTraitSelction("RacialTrait",
                                     "Race Trait",
                                     "Race traits are keyed to specific races or ethnicities. In order to select a race trait, your character must be of the trait’s race or ethnicity. If your race or ethnicity changes at some later point (as could be possible due to the result of polymorph magic or a reincarnation spell), the benefits gained by your racial trait persist— only if your mind and memories change as well do you lose the benefits of a race trait. Of course, in such an event, you’re also likely to lose skills, feats, and a whole lot more!",
@@ -1754,7 +1805,9 @@ namespace ZFavoredClass
                                     well_informed,
                                     helpful,
                                     intrepid_volunteer,
-                                    goblin_foolhardiness
+                                    goblin_foolhardiness,
+                                    celestial_contact,
+                                    harrows_chosen
                                     //eclectic
                                     );
         }
