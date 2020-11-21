@@ -1722,7 +1722,7 @@ namespace ZFavoredClass
 
             for (int i = 0; i < maneuvers.Length; i++)
             {
-                var feat = Helpers.CreateFeature("MagusManeuverMastery" + maneuvers[i][0].ToString() + "Feature",
+                var feat = Helpers.CreateFeature("IntrepidVolunteerFeatureSelection" + maneuvers[i][0].ToString() + "Feature",
                                                  intrepid_volunteer.Name + " (" + names[i] + ")",
                                                  intrepid_volunteer.Description,
                                                  "",

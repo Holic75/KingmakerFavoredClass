@@ -14,6 +14,7 @@ using Kingmaker.PubSubSystem;
 using Kingmaker.RuleSystem.Rules.Damage;
 using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Class.LevelUp;
+using Kingmaker.UnitLogic.Class.LevelUp.Actions;
 using Kingmaker.UnitLogic.FactLogic;
 using Kingmaker.UnitLogic.Mechanics;
 using Kingmaker.Utility;
@@ -77,12 +78,30 @@ namespace ZFavoredClass.NewMechanics
             // it won't allow the base class to get its favored class bonus.
             bool isFavoredClass = !@class.PrestigeClass && classes.Contains(@class) && !Owner.Progression.Classes.Any(c => c.Level >= nextLevel && c.CharacterClass != @class);
 
-            if (isFavoredClass)
+            /*if (isFavoredClass)
             {
                 Owner.Stats.HitPoints.BaseValue--;
-            }
+            }*/
         }
     }
+
+    //remove extra hp due to favored class
+    [Harmony12.HarmonyPatch(typeof(ApplyClassMechanics))]
+    [Harmony12.HarmonyPatch("ApplyHitPoints", Harmony12.MethodType.Normal)]
+    class RuleCalculateAC__OnTrigger__FlyingFix
+    {
+        static bool Prefix(LevelUpState state, ClassData classData, UnitDescriptor unit)
+        {
+            int hitDie = (int)classData.CharacterClass.HitDie;
+            BlueprintCharacterClass characterClass = classData.CharacterClass;
+            int nextLevel = state.NextLevel;
+            int num2 = !BlueprintRoot.Instance.Progression.CharacterClasses.Contains(characterClass) || !unit.IsPlayerFaction ? hitDie / 2 + nextLevel % 2 + 1 : (nextLevel > 1 ? hitDie / 2 + nextLevel % 2 : hitDie) ;
+            unit.Stats.HitPoints.BaseValue += num2;
+            return false;
+        }
+    }
+
+
 
 
     public abstract class ComponentAppliedOnceOnLevelUp : OwnedGameLogicComponent<UnitDescriptor>, ILevelUpCompleteUIHandler
