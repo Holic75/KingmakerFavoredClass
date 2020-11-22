@@ -32,14 +32,48 @@ namespace ZFavoredClass
             {
                 var archetypes = c.Archetypes.ToList().ToArray();
 
-                for (int i = 0; i < archetypes.Length; i++)
+                var archetypes_idx = new List<int>();
+                archetypes_idx.Add(0);
+                int next_archetype_idx = 1;
+                while (true)
                 {
-                    for (int j = i + 1; j < archetypes.Length; j++)
+                    //Main.logger.Log("Checking " + archetypes[archetypes_idx.Last()].name);
+                    bool add_archetype = false;
+                    for (int i = next_archetype_idx; i < archetypes.Length; i++)
                     {
-                        if (canCombineArchetypes(archetypes[i], archetypes[j]))
+                        add_archetype = true;
+                        foreach (var a_idx in archetypes_idx)
                         {
-                            createCombinedArchetype(archetypes[i], archetypes[j]);
+                            add_archetype = add_archetype && canCombineArchetypes(archetypes[a_idx], archetypes[i]);
+                            if (!add_archetype)
+                            {
+                                break;
+                            }
                         }
+                        if (add_archetype)
+                        {
+                            archetypes_idx.Add(i);
+                            //Main.logger.Log("Added " + archetypes[i].name);
+                            break;
+                        }
+                    }
+                    next_archetype_idx = archetypes_idx.Last() + 1;
+                    if (add_archetype)
+                    {
+                        createCombinedArchetypeMultiple(archetypes_idx.Select(ai => archetypes[ai]).ToArray());
+                    }
+                    else
+                    {
+                        archetypes_idx.RemoveAt(archetypes_idx.Count - 1);
+                    }
+                    if (archetypes_idx.Empty())
+                    {
+                        if (next_archetype_idx >= archetypes.Length)
+                        {
+                            break;
+                        }
+                        archetypes_idx.Add(next_archetype_idx);
+                        next_archetype_idx++;
                     }
                 }
             }
@@ -50,6 +84,72 @@ namespace ZFavoredClass
             {
                 library.Get<BlueprintFeatureSelection>("c5e2d914e4174aadb3e3fcec72008711").AddComponent(Common.prerequisiteNoArchetype(combined_archetypes["SacredHuntsmasterArchetypeRavenerHunterArchetype"]));
             }
+        }
+
+
+        static BlueprintArchetype createCombinedArchetypeMultiple(params BlueprintArchetype[] archetypes)
+        {
+            var parent_class = archetypes[0].GetParentClass();
+
+            var combined_archetype = Helpers.Create<BlueprintArchetype>(a =>
+            {
+                a.name = "";
+                string localized_name = "";
+                string description_header = "This archetype represents a combination of following archetypes:";
+                string description = "";
+                foreach (var ar in archetypes)
+                {
+                    a.name += ar.name;
+                    localized_name += ar.Name + (ar == archetypes.Last() ? "" : " / ");
+                    description_header += (ar == archetypes.Last() ? " and " : " ") + ar.Name + (ar == archetypes.Last() ? "." : "");
+                    description += ar.Name + ": " + ar.Description + (ar == archetypes.Last() ? "" : "\n");
+                }
+                                
+                a.LocalizedName = Helpers.CreateString($"{a.name}.Name", localized_name);
+                a.LocalizedDescription = Helpers.CreateString($"{a.name}.Description", $"{description_header}\n{description}");
+            });
+            Helpers.SetField(combined_archetype, "m_ParentClass", parent_class);
+            library.AddAsset(combined_archetype, Helpers.MergeIdsMultiple(archetypes.Select(s => s.AssetGuid).ToArray()));
+
+            combined_archetype.RemoveFeatures = new LevelEntry[] { };
+
+            combined_archetype.AddFeatures = new LevelEntry[] {Helpers.LevelEntry(1)
+                                                                  };
+            parent_class.Archetypes = parent_class.Archetypes.AddToArray(combined_archetype);
+
+            var extra_skills = new List<StatType>();
+            var missing_skills = new List<StatType>();
+
+            var replace_skills = false;
+            for (int i = 0; i < archetypes.Length; i++)
+            {
+                var skills = archetypes[i].ReplaceClassSkills ? archetypes[i].ClassSkills : parent_class.ClassSkills;
+
+                replace_skills = replace_skills || archetypes[i].ReplaceClassSkills;
+                missing_skills.AddRange(parent_class.ClassSkills.Except(skills));
+                missing_skills = missing_skills.Distinct().ToList();
+
+                extra_skills.AddRange(skills.Except(parent_class.ClassSkills));
+                extra_skills = extra_skills.Distinct().ToList();               
+            }
+         
+
+            if (replace_skills)
+            {
+                combined_archetype.ReplaceClassSkills = replace_skills;
+                combined_archetype.ClassSkills = parent_class.ClassSkills.AddToArray(extra_skills).Except(missing_skills).ToArray();
+            }
+
+            foreach (var a in archetypes)
+            {
+                combined_archetype.IsArcaneCaster = combined_archetype.IsArcaneCaster || a.IsArcaneCaster;
+                combined_archetype.IsDivineCaster = combined_archetype.IsDivineCaster || a.IsDivineCaster;
+                combined_archetype.ChangeCasterType = combined_archetype.ChangeCasterType || a.ChangeCasterType;
+            }
+
+            combined_archetype.AddComponent(Helpers.Create<CombineArchetypes>(c => c.archetypes =archetypes));
+            combined_archetypes[combined_archetype.name] = combined_archetype;
+            return combined_archetype;
         }
 
 
@@ -97,7 +197,6 @@ namespace ZFavoredClass
             combined_archetype.AddComponent(Helpers.Create<CombineArchetypes>(c => c.archetypes = new BlueprintArchetype[] { archetype1, archetype2 }));
             combined_archetypes[archetype1.name + archetype2.name] = combined_archetype;
             return combined_archetype;
-
         }
 
 
