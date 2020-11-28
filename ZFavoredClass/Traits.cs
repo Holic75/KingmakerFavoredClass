@@ -785,7 +785,7 @@ namespace ZFavoredClass
             magical_lineage.Groups = new FeatureGroup[] { FeatureGroup.Trait };
             magical_lineage.SetNameDescription("Magical Lineage",
                                             "One of your parents was a gifted spellcaster who not only used metamagic often, but also developed many magical items and perhaps even a new spell or two—and you have inherited a fragment of this greatness.\n"
-                                            + "Benefit: Pick one spell when you choose this trait. When you apply metamagic feats to this spell that add at least 1 level to the spell, treat its actual level as 1 lower for determining the spell’s final adjusted level.");
+                                            + "Benefit: Pick one spell of 3rd level or lower when you choose this trait. When you apply metamagic feats to this spell that add at least 1 level to the spell, treat its actual level as 1 lower for determining the spell’s final adjusted level.");
             magical_lineage.Prerequisite = null;
 
             magical_lineage.ComponentsArray = new BlueprintComponent[] { Helpers.Create<CallOfTheWild.NewMechanics.MetamagicMechanics.ReduceMetamagicCostForSpellParametrized>(r => r.reduction = 1),
