@@ -774,7 +774,7 @@ namespace ZFavoredClass
             gifted_adept.Groups = new FeatureGroup[] { FeatureGroup.Trait };
             gifted_adept.SetNameDescription("Gifted Adept",
                                             "Your interest in magic was inspired by witnessing a spell being cast in a particularly dramatic method, perhaps even one that affected you physically or spiritually. This early exposure to magic has made it easier for you to work similar magic on your own.\n"
-                                            + "Benefit: Pick one spell when you choose this trait—from this point on, whenever you cast that spell, its effects manifest at +1 caster level.");
+                                            + "Benefit: Pick one spell of 3rd level or lower when you choose this trait — from this point on, whenever you cast that spell, its effects manifest at +1 caster level.");
             gifted_adept.ComponentsArray = new BlueprintComponent[] { Helpers.Create<SpellDuplicates.ClBonusParametrized>(c => c.bonus = 1),
                                                                       Helpers.Create<CallOfTheWild.NewMechanics.ParametrizedFeatureSelection.MaxLearneableSpellLevelLimiter>(m => m.max_lvl = 3) };
             gifted_adept.Prerequisite = null;
