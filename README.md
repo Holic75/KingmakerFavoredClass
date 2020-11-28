@@ -54,7 +54,7 @@ Alternate Racial Traits:
 Other features:
 - Everyone can select a Deity (optional),
 - Everyone can select 2 traits at character creation (optional),
-- It is possible to stack up to 2 compatible archetypes.
+- Archetype stacking.
 
 
  
