@@ -45,7 +45,8 @@ It adds the following options for favored class bonuses:
  - +1 trip and grapple cmb bonus/4 levels for hobgoblin monks,
  - +1 to dodge bonus against favored enemies/4 levels for halfling rangers,
  - +1 to dodge bonus against studied targets/4 levels for halfling and fetchling slayers,
- - +1 to attack bonus against one favored enemy/4 levels for hobgoblin rangers.
+ - +1 to attack bonus against one favored enemy/4 levels for hobgoblin rangers,
+ - +1 cruelty/greed/4 levels for drow antipaladins.
 
 Alternate Racial Traits:
 - Half-elf: ancestral arms,

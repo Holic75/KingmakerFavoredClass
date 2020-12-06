@@ -990,6 +990,17 @@ namespace ZFavoredClass
             addFavoredClassBonus(extra_teamwork_feat, null, inquistor, 6, drow);
 
             addFavoredClassBonus(createFeatureCopy(Psychic.phrenic_amplification, "Gain 1/6 of a new phrenic amplification.", 3), null, Psychic.psychic_class, 6, half_elf, drow);
+
+
+            var cruelty_fcb = createFeatureCopy(Antipaladin.cruelty, "Gain 1/4 of a new cruelty.", 4);
+            cruelty_fcb.AddComponents(Common.prerequisiteNoArchetype(Antipaladin.insinuator),
+                                      Common.prerequisiteNoArchetype(Antipaladin.iron_tyrant)
+                                      );
+            addFavoredClassBonus(cruelty_fcb, null, Antipaladin.antipaladin_class, 5, drow);
+
+            var greeds_fcb = createFeatureCopy(Antipaladin.greeds, "Gain 1/4 of a new greed.", 4);
+            greeds_fcb.AddComponent(Common.createPrerequisiteArchetypeLevel(Antipaladin.insinuator, 1));
+            addFavoredClassBonus(greeds_fcb, null, Antipaladin.antipaladin_class, 5, drow);
         }
 
 
