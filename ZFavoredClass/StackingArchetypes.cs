@@ -250,13 +250,13 @@ namespace ZFavoredClass
             }
 
 
-            if ((archetype1.FortitudeSave != null) && (archetype2.FortitudeSave != null) && archetype1.BaseAttackBonus != archetype2.FortitudeSave)
+            if ((archetype1.FortitudeSave != null) && (archetype2.FortitudeSave != null) && archetype1.FortitudeSave != archetype2.FortitudeSave)
             {
                 //Main.logger.Log("Fort Save Failure");
                 return false;
             }
 
-            if ((archetype1.IsDivineCaster && archetype1.IsArcaneCaster) || (archetype1.IsArcaneCaster && archetype1.IsDivineCaster))
+            if ((archetype2.IsDivineCaster && archetype1.IsArcaneCaster) || (archetype2.IsArcaneCaster && archetype2.IsDivineCaster))
             {
                 //Main.logger.Log("Caster type Failure");
                 return false;
