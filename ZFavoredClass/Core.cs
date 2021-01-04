@@ -1001,6 +1001,9 @@ namespace ZFavoredClass
             var greeds_fcb = createFeatureCopy(Antipaladin.greeds, "Gain 1/4 of a new greed.", 5);
             greeds_fcb.AddComponent(Common.createPrerequisiteArchetypeLevel(Antipaladin.insinuator, 1));
             addFavoredClassBonus(greeds_fcb, null, Antipaladin.antipaladin_class, 4, drow);
+
+            var focus_power = createFeatureCopy(Occultist.focus_power_selection, "Gain 1/6 of a new focus power.", 3);
+            addFavoredClassBonus(focus_power, null, Occultist.occultist_class, 6, human, half_elf, half_orc, aasimar, tiefling);
         }
 
 
@@ -1142,6 +1145,12 @@ namespace ZFavoredClass
                                                                 Psychic.phrenic_pool.Icon,
                                                                 Psychic.phrenic_pool_resource);
 
+            var extra_mental_focus = createResourceBonusFeature("FavoredClassExtraMentalFocusFeature",
+                                                    "Bonus Mental Focus",
+                                                    "Increase the occultist’s total number of points of mental focus by 1/2 point.",
+                                                    Occultist.mental_focus.Icon,
+                                                    Occultist.mental_focus_resource[SpellSchool.Universalist]);
+
             addFavoredClassBonus(extra_bloodrage, null, Bloodrager.bloodrager_class, 1, dwarf, half_orc, human, half_elf, aasimar, tiefling);
             addFavoredClassBonus(extra_rage, null, barbarian, 1, dwarf, half_orc);
             addFavoredClassBonus(extra_performance, null, bard, 1, half_elf, half_orc, gnome, goblin);
@@ -1157,6 +1166,7 @@ namespace ZFavoredClass
             addFavoredClassBonus(extra_inspiration, null, Investigator.investigator_class, 3, elf, half_elf, ganzi);
             addFavoredClassBonus(extra_judgment, null, inquistor, 6, duergar);
             addFavoredClassBonus(extra_phrenic_pool, null, Psychic.psychic_class, 3, elf, gnome, half_elf);
+            addFavoredClassBonus(extra_mental_focus, null, Occultist.occultist_class, 2, elf, halfling, half_elf);
         }
 
 
