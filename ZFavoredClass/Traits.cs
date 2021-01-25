@@ -689,7 +689,7 @@ namespace ZFavoredClass
                                                  );
 
             mothers_rage = Helpers.CreateFeature("MothersRageTrait",
-                                                 "Mother's Teeth",
+                                                 "Mother's Rage",
                                                  "The blood of the beast runs thick in your veins, and your appearance is bestial.\n"
                                                  + "Benefit: You receive a +1 trait bonus on Lore (Nature), and you treat your caster level as +1 higher when summoning creatures.",
                                                  "",
@@ -2229,7 +2229,7 @@ namespace ZFavoredClass
                                         "",
                                         mw_weapon.Icon,
                                         FeatureGroup.Trait,
-                                        Helpers.Create<PrerequisiteProficiency>(p => p.WeaponProficiencies = new WeaponCategory[] { wp }),
+                                        Helpers.Create<PrerequisiteProficiency>(p => { p.WeaponProficiencies = new WeaponCategory[] { wp }; p.ArmorProficiencies = new ArmorProficiencyGroup[0]; }),
                                         Helpers.Create<CallOfTheWild.NewMechanics.AttackBonusOnAttacksOfOpportunity>(a =>
                                         {
                                             a.categories = new WeaponCategory[] { wp };
@@ -2256,7 +2256,7 @@ namespace ZFavoredClass
                                                         "",
                                                         mw_weapon.Icon,
                                                         FeatureGroup.Trait,
-                                                        Helpers.Create<PrerequisiteProficiency>(p => p.WeaponProficiencies = new WeaponCategory[] { wp }),
+                                                        Helpers.Create<PrerequisiteProficiency>(p => { p.WeaponProficiencies = new WeaponCategory[] { wp }; p.ArmorProficiencies = new ArmorProficiencyGroup[0]; }),
                                                         Helpers.Create<CallOfTheWild.WeaponTrainingMechanics.AddFeatureOnWeaponCategory>(a =>
                                                         {
                                                             a.feature = heirloom_weapon_cmb_bonus;
