@@ -252,9 +252,12 @@ namespace ZFavoredClass
                                                       Helpers.Create<CallOfTheWild.EvolutionMechanics.addSelection>(a => a.selection = traits_selection2)
                                                       );
             var animal_calss = ResourcesLibrary.TryGetBlueprint<BlueprintCharacterClass>("4cd1757a0eea7694ba5c933729a53920");
+            var dragon_calss = ResourcesLibrary.TryGetBlueprint<BlueprintCharacterClass>("01a754e7c1b7c5946ba895a5ff0faffc");
             additional_traits.AddComponent(Helpers.PrerequisiteNoFeature(additional_traits));
             additional_traits.AddComponents(Helpers.Create<PrerequisiteNoClassLevel>(p => p.CharacterClass = animal_calss),
-                                            Helpers.Create<PrerequisiteNoClassLevel>(p => p.CharacterClass = Eidolon.eidolon_class));
+                                            Helpers.Create<PrerequisiteNoClassLevel>(p => p.CharacterClass = Eidolon.eidolon_class),
+                                            Helpers.Create<PrerequisiteNoClassLevel>(p => p.CharacterClass = Phantom.phantom_class),
+                                            Helpers.Create<PrerequisiteNoClassLevel>(p => p.CharacterClass = dragon_calss));
 
 
             if (enable)
@@ -890,7 +893,7 @@ namespace ZFavoredClass
                                                          FeatureGroup.Trait
                                                          );
             magical_knack.HideInCharacterSheetAndLevelUp = true;
-            var classes = library.Root.Progression.CharacterClasses.Where(c => !c.HideIfRestricted && !c.PrestigeClass && c.Spellbook != null).ToList();
+            var classes = library.Root.Progression.CharacterClasses.Where(c => !c.HideIfRestricted && !c.PrestigeClass && (c.Spellbook != null || c.Archetypes.Any(a => a.ReplaceSpellbook != null))).ToList();
             foreach (var cls in classes)
             {
                 var f = Helpers.CreateFeature(cls.name + magical_knack.name,
@@ -1247,7 +1250,7 @@ namespace ZFavoredClass
                                                              Helpers.GetIcon("1a54bbbafab728348a015cf9ffcf50a7"), // Extra Rage
                                                              FeatureGroup.Trait,
                                                              rage_resource.CreateIncreaseResourceAmount(3),
-                                                             Helpers.PrerequisiteClassLevel(library.Get<BlueprintCharacterClass>("f7d7eb166b3dd594fb330d085df41853"), 1));
+                                                             Helpers.PrerequisiteFeature(library.Get<BlueprintFeature>("2479395977cfeeb46b482bc3385f4647")));
 
             blade_of_the_society = Helpers.CreateFeature("BladeOfTheSocietyTrait",
                                                          "Blade of the Society",
@@ -1327,9 +1330,7 @@ namespace ZFavoredClass
                                                          "Xa Hoi’s elite warriors are trained to deflect energy attacks.\nBenefit: Choose an energy type (acid, cold, electricity, fire, or sonic) when you acquire this trait. When you are wearing medium or heavy armor, you gain a +2 trait bonus on Reflex saves against spells and effects of the chosen energy type.",
                                                          "",
                                                          Helpers.GetIcon("d2f116cfe05fcdd4a94e80143b67046f"), // protection from energy
-                                                         FeatureGroup.Trait,
-                                                         Helpers.CreateAddStatBonus(StatType.SkillStealth, 1, ModifierDescriptor.Trait),
-                                                         Helpers.Create<AddClassSkill>(a => a.Skill = StatType.SkillStealth)
+                                                         FeatureGroup.Trait
                                                          );
             dragon_armor.HideInCharacterSheetAndLevelUp = true;
             var descriptors = new SpellDescriptor[] { SpellDescriptor.Fire, SpellDescriptor.Acid, SpellDescriptor.Cold, SpellDescriptor.Electricity };
@@ -2170,6 +2171,7 @@ namespace ZFavoredClass
                                                                                                       && wp != WeaponCategory.WeaponLightShield
                                                                                                       && wp != WeaponCategory.SpikedLightShield
                                                                                                       && wp != WeaponCategory.WeaponHeavyShield
+                                                                                                      && wp != WeaponCategory.Sling
                                                                                                       ).ToArray();
 
             var racial_weapons = new Dictionary<WeaponCategory, BlueprintRace>

@@ -93,6 +93,7 @@ namespace ZFavoredClass
         static internal BlueprintCharacterClass slayer = library.Get<BlueprintCharacterClass>("c75e0971973957d4dbad24bc7957e4fb");
         static internal BlueprintCharacterClass monk = library.Get<BlueprintCharacterClass>("e8f21e5b58e0569468e420ebea456124");
         static internal BlueprintCharacterClass animal = library.Get<BlueprintCharacterClass>("4cd1757a0eea7694ba5c933729a53920");
+        static internal BlueprintCharacterClass dragon = library.Get<BlueprintCharacterClass>("01a754e7c1b7c5946ba895a5ff0faffc");
         static internal BlueprintFeatureSelection multi_talented;
 
         static internal FavoredClassFeature rogue_talent;
@@ -100,6 +101,7 @@ namespace ZFavoredClass
         static public FavoredClassFeature favored_skill;
         static public FavoredClassFeature favored_hp;
         static public FavoredClassFeature favored_bombs;
+        static public FavoredClassFeature favored_eldritch_pool;
 
 
 
@@ -143,7 +145,7 @@ namespace ZFavoredClass
                     favored_prestige_class_selection.AllFeatures = favored_prestige_class_selection.AllFeatures.AddToArray(progression);
                     progression.AddComponent(Helpers.Create<PrerequisiteNoClassLevel>(p => p.CharacterClass = c));
                 }
-                else if (c != animal && c != CallOfTheWild.Eidolon.eidolon_class && c != CallOfTheWild.Phantom.phantom_class)
+                else if (c != animal && c != CallOfTheWild.Eidolon.eidolon_class && c != CallOfTheWild.Phantom.phantom_class && c != dragon)
                 {
                     favored_class_selection.AllFeatures = favored_class_selection.AllFeatures.AddToArray(progression);
                 }
@@ -523,7 +525,7 @@ namespace ZFavoredClass
                                       );
             negative_energy_dmg_bonus.AddComponent(Helpers.CreateContextRankConfig(baseValueType: ContextRankBaseValueType.FeatureRank, feature: negative_energy_dmg_bonus));
             negative_energy_dmg_bonus.Ranks = 10;
-            addFavoredClassBonus(negative_energy_dmg_bonus, null, new BlueprintCharacterClass[] { cleric }, 2, hobgoblin, ganzi);
+            addFavoredClassBonus(negative_energy_dmg_bonus, null, new BlueprintCharacterClass[] { cleric }, 2, hobgoblin, fetchling);
 
 
             var negative_energy_dmg_bonus2 = Helpers.CreateFeature("OracleNegativeEnergyDamageFavoredClassBonusFeature",
@@ -812,7 +814,8 @@ namespace ZFavoredClass
             {
                 addFavoredClassToCompanion(favored_hp, octavia_acls[1], skip_class_selection: true);
             }
-            addFavoredClassToCompanion(favored_skill, regongar_feature.GetComponent<AddClassLevels>());
+            
+            addFavoredClassToCompanion(favored_eldritch_pool, regongar_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(rogue_talent, varn_feature.GetComponent<AddClassLevels>());
             addFavoredClassToCompanion(favored_hp, cephal_feature.GetComponent<AddClassLevels>());
         }
@@ -1158,7 +1161,7 @@ namespace ZFavoredClass
             favored_bombs = addFavoredClassBonus(extra_bombs, null, alchemist, 2, gnome, hobgoblin);
             addFavoredClassBonus(extra_ki, null, monk, 4, human, half_elf, half_orc, aasimar, tiefling);
             addFavoredClassBonus(extra_arcane_pool, null, magus, 4, human, half_elf, tiefling, aasimar, half_orc, suli, fetchling);
-            addFavoredClassBonus(extra_eldritch_pool, null, magus, 4, human, half_elf,tiefling, aasimar, half_orc, suli, fetchling);
+            favored_eldritch_pool = addFavoredClassBonus(extra_eldritch_pool, null, magus, 4, human, half_elf, tiefling, aasimar, half_orc, suli, fetchling);
             addFavoredClassBonus(extra_internal_buffer, null, kineticist, 6, halfling);
             addFavoredClassBonus(extra_healer_buffer, null, kineticist, 3, halfling);
             addFavoredClassBonus(extra_max_arcane_reservoir, null, Arcanist.arcanist_class, 1, elf, half_elf);

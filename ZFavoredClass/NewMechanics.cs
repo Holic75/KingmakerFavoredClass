@@ -8,6 +8,8 @@ using Kingmaker.Blueprints.Classes.Spells;
 using Kingmaker.Blueprints.Facts;
 using Kingmaker.Blueprints.Root;
 using Kingmaker.EntitySystem.Entities;
+using Kingmaker.EntitySystem.Stats;
+using Kingmaker.Enums;
 using Kingmaker.Enums.Damage;
 using Kingmaker.Items;
 using Kingmaker.PubSubSystem;
@@ -106,6 +108,8 @@ namespace ZFavoredClass.NewMechanics
 
     public abstract class ComponentAppliedOnceOnLevelUp : OwnedGameLogicComponent<UnitDescriptor>, ILevelUpCompleteUIHandler
     {
+        [JsonProperty]
+        private bool applied = false;
         public override void OnFactActivate()
         {
             try
@@ -116,6 +120,7 @@ namespace ZFavoredClass.NewMechanics
                 if (Owner == levelUp.Preview || Owner == levelUp.Unit)
                 {
                     Apply(levelUp.State);
+                    applied = true;
                 }
             }
             catch (Exception e)
@@ -130,7 +135,18 @@ namespace ZFavoredClass.NewMechanics
 
         public void HandleLevelUpComplete(UnitEntityData unit, bool isChargen)
         {
-
+            if (!applied)
+            {
+                try
+                {
+                    Apply(null);
+                    applied = true;
+                }
+                catch (Exception e)
+                {
+                    Main.logger.Log(e.ToString());
+                }
+            }
         }
 
         protected abstract void Apply(LevelUpState state);
@@ -186,12 +202,32 @@ namespace ZFavoredClass.NewMechanics
 
 
     [AllowedOn(typeof(BlueprintUnitFact))]
-    public class AddHitPointOnce : ComponentAppliedOnceOnLevelUp
+    public class AddHitPointOnce : OwnedGameLogicComponent<UnitDescriptor>, IUnitGainLevelHandler, IGlobalSubscriber
     {
-        protected override void Apply(LevelUpState state)
+        private ModifiableValue.Modifier m_Modifier;
+
+        public override void OnTurnOn()
         {
-           // Main.logger.Log(GetType().Name + $" {state.SelectedClass}");
-            Owner.Stats.HitPoints.BaseValue++;
+            this.Apply();
+        }
+
+        public override void OnTurnOff()
+        {
+            if (this.m_Modifier != null)
+                this.m_Modifier.Remove();
+            this.m_Modifier = (ModifiableValue.Modifier)null;
+        }
+
+        public void HandleUnitGainLevel(UnitDescriptor unit, BlueprintCharacterClass @class)
+        {
+            this.Apply();
+        }
+
+        private void Apply()
+        {
+            if (this.m_Modifier != null)
+                this.m_Modifier.Remove();
+            this.m_Modifier = this.Owner.Stats.HitPoints.AddModifier(this.Fact.GetRank(), (GameLogicComponent)this, ModifierDescriptor.UntypedStackable);
         }
     }
 

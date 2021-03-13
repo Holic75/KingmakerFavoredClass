@@ -95,7 +95,7 @@ namespace ZFavoredClass
             {
                 a.name = "";
                 string localized_name = "";
-                string description_header = "This archetype represents a combination of following archetypes:";
+                string description_header = "This archetype represents a combination of the following archetypes:";
                 string description = "";
                 foreach (var ar in archetypes)
                 {

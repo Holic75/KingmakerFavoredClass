@@ -74,7 +74,9 @@ namespace ZFavoredClass
             {
                 Main.library.Get<BlueprintCharacterClass>("f5b8c63b141b2f44cbb8c2d7579c34f5"), //eldritch scion
                 Main.library.Get<BlueprintCharacterClass>("4cd1757a0eea7694ba5c933729a53920"), //animal
-                CallOfTheWild.Eidolon.eidolon_class
+                CallOfTheWild.Eidolon.eidolon_class,
+                Main.library.Get<BlueprintCharacterClass>("01a754e7c1b7c5946ba895a5ff0faffc"), //dragon
+                CallOfTheWild.Phantom.phantom_class
             };
 
             var classes = Main.library.Root.Progression.CharacterClasses.Where(c => !forbidden_classes.Contains(c) && !c.Archetypes.Empty() || c == VindicativeBastard.vindicative_bastard_class).ToList();

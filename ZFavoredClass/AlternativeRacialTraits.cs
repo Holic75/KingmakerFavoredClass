@@ -68,6 +68,7 @@ namespace ZFavoredClass
             createHalfElfAdaptability();
             createHalfOrcAlternativeRacialFeatures();
 
+            //TODO: creepy for elf (+2 intimidate/ +1 dc for fear/confusion spells)
         }
 
 
@@ -106,6 +107,16 @@ namespace ZFavoredClass
             alternative_racial_trait.HideInUI = true;
             alternative_racial_trait.AllFeatures = new BlueprintFeature[] { toothy, sacred_tattoo, skip_feature };
             Core.half_orc.Features = Core.half_orc.Features.AddToArray(alternative_racial_trait);
+
+
+            var regongar_feature = ResourcesLibrary.TryGetBlueprint<BlueprintFeature>("12ee53c9e546719408db257f489ec366");
+            var regongar_class_levels = regongar_feature.GetComponent<AddClassLevels>();
+            regongar_class_levels.Selections = regongar_class_levels.Selections.AddToArray(new SelectionEntry()
+            {
+                Selection = alternative_racial_trait,
+                Features = new BlueprintFeature[] { toothy }
+            }
+            );
         }
 
 
