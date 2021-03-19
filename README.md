@@ -67,7 +67,7 @@ It also add following feats:
 also it will not work if it is taken for spontaneous caster advancing prestige class and you get to select new spells known from some other spontaneous casting class,
 i.e. if you have eldritch knight advancing sorcerer spellcasting, you can not take the feat during a level up for let's say inquisitor class)
 
-It requires at least Call of the Wild 1.132.
+It requires at least Call of the Wild 1.133.
 
 This mod supposed to work with all classes that were introduced by other mods as long as it is loaded the last (should be by default).
 
