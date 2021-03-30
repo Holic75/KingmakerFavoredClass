@@ -24,7 +24,9 @@ namespace ZFavoredClass
             {
                 Main.library.Get<BlueprintCharacterClass>("f5b8c63b141b2f44cbb8c2d7579c34f5"), //eldritch scion
                 Main.library.Get<BlueprintCharacterClass>("4cd1757a0eea7694ba5c933729a53920"), //animal
-                CallOfTheWild.Eidolon.eidolon_class
+                CallOfTheWild.Eidolon.eidolon_class,
+                CallOfTheWild.Phantom.phantom_class,
+                library.Get<BlueprintCharacterClass>("01a754e7c1b7c5946ba895a5ff0faffc")
             };
 
             var classes = Main.library.Root.Progression.CharacterClasses.Where(c => !forbidden_classes.Contains(c) && !c.Archetypes.Empty()).ToList();
@@ -139,12 +141,13 @@ namespace ZFavoredClass
                 combined_archetype.ReplaceClassSkills = replace_skills;
                 combined_archetype.ClassSkills = parent_class.ClassSkills.AddToArray(extra_skills).Except(missing_skills).ToArray();
             }
-
+            combined_archetype.ComponentsArray = new BlueprintComponent[0];
             foreach (var a in archetypes)
             {
                 combined_archetype.IsArcaneCaster = combined_archetype.IsArcaneCaster || a.IsArcaneCaster;
                 combined_archetype.IsDivineCaster = combined_archetype.IsDivineCaster || a.IsDivineCaster;
                 combined_archetype.ChangeCasterType = combined_archetype.ChangeCasterType || a.ChangeCasterType;
+                combined_archetype.ComponentsArray = combined_archetype.ComponentsArray.AddToArray(a.ComponentsArray);
             }
 
             combined_archetype.AddComponent(Helpers.Create<CombineArchetypes>(c => c.archetypes =archetypes));

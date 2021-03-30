@@ -63,7 +63,6 @@ namespace ZFavoredClass
                 logger = modEntry.Logger;
                 harmony = Harmony12.HarmonyInstance.Create(modEntry.Info.Id);
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
-
             }
             catch (Exception ex)
             {
