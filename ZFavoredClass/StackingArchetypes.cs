@@ -149,8 +149,8 @@ namespace ZFavoredClass
                 combined_archetype.ChangeCasterType = combined_archetype.ChangeCasterType || a.ChangeCasterType;
                 combined_archetype.ComponentsArray = combined_archetype.ComponentsArray.AddToArray(a.ComponentsArray);
             }
-
-            combined_archetype.AddComponent(Helpers.Create<CombineArchetypes>(c => c.archetypes =archetypes));
+            combined_archetype.ComponentsArray = combined_archetype.ComponentsArray.Distinct().ToArray();
+            combined_archetype.AddComponent(Helpers.Create<CombineArchetypes>(c => c.archetypes = archetypes));
             combined_archetypes[combined_archetype.name] = combined_archetype;
             return combined_archetype;
         }
