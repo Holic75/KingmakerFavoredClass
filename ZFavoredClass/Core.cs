@@ -223,7 +223,7 @@ namespace ZFavoredClass
 
             favored_hp = addFavoredClassBonus(bonus_hp, null, classes.ToArray(), 1);
             favored_skill = addFavoredClassBonus(bonus_skill, null, classes.ToArray(), 2);
-            addFavoredClassBonus(bonus_speed, null, new BlueprintCharacterClass[] { barbarian, Bloodrager.bloodrager_class, monk }, 1, elf, half_elf);
+            addFavoredClassBonus(bonus_speed, null, new BlueprintCharacterClass[] { barbarian, Bloodrager.bloodrager_class, monk, Brawler.brawler_class }, 1, elf, half_elf);
 
             addCasterLevelIncrease();
             addEnergyResistanceFavoredClassBonus();
