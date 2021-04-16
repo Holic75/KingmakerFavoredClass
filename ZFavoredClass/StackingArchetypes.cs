@@ -103,7 +103,7 @@ namespace ZFavoredClass
                 {
                     a.name += ar.name;
                     localized_name += ar.Name + (ar == archetypes.Last() ? "" : " / ");
-                    description_header += (ar == archetypes.Last() ? " and " : " ") + ar.Name + (ar == archetypes.Last() ? "." : "");
+                    description_header += (ar == archetypes.Last() ? " and " : ", ") + ar.Name + (ar == archetypes.Last() ? "." : "");
                     description += ar.Name + ": " + ar.Description + (ar == archetypes.Last() ? "" : "\n");
                 }
                                 
