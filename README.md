@@ -28,7 +28,7 @@ It adds the following options for favored class bonuses:
  - +1 to damage of earth and acid spells/2 levels for dwarf sorcerers
  - +1 to earth elemental blasts damage/3 levels for dwarf kineticists
  - +1 to elemental blasts damage/4 levels for half-elf and elf kineticists
- - +1 to base speed/level for elf barbarians, bloodragers and monks
+ - +1 to base speed/level for elf barbarians, bloodragers, brawlers and monks
  - +1 to natural AC when using mutagen/4 levels for dwarf alchemists
  - +1 to number of internal buffer uses/6 levels for halfling kineticists
  - +1 to maximum number of arcane reservoir points/level for elf or half-elf arcanists
