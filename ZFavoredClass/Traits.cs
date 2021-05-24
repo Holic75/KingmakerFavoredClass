@@ -165,6 +165,7 @@ namespace ZFavoredClass
         static public BlueprintFeature goblin_foolhardiness;
         static public BlueprintFeature celestial_contact;
         static public BlueprintFeature harrows_chosen;
+        static public BlueprintFeature tusked;
 
         //REGIONAL TRAITS
         static public BlueprintFeature chilled_by_brutality;
@@ -1784,6 +1785,19 @@ namespace ZFavoredClass
                                             Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.human)
                                             );
 
+            tusked = Helpers.CreateFeature("TuskedTrait",
+                                     "Tusked",
+                                     "Huge, sharp tusks bulge from your mouth.\n"
+                                     + "Benefit: You can make a bite attack for 1d4 points of damage as a secondary attack.",
+                                     "",
+                                     CallOfTheWild.NewSpells.savage_maw.Icon,
+                                     FeatureGroup.Trait,
+                                     Common.createAddSecondaryAttacks(library.Get<BlueprintItemWeapon>("35dfad6517f401145af54111be04d6cf")),
+                                     Helpers.Create<NewMechanics.PrerequisiteRace>(p => p.race = Core.half_orc),
+                                     Helpers.PrerequisiteNoFeature(AlternativeRacialTraits.toothy)
+                                     );
+
+            AlternativeRacialTraits.toothy.AddComponent(Helpers.PrerequisiteNoFeature(tusked));
             racial_traits = createTraitSelction("RacialTrait",
                                     "Race Trait",
                                     "Race traits are keyed to specific races or ethnicities. In order to select a race trait, your character must be of the trait’s race or ethnicity. If your race or ethnicity changes at some later point (as could be possible due to the result of polymorph magic or a reincarnation spell), the benefits gained by your racial trait persist— only if your mind and memories change as well do you lose the benefits of a race trait. Of course, in such an event, you’re also likely to lose skills, feats, and a whole lot more!",
@@ -1808,7 +1822,8 @@ namespace ZFavoredClass
                                     intrepid_volunteer,
                                     goblin_foolhardiness,
                                     celestial_contact,
-                                    harrows_chosen
+                                    harrows_chosen,
+                                    tusked
                                     //eclectic
                                     );
         }

@@ -51,12 +51,14 @@ It adds the following options for favored class bonuses:
 
 Alternate Racial Traits:
 - Half-elf: ancestral arms,
-- Half-orc: toothy, sacred tattoo.
+- Half-orc: toothy, sacred tattoo,
+- Tiefling: Claws.
  
 Other features:
 - Everyone can select a Deity (optional),
 - Everyone can select 2 traits at character creation (optional),
-- Archetype stacking.
+- Archetype stacking,
+- Fixed tiefling heritages to work closer to pnp (i.e. you can no longer get both spell-like ability and your heritage ability, like extra bite attack or + 1 Natural AC)
 
 
  

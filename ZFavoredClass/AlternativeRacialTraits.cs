@@ -54,6 +54,7 @@ namespace ZFavoredClass
 
 
         static public BlueprintFeature sacred_tattoo;
+        static public BlueprintFeature toothy;
         static internal void load()
         {
             skip_feature = Helpers.CreateFeature("SkipAlternateRacialFeature",
@@ -67,8 +68,99 @@ namespace ZFavoredClass
 
             createHalfElfAdaptability();
             createHalfOrcAlternativeRacialFeatures();
-
+            createTieflingAlternativeRacialTraits();
             //TODO: creepy for elf (+2 intimidate/ +1 dc for fear/confusion spells)
+        }
+
+
+        static void createTieflingAlternativeRacialTraits()
+        {
+            var maw_or_claw = Helpers.CreateFeature("TieflingClaws",
+                                                    "Claws",
+                                                    "Some tieflings take on the more bestial aspects of their fiendish ancestors. These tieflings exhibit powerful dangerous claws. The tiefling receive two claws that each deal 1d4 points of damage.",
+                                                    "",
+                                                    Helpers.GetIcon("f68af48f9ebf32549b5f9fdc4edfd475"),
+                                                    FeatureGroup.Racial,
+                                                    Common.createEmptyHandWeaponOverride(library.Get<BlueprintItemWeapon>("118fdd03e569a66459ab01a20af6811a"))
+                                                    );
+            var base_stats = new StatType[] { StatType.Strength, StatType.Constitution, StatType.Dexterity, StatType.Charisma, StatType.Wisdom, StatType.Intelligence };
+            var tiefling_heritage = library.Get<BlueprintFeatureSelection>("c862fd0e4046d2d4d9702dd60474a181");
+
+            var selection = library.CopyAndAdd(tiefling_heritage, "FiendishHeritageFeatureSelection", "");
+            selection.SetNameDescription("Fiendish Heritage", "Some tieflings are blessed or cursed with unusual abilities.");
+            selection.AllFeatures = new BlueprintFeature[] { maw_or_claw };
+            var tiefling_race = library.Get<BlueprintRace>("5c4e42124dc2b4647af6e36cf2590500");
+            tiefling_race.Features = tiefling_race.Features.AddToArray(selection);
+
+            foreach (var f in tiefling_heritage.AllFeatures)
+            {
+                var heritage_name = f.Name;
+                if (heritage_name.Contains(" "))
+                { 
+                    heritage_name = heritage_name.Substring(0, heritage_name.IndexOf(" "));
+                }
+                else
+                {
+                    heritage_name = heritage_name + "s";
+                }
+
+                var ability = f.GetComponent<AddFacts>().Facts[0] as BlueprintAbility;
+                var spell_like_feature = Common.AbilityToFeature(ability, false);
+                spell_like_feature.SetNameDescription($"Spell-Like Ability ({ability.Name})", heritage_name + " can use " + ability.Name + " as spell-like ability once per day.");
+                f.RemoveComponents<AddFacts>();
+                spell_like_feature.AddComponent(Helpers.PrerequisiteFeature(f));
+
+                var stat_boni = f.GetComponents<AddStatBonus>().Where(s => base_stats.Contains(s.Stat)).ToArray();
+
+                var charisma_penalty = f.GetComponents<AddContextStatBonus>().Where(a => a.Stat == StatType.Charisma).FirstOrDefault();
+                BlueprintFeature[] stat_bonus_features = new BlueprintFeature[0];
+                if (charisma_penalty != null)
+                {
+                    stat_boni = stat_boni.AddToArray(Helpers.CreateAddStatBonus(StatType.Charisma, -2, ModifierDescriptor.Racial));
+                    f.RemoveComponent(charisma_penalty);
+                    var context_rank_config = f.GetComponent<ContextRankConfig>();
+                    stat_bonus_features = Helpers.GetField<BlueprintFeature[]>(context_rank_config, "m_FeatureList");
+                    f.RemoveComponents<ContextRankConfig>();
+                    f.RemoveComponents<RecalculateOnFactsChange>();
+                }
+
+                var skill_boni = f.GetComponents<AddStatBonus>().Where(s => !base_stats.Contains(s.Stat)).ToArray();
+                var extra_feature_components = f.ComponentsArray;
+                var stat_skill_boni = stat_boni.AddToArray(skill_boni);
+                foreach (var s in stat_skill_boni)
+                {
+                    extra_feature_components = extra_feature_components.RemoveFromArray(s);
+                }
+                if (!stat_bonus_features.Empty())
+                {
+                    extra_feature_components = extra_feature_components.AddToArray(Helpers.CreateAddContextStatBonus(StatType.Charisma, ModifierDescriptor.Racial, multiplier: 2),
+                                                                                   Helpers.CreateContextRankConfig(ContextRankBaseValueType.FeatureList, featureList: stat_bonus_features, max: 1 ),
+                                                                                   Helpers.Create<RecalculateOnFactsChange>(r => r.CheckedFacts = stat_bonus_features)
+                                                                                   );
+                }
+
+                var split_description = f.Description.Split(new char[] { '.', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+                var fiendish_heritage_feature_description = split_description.Last().Trim(' ');
+                fiendish_heritage_feature_description = heritage_name + fiendish_heritage_feature_description.Substring(fiendish_heritage_feature_description.IndexOf(' ')) + ".";
+
+                var heritage_feature = Helpers.CreateFeature("HeritageFeature" + f.name,
+                                                             "Fiendish Heritage: " + f.Name,
+                                                             fiendish_heritage_feature_description,
+                                                             "",
+                                                             f.Icon,
+                                                             FeatureGroup.Racial,
+                                                             extra_feature_components
+                                                             );
+                heritage_feature.Groups = f.Groups;
+                heritage_feature.AddComponent(Helpers.PrerequisiteFeature(f));
+
+
+                f.SetDescription(f.Description.Substring(0, f.Description.LastIndexOf(split_description[split_description.Length - 2]) ));
+                f.ComponentsArray = stat_boni.AddToArray(skill_boni);
+                selection.AllFeatures = selection.AllFeatures.AddToArray(heritage_feature, spell_like_feature);
+            }
+
         }
 
 
@@ -76,7 +168,7 @@ namespace ZFavoredClass
         {
             var ferocity = library.Get<BlueprintFeature>("c99f3405d1ef79049bd90678a666e1d7");
 
-            var toothy = Helpers.CreateFeature("ToothyHalfOrcRacialFeature",
+            toothy = Helpers.CreateFeature("ToothyHalfOrcRacialFeature",
                                                "Toothy",
                                                "Some half-orcs’ tusks are large and sharp, granting a bite attack. This is a primary natural attack that deals 1d4 points of piercing damage. This racial trait replaces orc ferocity.",
                                                "",
