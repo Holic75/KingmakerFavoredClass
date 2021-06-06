@@ -55,6 +55,7 @@ namespace ZFavoredClass
 
         static public BlueprintFeature sacred_tattoo;
         static public BlueprintFeature toothy;
+
         static internal void load()
         {
             skip_feature = Helpers.CreateFeature("SkipAlternateRacialFeature",
