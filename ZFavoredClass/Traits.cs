@@ -1018,7 +1018,7 @@ namespace ZFavoredClass
                                                              s.old_stat = StatType.Charisma;
                                                              s.new_stat = StatType.Intelligence;
                                                          }),
-                                                         Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckBluff; })
+                                                         Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = StatType.CheckIntimidate; })
                                                          );
 
             clever_wordplay = Helpers.CreateFeature("CleverWordpalyTrait",
